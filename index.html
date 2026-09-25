@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+<title>Pipeline '27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#EEF2EF; --surface:#FFFFFF; --sunk:#E4EAE6; --ink:#14201B; --muted:#5A6A62; --faint:#8A9891;
+  --line:#D3DCD7; --accent:#1D5A4D; --accent-ink:#FFFFFF; --accent-soft:#D9E8E3;
+  --ib:#2A4A7C; --ib-soft:#DCE4F1; --co:#6A3D78; --co-soft:#EADFEE; --me:#8A5A12; --me-soft:#F3E7CF;
+  --danger:#B42318; --danger-soft:#FBE3E0; --warn:#9A6100; --warn-soft:#FBEFD6; --ok:#23704A; --ok-soft:#DDF0E4;
+  --serif:"Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --sans:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#0D1311; --surface:#141C19; --sunk:#1A2420; --ink:#E4EBE7; --muted:#9AA9A1; --faint:#6D7C75;
+    --line:#26332E; --accent:#62B8A2; --accent-ink:#0B1511; --accent-soft:#1B3530;
+    --ib:#8FB0E6; --ib-soft:#1C2940; --co:#D1A6DE; --co-soft:#2F2136; --me:#E3B769; --me-soft:#33280F;
+    --danger:#F08A7E; --danger-soft:#3A1A17; --warn:#E8B45A; --warn-soft:#352812; --ok:#74CC9C; --ok-soft:#15301F;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#0D1311; --surface:#141C19; --sunk:#1A2420; --ink:#E4EBE7; --muted:#9AA9A1; --faint:#6D7C75;
+  --line:#26332E; --accent:#62B8A2; --accent-ink:#0B1511; --accent-soft:#1B3530;
+  --ib:#8FB0E6; --ib-soft:#1C2940; --co:#D1A6DE; --co-soft:#2F2136; --me:#E3B769; --me-soft:#33280F;
+  --danger:#F08A7E; --danger-soft:#3A1A17; --warn:#E8B45A; --warn-soft:#352812; --ok:#74CC9C; --ok-soft:#15301F;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:14px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px;padding-block:28px 64px}
+@media (max-width:520px){.wrap{padding-inline:16px;padding-block:18px 48px}}
+a{color:var(--accent)}
+button,select,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* header */
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line);padding-bottom:18px}
+.brand h1{font:400 clamp(40px,7vw,64px)/.9 var(--serif);letter-spacing:-.01em;margin:0}
+.brand h1 i{color:var(--accent)}
+.brand p{margin:8px 0 0;color:var(--muted);max-width:60ch}
+.meta{display:flex;flex-direction:column;align-items:flex-end;gap:6px;font-size:12px;color:var(--muted)}
+.meta .today{font-family:var(--mono);font-size:13px;color:var(--ink)}
+.sync{display:inline-flex;align-items:center;gap:6px}
+.sync::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--faint)}
+.sync[data-mode="db"]::before{background:var(--ok)}
+.sync[data-mode="local"]::before{background:var(--warn)}
+
+/* stats */
+.stats{display:grid;grid-template-columns:1.6fr repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:20px}
+.stat{background:var(--surface);padding:14px 16px;min-width:0}
+.stat .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font:400 34px/1.1 var(--serif);margin-top:4px}
+.stat .s{font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stat.next .v{color:var(--danger)}
+@media (max-width:760px){.stats{grid-template-columns:repeat(3,1fr)}.stat.next{grid-column:1/-1}.stat .v{font-size:28px}}
+@media (max-width:640px){.bar-row{position:static}}
+
+/* month strip */
+.strip{margin-top:18px;display:grid;grid-template-columns:repeat(14,1fr);gap:4px;align-items:end}
+.strip .m{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;background:none;border:0;padding:0}
+.strip .bar{width:100%;max-width:38px;background:var(--sunk);border-radius:3px 3px 0 0;height:56px;display:flex;flex-direction:column-reverse;overflow:hidden}
+.strip .bar span{display:block;width:100%}
+.strip .bar .dl{background:var(--accent)}
+.strip .bar .ev{background:var(--me)}
+.strip .lbl{font:500 10px/1 var(--mono);color:var(--muted);text-transform:uppercase}
+.strip .m.cur .lbl{color:var(--ink);font-weight:600}
+.strip .m.cur .bar{outline:1.5px solid var(--ink);outline-offset:1px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:11.5px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+
+/* controls */
+.bar-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:26px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);padding-block:10px;border-bottom:1px solid var(--line)}
+.tabs{display:flex;gap:2px;background:var(--sunk);padding:3px;border-radius:9px;overflow-x:auto;max-width:100%}
+.tab{border:0;background:none;padding:7px 14px;border-radius:7px;cursor:pointer;color:var(--muted);font-weight:500;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:none;padding:6px 10px;cursor:pointer;font-size:12.5px;color:var(--muted)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.chk{display:inline-flex;gap:6px;align-items:center;font-size:12.5px;color:var(--muted);padding:6px 8px;cursor:pointer}
+.chk input{accent-color:var(--accent)}
+.btn{border:1px solid var(--line);background:var(--surface);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:12.5px;font-weight:500}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn:hover{border-color:var(--muted)}
+input[type=search],input[type=text],input[type=date],input[type=url],select,textarea{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px;min-width:0}
+textarea{width:100%;min-height:90px;resize:vertical;line-height:1.45}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:2px 7px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.chip.IB{background:var(--ib-soft);color:var(--ib)}
+.chip.Consulting{background:var(--co-soft);color:var(--co)}
+.chip.You{background:var(--accent-soft);color:var(--accent)}
+.chip.rg{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.chip.rg.ME{border-color:transparent;background:var(--me-soft);color:var(--me)}
+.chip.est{background:transparent;color:var(--faint);border:1px dashed var(--line)}
+.chip.conf{background:var(--ok-soft);color:var(--ok)}
+.chip.roll{background:var(--sunk);color:var(--muted)}
+.chip.wait{background:var(--warn-soft);color:var(--warn)}
+
+.kind{font:500 10.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 6px;border-radius:4px;white-space:nowrap}
+.kind.deadline{background:var(--danger-soft);color:var(--danger)}
+.kind.opens{background:var(--accent-soft);color:var(--accent)}
+.kind.event{background:var(--me-soft);color:var(--me)}
+.kind.task{background:var(--sunk);color:var(--muted)}
+
+/* status select */
+.status{appearance:none;-webkit-appearance:none;border-radius:999px;padding:4px 24px 4px 10px;font-size:12px;font-weight:500;cursor:pointer;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 12px) 55%,calc(100% - 8px) 55%;background-size:4px 4px;background-repeat:no-repeat;border:1px solid var(--line);background-color:var(--surface);color:var(--muted);max-width:100%}
+.status[data-s="interested"]{color:var(--ib);border-color:currentColor}
+.status[data-s="registered"],.status[data-s="applied"]{color:var(--accent);background-color:var(--accent-soft);border-color:transparent}
+.status[data-s="interview"]{color:var(--warn);background-color:var(--warn-soft);border-color:transparent}
+.status[data-s="offer"],.status[data-s="done"]{color:var(--ok);background-color:var(--ok-soft);border-color:transparent}
+.status[data-s="rejected"],.status[data-s="skip"]{color:var(--faint);text-decoration:line-through}
+
+/* agenda */
+.view{margin-top:18px}
+.month{margin-top:28px}
+.month h2{display:flex;align-items:baseline;gap:12px;font:400 30px/1 var(--serif);margin:0 0 10px}
+.month h2 small{font:500 11px/1 var(--mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.month.past h2{color:var(--faint)}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.row{display:grid;grid-template-columns:74px 84px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px;border-top:1px solid var(--line);cursor:pointer}
+.row:first-child{border-top:0}
+.row:hover{background:var(--sunk)}
+.row.past{opacity:.55}
+.row.urgent{box-shadow:inset 3px 0 0 var(--danger)}
+.row .date{font:500 13px/1.2 var(--mono);font-variant-numeric:tabular-nums}
+.row .date small{display:block;font-size:10.5px;color:var(--muted);font-weight:400;margin-top:2px}
+.row .date.est{color:var(--muted)}
+.row .what{min-width:0}
+.row .fn{font-weight:600}
+.row .prog{color:var(--muted)}
+.row .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.row .right{display:flex;gap:8px;align-items:center;justify-content:flex-end}
+.row .left{font:500 11.5px/1 var(--mono);color:var(--muted);white-space:nowrap}
+.row .left.hot{color:var(--danger)}
+@media (max-width:640px){
+  .row{grid-template-columns:62px minmax(0,1fr);row-gap:6px}
+  .row .kindcell{grid-column:2;grid-row:1}
+  .row .what{grid-column:1/-1}
+  .row .right{grid-column:1/-1;justify-content:space-between}
+}
+.empty{padding:28px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:var(--r)}
+.soon{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);margin-top:6px}
+.soon-head{display:flex;justify-content:space-between;align-items:baseline;padding:12px 14px 4px}
+.soon-head h3{margin:0;font:400 24px/1 var(--serif)}
+.soon-head span{font-size:12px;color:var(--muted)}
+.soon .list{border:0;border-radius:0;border-top:1px solid var(--line)}
+
+/* programs */
+.prog-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.prog-tools input[type=search]{flex:1 1 220px}
+.prow{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1.6fr) 120px 150px auto;gap:12px;align-items:center;padding:11px 14px;border-top:1px solid var(--line);cursor:pointer}
+.prow:first-child{border-top:0}
+.prow:hover{background:var(--sunk)}
+.prow.head{cursor:default;background:var(--sunk);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.prow .keyd{font:500 12.5px/1.3 var(--mono)}
+.prow .keyd small{display:block;color:var(--muted);font-weight:400;font-size:10.5px}
+@media (max-width:760px){
+  .prow{grid-template-columns:minmax(0,1fr) auto}
+  .prow.head{display:none}
+  .prow .c-prog{grid-column:1/-1}
+  .prow .c-type{grid-column:1}
+  .prow .c-key{grid-column:1}
+  .prow .c-stat{grid-column:2;grid-row:1}
+}
+
+/* firms */
+.tier{margin-top:26px}
+.tier h2{font:400 28px/1 var(--serif);margin:0 0 4px}
+.tier p{margin:0 0 12px;color:var(--muted);font-size:13px}
+.firms{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.firm{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.firm h3{margin:0;font-size:15px;font-weight:600;display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.firm h3 span{font:400 11px/1 var(--mono);color:var(--muted)}
+.firm .focus{font-size:12.5px;color:var(--muted);line-height:1.45}
+.firm .nx{font-size:12.5px}
+.firm .nx b{font-family:var(--mono);font-weight:500}
+.firm .act{display:flex;gap:10px;flex-wrap:wrap;font-size:12.5px;margin-top:auto}
+.firm .act button{background:none;border:0;padding:0;color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.pips{display:flex;gap:3px;flex-wrap:wrap}
+.pip{width:8px;height:8px;border-radius:2px;background:var(--sunk)}
+.pip.on{background:var(--accent)}
+.pip.int{background:var(--ib)}
+
+/* playbook */
+.phases{display:grid;gap:12px}
+.phase{display:grid;grid-template-columns:170px minmax(0,1fr);gap:18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.phase.now{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.phase .when{font:500 12px/1.3 var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.phase .when b{display:block;font:400 26px/1.05 var(--serif);text-transform:none;letter-spacing:0;color:var(--ink);margin-top:6px}
+.phase ul{margin:0;padding-left:18px;display:grid;gap:5px;max-width:72ch}
+.phase li::marker{color:var(--faint)}
+@media (max-width:640px){.phase{grid-template-columns:1fr;gap:8px}}
+.note{margin-top:22px;font-size:12.5px;color:var(--muted);max-width:80ch;line-height:1.6}
+.note h3{font:400 22px/1 var(--serif);color:var(--ink);margin:0 0 6px}
+.srcs{columns:2 280px;column-gap:24px;font-size:12px;margin-top:8px;padding-left:18px}
+.srcs li{break-inside:avoid;margin-bottom:3px}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(10,16,14,.42);z-index:20}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:var(--surface);border-left:1px solid var(--line);z-index:21;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.drawer header{padding:18px 20px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.drawer header h2{margin:0;font:400 28px/1.05 var(--serif)}
+.drawer header p{margin:4px 0 0;color:var(--muted)}
+.drawer .x{border:0;background:var(--sunk);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:18px;line-height:1;flex:none}
+.drawer .body{padding:16px 20px;overflow-y:auto;display:grid;gap:16px;align-content:start}
+.drawer .kv{display:grid;grid-template-columns:96px minmax(0,1fr);gap:6px 12px;font-size:13px}
+.drawer .kv dt{color:var(--muted)}
+.drawer .kv dd{margin:0}
+.drawer .dates{display:grid;gap:6px}
+.drawer .dates div{display:flex;gap:10px;align-items:center;font-size:13px}
+.drawer label.fl{display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500}
+.drawer .saved{font-size:11.5px;color:var(--faint);min-height:1em}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-grid .full{grid-column:1/-1}
+@media (prefers-reduced-motion:no-preference){.drawer{animation:slide .18s ease-out}@keyframes slide{from{transform:translateX(24px);opacity:.6}}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>Pipeline <i>'27</i></h1>
+      <p>Every insight program, sophomore event and application window for your IB and consulting list, from this fall through the 2027 recruiting season. Summer 2028 internships open during your sophomore spring.</p>
+    </div>
+    <div class="meta">
+      <span class="today mono" id="today"></span>
+      <span class="sync" id="sync" data-mode="none">Loading your progress…</span>
+    </div>
+  </header>
+
+  <section class="stats" id="stats" aria-label="Summary"></section>
+
+  <div class="strip" id="strip" aria-label="Dates per month"></div>
+  <div class="legend"><span><i style="background:var(--accent)"></i>Deadlines &amp; openings</span><span><i style="background:var(--me)"></i>Events</span><span>Tap a month to jump to it</span></div>
+
+  <div class="bar-row">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-tab="agenda" aria-selected="true">Agenda</button>
+      <button class="tab" role="tab" data-tab="programs" aria-selected="false">Programs</button>
+      <button class="tab" role="tab" data-tab="firms" aria-selected="false">Firms</button>
+      <button class="tab" role="tab" data-tab="playbook" aria-selected="false">Playbook</button>
+    </div>
+    <div class="filters">
+      <div class="seg" id="f-sector" aria-label="Sector">
+        <button data-v="all" aria-pressed="true">All</button><button data-v="IB" aria-pressed="false">IB</button><button data-v="Consulting" aria-pressed="false">Consulting</button>
+      </div>
+      <div class="seg" id="f-region" aria-label="Region">
+        <button data-v="all" aria-pressed="true">All regions</button><button data-v="US" aria-pressed="false">US</button><button data-v="ME" aria-pressed="false">Middle East</button><button data-v="EMEA" aria-pressed="false">UK/EMEA</button>
+      </div>
+      <label class="chk"><input type="checkbox" id="f-elig" checked> Open to sophomores</label>
+      <button class="btn primary" id="add-btn">+ Add event</button>
+    </div>
+  </div>
+
+  <main id="view" class="view"></main>
+</div>
+
+<div id="drawer-root"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- firms ---------- */
+const FIRMS = [
+  // tier, sector, name, careers url, focus
+  ["bb","IB","Goldman Sachs","https://www.goldmansachs.com/careers/students/programs-and-internships",""],
+  ["bb","IB","J.P. Morgan","https://careers.jpmorgan.com/us/en/students/programs",""],
+  ["bb","IB","Morgan Stanley","https://www.morganstanley.com/people-opportunities/students-graduates",""],
+  ["bb","IB","Citigroup","https://jobs.citi.com/students",""],
+  ["bb","IB","Bank of America","https://careers.bankofamerica.com/en-us/students",""],
+  ["bb","IB","UBS","https://www.ubs.com/global/en/careers/early-careers.html",""],
+  ["bb","IB","Deutsche Bank","https://careers.db.com/students-graduates/",""],
+  ["bb","IB","Barclays","https://search.jobs.barclays/early-careers",""],
+  ["bb","IB","Lazard","https://www.lazard.com/careers/students/",""],
+  ["bb","IB","Rothschild & Co","https://www.rothschildandco.com/en/careers/students-and-graduates/",""],
+  ["bb","IB","Moelis & Company","https://www.moelis.com/careers/",""],
+  ["bb","IB","Evercore","https://www.evercore.com/careers/",""],
+  ["intl","IB","Jefferies","https://www.jefferies.com/careers/",""],
+  ["intl","IB","HSBC","https://www.hsbc.com/careers/students-and-graduates",""],
+  ["intl","IB","Standard Chartered","https://www.sc.com/en/careers/students-graduates/",""],
+  ["intl","IB","BNP Paribas","https://group.bnpparibas/en/careers",""],
+  ["intl","IB","Société Générale","https://careers.societegenerale.com/en",""],
+  ["intl","IB","Crédit Agricole CIB","https://jobs.ca-cib.com/",""],
+  ["intl","IB","Houlihan Lokey","https://hl.com/careers/",""],
+  ["intl","IB","Mizuho","https://www.mizuhogroup.com/americas/careers",""],
+  ["intl","IB","MUFG","https://www.mufgamericas.com/careers",""],
+  ["gcc","IB","EFG Hermes","https://careers.efghldg.com/joinUs/Index/en","Regional leader in MENA ECM/M&A; Cairo, Dubai, Riyadh."],
+  ["gcc","IB","Arqaam Capital","https://www.arqaamcapital.com/","DIFC-based investment bank; small team, hires through referrals."],
+  ["gcc","IB","Rasmala","https://www.rasmala.com/","Dubai asset manager and advisory; networking-led hiring."],
+  ["gcc","IB","Alpen Capital","https://www.alpencapital.com/","Dubai boutique; known for GCC sector research reports."],
+  ["gcc","IB","First Abu Dhabi Bank","https://www.bankfab.com/en-ae/about-fab/careers","UAE's largest bank; IB and FIG intern roles post on its careers site."],
+  ["gcc","IB","Emirates NBD Capital","https://www.emiratesnbd.com/en/careers/join-emirates-nbd/students","Year-round internships for Emirati undergrads; others via networking."],
+  ["gcc","IB","Mashreq Bank","https://www.mashreq.com/","Dubai bank with a growing corporate & investment banking arm."],
+  ["gcc","IB","ADCB","https://www.adcb.com/en/about-us/careers/","Abu Dhabi Commercial Bank; internships with an Emiratisation focus."],
+  ["mbb","Consulting","McKinsey & Company","https://www.mckinsey.com/careers/students","Corporate strategy, government, transformation, financial services, sovereign-related work."],
+  ["mbb","Consulting","Boston Consulting Group","https://careers.bcg.com/","Strategy, growth, transformation, digital/AI, government."],
+  ["mbb","Consulting","Bain & Company","https://www.bain.com/careers/","Corporate strategy, PE/private capital, performance improvement, consumer."],
+  ["t2","Consulting","Strategy&","https://www.strategyand.pwc.com/m1/en/careers/student-jobs.html","Strong Gulf presence; government, corporate strategy, operating models, transformation."],
+  ["t2","Consulting","Oliver Wyman","https://www.oliverwyman.com/careers/entry-level.html","Financial services/banking, risk, aviation, transport, strategy."],
+  ["t2","Consulting","Kearney","https://www.middle-east.kearney.com/careers","Strategy, operations, procurement, supply chain, transformation."],
+  ["t2","Consulting","Roland Berger","https://www.rolandberger.com/en/Join/","Strategy, industrials, transportation, energy, restructuring."],
+  ["t2","Consulting","Arthur D. Little","https://www.adlittle.com/en/careers","Energy, telecom, transport, technology, innovation and transformation."],
+  ["t2","Consulting","L.E.K. Consulting","https://www.lek.com/join-lek","Commercial strategy, healthcare, consumer and due diligence."],
+  ["t2","Consulting","AlixPartners","https://www.alixpartners.com/careers/","Restructuring, performance improvement, turnaround and complex transformation."],
+  ["big4","Consulting","Deloitte","https://www.deloitte.com/us/en/careers/students.html","Large-scale transformation, financial services, technology, risk, government."],
+  ["big4","Consulting","PwC","https://www.pwc.com/us/en/careers/university-relations.html","Strategy&, deals, transformation, finance, government and implementation."],
+  ["big4","Consulting","EY-Parthenon","https://www.ey.com/en_us/careers/students","Strategy, transactions, PE, corporate transformation."],
+  ["big4","Consulting","KPMG","https://www.kpmguscareers.com/students/","Financial services, risk, regulatory, transformation and deals."],
+  ["big4","Consulting","Accenture","https://www.accenture.com/us-en/careers/local/students","Technology, digital transformation, AI, operating-model implementation."]
+].map(([tier,sector,name,url,focus])=>({tier,sector,name,url,focus}));
+const FIRM = Object.fromEntries(FIRMS.map(f=>[f.name,f]));
+const TIERS = [
+  ["bb","International blue-chip IB","Bulge brackets and elite boutiques. US sophomore programs close this fall; 2028 summer analyst apps open Dec–Feb."],
+  ["intl","Other international banks","Mostly EMEA-led. Spring insights in the UK and Middle East summer roles open in the fall a year ahead."],
+  ["gcc","Local and regional GCC firms","Fewer formal programs. Hiring runs on CVs sent early and referrals from analysts you know."],
+  ["mbb","MBB","The main junior-summer applications land spring–summer 2027. Sophomore programs this year are thin, so events count."],
+  ["t2","Strategy boutiques and specialists","Middle East offices hire interns on a rolling basis; apply 6–9 months before you want to start."],
+  ["big4","Big Four and Accenture","The friendliest sophomore programs in consulting. US deadlines cluster in the fall."]
+];
+
+/* ---------- programs ----------
+   d: [kind, ISO date, label?]   kind: opens | deadline | event | task
+   c: confirmed | expected | rolling | watch
+   now: a sophomore can apply in this cycle (false = eligible from next year)            */
+const P = [];
+const add = (o)=>P.push(o);
+
+// Goldman Sachs
+add({id:"gs-els",f:"Goldman Sachs",n:"Emerging Leaders Series",t:"insight",r:"US",c:"confirmed",now:true,d:[["deadline","2026-10-04"]],e:"Second-year undergraduates",u:"https://www.goldmansachs.com/careers/students/programs-and-internships/americas/emerging-leaders-series",note:"GS's sophomore program. Applications close Sunday Oct 4 at 11:59pm ET. The first-year Possibilities Series is already closed."});
+add({id:"gs-sa28",f:"Goldman Sachs",n:"2028 Summer Analyst (Americas)",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2026-12-01"],["deadline","2027-01-31"]],e:"Class of 2029",note:"The junior-summer internship. Last cycle's US bulge-bracket windows ran Dec–Jan; GS reviews on a rolling basis, so apply in the first week."});
+add({id:"gs-me28",f:"Goldman Sachs",n:"2028 Summer Analyst (EMEA: Dubai, Riyadh, Doha)",t:"sa",r:"ME",c:"expected",now:false,d:[["opens","2027-08-15"]],e:"Penultimate-year students",u:"https://www.goldmansachs.com/careers/students/programs-and-internships/emea/summer-analyst-programme",note:"The 2027 edition opened Aug 15, 2026 with rolling review. Expect the 2028 edition around the same date next year."});
+// J.P. Morgan
+add({id:"jpm-ins",f:"J.P. Morgan",n:"CIB Insights Programs (Winning Women, Advancing Black Pathways, AHL)",t:"div",r:"US",c:"expected",now:true,d:[["opens","2026-09-01"],["deadline","2026-11-01"]],e:"Sophomores (some tracks juniors too)",note:"One- to two-day programs. Last cycle closed in late fall, and strong participants were fast-tracked into the summer analyst process. Apply early; review is rolling."});
+add({id:"jpm-sa28",f:"J.P. Morgan",n:"2028 IB Summer Analyst (US)",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2026-12-01"],["deadline","2027-01-15"]],e:"Class of 2029",note:"Last cycle JPM opened roughly 17 months ahead of the internship."});
+add({id:"jpm-me28",f:"J.P. Morgan",n:"2028 Summer Analyst (Middle East)",t:"sa",r:"ME",c:"expected",now:false,d:[["opens","2027-08-01"]],e:"Penultimate-year students",note:"Applied through the EMEA portal. Watch for it in late summer 2027."});
+// Morgan Stanley
+add({id:"ms-ei",f:"Morgan Stanley",n:"Early Insights (US)",t:"insight",r:"US",c:"confirmed",now:true,d:[["deadline","2026-10-30"],["event","2026-11-02","Session 1"],["event","2026-11-05","Session 2"]],e:"Graduating Dec 2028 – Jun 2029",note:"Registration closes Oct 30 at 11:55pm ET. Sessions run Nov 2 and Nov 5."});
+add({id:"ms-emea",f:"Morgan Stanley",n:"EMEA Early Insight",t:"insight",r:"EMEA",c:"expected",now:true,d:[["opens","2026-10-01"],["deadline","2026-12-01"]],e:"First- and non-penultimate-year students",u:"https://www.morganstanley.com/people-opportunities/emea-early-insight-faq",note:"The EMEA route for students who are not yet penultimate year. Last cycle's EMEA applications opened Sep–Oct."});
+add({id:"ms-sa28",f:"Morgan Stanley",n:"2028 IB Summer Analyst (US)",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2027-01-01"],["deadline","2027-02-15"]],e:"Class of 2029",note:"Last cycle's window ran Jan 1 – Feb 15. Expect the same pattern."});
+// Citi
+add({id:"citi-eid",f:"Citigroup",n:"Early ID (3-week virtual program)",t:"soph",r:"US",c:"expected",now:true,d:[["opens","2026-11-01"],["deadline","2027-02-20"]],e:"Current sophomores",note:"Mentorship, technical training and interview prep across IB, Capital Markets and S&T. The spring 2026 cohort closed in late February. It feeds directly into Citi's summer analyst class."});
+add({id:"citi-sa28",f:"Citigroup",n:"2028 Summer Analyst (US)",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2026-12-01"],["deadline","2027-01-31"]],e:"Class of 2029"});
+add({id:"citi-me28",f:"Citigroup",n:"2028 Summer Analyst (Dubai / Riyadh)",t:"sa",r:"ME",c:"expected",now:false,d:[["opens","2027-09-01"]],e:"Penultimate-year students"});
+// Bank of America
+add({id:"bofa-sip",f:"Bank of America",n:"Sophomore Insight Program (New York)",t:"insight",r:"US",c:"expected",now:true,d:[["opens","2026-09-01"],["deadline","2026-12-15"],["event","2027-02-04","Program day"]],e:"Sophomores",note:"BofA's student applications opened Sep 1, 2026 with rolling review. Last year's program day was Feb 4."});
+add({id:"bofa-sa28",f:"Bank of America",n:"2028 IB Summer Analyst (US)",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2026-12-01"],["deadline","2027-01-31"]],e:"Class of 2029"});
+add({id:"bofa-dxb",f:"Bank of America",n:"2028 Global IB Summer Internship (Dubai)",t:"sa",r:"ME",c:"expected",now:false,d:[["opens","2027-09-01"]],e:"Penultimate-year students",note:"BofA's MENA team covers the GCC from DIFC, Riyadh and QFC. The 2027 edition is live now for current penultimate-year students."});
+// UBS
+add({id:"ubs-tt",f:"UBS",n:"Tomorrow's Talent (Spring Insight)",t:"insight",r:"EMEA",c:"expected",now:true,d:[["opens","2026-10-15"],["deadline","2027-01-15"]],e:"First- and second-year students",u:"https://www.ubs.com/global/en/careers/early-careers/tomorrows-talent-program.html"});
+add({id:"ubs-sa28",f:"UBS",n:"2028 IB Summer Analyst (US)",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2026-12-15"],["deadline","2027-01-31"]],e:"Class of 2029"});
+// Deutsche Bank
+add({id:"db-spring",f:"Deutsche Bank",n:"Spring Internship / Insight (EMEA)",t:"insight",r:"EMEA",c:"expected",now:true,d:[["opens","2026-10-15"],["deadline","2027-01-10"]],e:"First- and second-year students"});
+add({id:"db-sa28",f:"Deutsche Bank",n:"2028 Summer Analyst (US)",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2027-01-05"],["deadline","2027-02-15"]],e:"Class of 2029"});
+// Barclays
+add({id:"barc-sip",f:"Barclays",n:"Spring Insight (UK)",t:"insight",r:"EMEA",c:"expected",now:true,d:[["opens","2026-10-01"],["deadline","2026-12-31"]],e:"First- and second-year students"});
+add({id:"barc-sa28",f:"Barclays",n:"2028 IB Summer Analyst (US)",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2027-01-05"],["deadline","2027-02-15"]],e:"Class of 2029"});
+add({id:"barc-dxb",f:"Barclays",n:"Banking Off-Cycle Internship 2027 (Dubai)",t:"offcycle",r:"ME",c:"rolling",now:false,d:[],e:"Penultimate/final year; Arabic desirable",u:"https://search.jobs.barclays/job/dubai/banking-off-cycle-internship-programme-2027-dubai/13015/99719474960",note:"Live now but for older students. Useful to know it exists if you take a semester off next year."});
+// Lazard / Evercore / Moelis / Rothschild
+add({id:"laz-soph",f:"Lazard",n:"Sophomore / early insight programs (US)",t:"insight",r:"US",c:"expected",now:true,d:[["opens","2027-01-05"],["deadline","2027-02-15"]],e:"Sophomores",note:"Elite boutique sophomore programming has run in January. Check lazard.com/careers/students from December."});
+add({id:"laz-sa28",f:"Lazard",n:"2028 Financial Advisory Summer Analyst",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2027-01-05"]],e:"Class of 2029",note:"Boutique timing has been early and variable. Network before it opens."});
+add({id:"evr-yl",f:"Evercore",n:"Young Leaders Program",t:"soph",r:"US",c:"expected",now:true,d:[["opens","2027-01-01"],["deadline","2027-02-01"]],e:"Sophomores",note:"Last cycle's US window ran Jan 1 – Feb 1 with a hard deadline."});
+add({id:"evr-sa28",f:"Evercore",n:"2028 Summer Analyst",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2027-01-01"]],e:"Class of 2029"});
+add({id:"moe-soph",f:"Moelis & Company",n:"Sophomore / early programs",t:"insight",r:"US",c:"expected",now:true,d:[["opens","2027-01-15"],["deadline","2027-02-15"]],e:"Sophomores",u:"https://moelis-careers.tal.net"});
+add({id:"moe-sa28",f:"Moelis & Company",n:"2028 Summer Analyst (US)",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2027-01-05"]],e:"Class of 2029",note:"Moelis also has Gulf offices. Mention regional interest in coffee chats."});
+add({id:"roth-sip",f:"Rothschild & Co",n:"2027 UK Global Advisory Spring Insight",t:"insight",r:"EMEA",c:"expected",now:true,d:[["opens","2026-10-01"],["deadline","2026-12-15"]],e:"First- and second-year students",u:"https://www.rothschildandco.com/en/careers/students-and-graduates/opportunities/2027-uk-global-advisory-spring-insight-programme/",note:"The program page for the 2027 edition is live. Confirm the closing date on the page."});
+add({id:"roth-sa28",f:"Rothschild & Co",n:"2028 Global Advisory Summer Analyst (US)",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2027-01-05"],["deadline","2027-02-28"]],e:"Class of 2029"});
+// Other international
+add({id:"jef-sa28",f:"Jefferies",n:"2028 IB Summer Analyst (US)",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2026-12-15"]],e:"Class of 2029"});
+add({id:"jef-dxb",f:"Jefferies",n:"2027 IB Off-Cycle (Dubai, Jan–Jun 2027)",t:"offcycle",r:"ME",c:"rolling",now:false,d:[],e:"Penultimate/final year",note:"MENA team covering M&A, ECM and DCM. For reference; you'll be eligible for the next round."});
+add({id:"hsbc-ei",f:"HSBC",n:"Early Insights (US)",t:"insight",r:"US",c:"expected",now:true,d:[["opens","2026-11-15"]],e:"First- and second-year students",note:"Last cycle it went live in mid-November."});
+add({id:"hsbc-sip",f:"HSBC",n:"Spring Insight Programme (UK/EMEA)",t:"insight",r:"EMEA",c:"expected",now:true,d:[["opens","2027-01-10"],["deadline","2027-03-15"]],e:"First-year (check second-year eligibility)",u:"https://www.hsbc.com/careers/students-and-graduates/insight-programmes"});
+add({id:"hsbc-me28",f:"HSBC",n:"2028 GB&M Summer Internship (Middle East)",t:"sa",r:"ME",c:"expected",now:false,d:[["opens","2027-09-15"]],e:"Penultimate-year students",note:"HSBC's Middle East hub is Dubai. It keeps investing in the region."});
+add({id:"sc-sip",f:"Standard Chartered",n:"Spring Insight / early careers (UK & UAE)",t:"insight",r:"EMEA",c:"expected",now:true,d:[["opens","2026-10-15"],["deadline","2027-01-15"]],e:"First- and second-year students"});
+add({id:"bnp-ins",f:"BNP Paribas",n:"CIB Discovery / insight programme",t:"insight",r:"EMEA",c:"expected",now:true,d:[["opens","2026-10-15"],["deadline","2027-01-31"]],e:"First- and second-year students"});
+add({id:"bnp-me28",f:"BNP Paribas",n:"2028 CIB Summer Internship (Dubai / Bahrain)",t:"sa",r:"ME",c:"expected",now:false,d:[["opens","2027-09-15"]],e:"Penultimate-year students"});
+add({id:"sg-ins",f:"Société Générale",n:"CIB insight / spring programme",t:"insight",r:"EMEA",c:"expected",now:true,d:[["opens","2026-11-01"],["deadline","2027-01-31"]],e:"First- and second-year students"});
+add({id:"cacib",f:"Crédit Agricole CIB",n:"Internships incl. V.I.E. and Dubai",t:"network",r:"ME",c:"rolling",now:true,d:[["opens","2027-01-15"]],e:"Varies by role",note:"Roles post one at a time on jobs.ca-cib.com. Set a job alert for Dubai."});
+add({id:"hl-sa28",f:"Houlihan Lokey",n:"2028 Summer Analyst (US)",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2026-12-01"]],e:"Class of 2029",note:"HL has historically been one of the earliest to open. Network before December."});
+add({id:"hl-dxb",f:"Houlihan Lokey",n:"Dubai (DIFC) team: networking",t:"network",r:"ME",c:"rolling",now:true,d:[],e:"Open",note:"No formal student program published. Reach out to analysts directly."});
+add({id:"miz-ei",f:"Mizuho",n:"Americas early insight / sophomore program",t:"insight",r:"US",c:"expected",now:true,d:[["opens","2026-11-01"],["deadline","2027-01-31"]],e:"Sophomores"});
+add({id:"mufg-ei",f:"MUFG",n:"Americas sophomore / early insight",t:"insight",r:"US",c:"expected",now:true,d:[["opens","2026-11-01"],["deadline","2027-01-31"]],e:"Sophomores"});
+// GCC
+add({id:"efg-si",f:"EFG Hermes",n:"Summer internship (IB: Cairo, Dubai, Riyadh)",t:"sa",r:"ME",c:"expected",now:true,d:[["opens","2027-02-01"],["deadline","2027-04-15"]],e:"Undergraduates",note:"Apply via the EFG careers portal and follow up with the IB team on LinkedIn."});
+add({id:"arq",f:"Arqaam Capital",n:"Summer internship (DIFC)",t:"network",r:"ME",c:"rolling",now:true,d:[["opens","2027-01-15"],["deadline","2027-03-31"]],e:"Undergraduates",note:"Small team. Send a CV plus a short note to HR and one analyst in January."});
+add({id:"ras",f:"Rasmala",n:"Internship: networking-led",t:"network",r:"ME",c:"rolling",now:true,d:[],e:"Open"});
+add({id:"alp",f:"Alpen Capital",n:"Internship: networking-led",t:"network",r:"ME",c:"rolling",now:true,d:[],e:"Open",note:"Read their GCC sector reports before reaching out. It makes a strong opener."});
+add({id:"fab",f:"First Abu Dhabi Bank",n:"IB / FIG internships",t:"network",r:"ME",c:"rolling",now:true,d:[["opens","2027-01-15"]],e:"UAE nationals prioritised",note:"Posted on FAB's SmartRecruiters page. Set an alert."});
+add({id:"enbd",f:"Emirates NBD Capital",n:"Student internships",t:"network",r:"ME",c:"rolling",now:true,d:[],e:"Emirati undergraduates (formal program)",note:"Formal track is for UAE nationals. Others should network into ENBD Capital directly."});
+add({id:"mash",f:"Mashreq Bank",n:"Internships",t:"network",r:"ME",c:"rolling",now:true,d:[],e:"Varies"});
+add({id:"adcb",f:"ADCB",n:"Internship programme",t:"network",r:"ME",c:"rolling",now:true,d:[],e:"UAE nationals prioritised"});
+// MBB
+add({id:"mck-ssba",f:"McKinsey & Company",n:"Sophomore Summer Business Analyst",t:"soph",r:"US",c:"watch",now:true,d:[],e:"Sophomores",note:"Reported cancelled for the 2027 summer. Check McKinsey's student page in case it returns, and go to their campus events regardless."});
+add({id:"mck-sba28",f:"McKinsey & Company",n:"2028 Summer Business Analyst (US)",t:"sa",r:"US",c:"expected",now:true,d:[["deadline","2027-03-29"]],e:"Class of 2029",note:"Last cycle the deadline moved from mid-July to Mar 29. Expect a similar spring deadline."});
+add({id:"mck-me",f:"McKinsey & Company",n:"Middle East Business Analyst internship",t:"sa",r:"ME",c:"rolling",now:true,d:[["opens","2026-10-01"]],e:"Undergraduates",note:"Middle East offices take interns through rolling applications. Apply 6–9 months before you want to start."});
+add({id:"bcg-bridge",f:"Boston Consulting Group",n:"Bridge to Consulting Workshop",t:"div",r:"US",c:"watch",now:true,d:[],e:"First- and second-years (underrepresented backgrounds)",note:"Cancelled for 2026. Check for a relaunch."});
+add({id:"bcg-sa28",f:"Boston Consulting Group",n:"2028 Summer Associate (US)",t:"sa",r:"US",c:"expected",now:true,d:[["deadline","2027-06-23"]],e:"Class of 2029",note:"The priority deadline has historically landed in late June."});
+add({id:"bcg-me",f:"Boston Consulting Group",n:"Middle East internship (Dubai, Riyadh, Abu Dhabi)",t:"sa",r:"ME",c:"rolling",now:true,d:[["opens","2026-10-01"]],e:"Undergraduates"});
+add({id:"bain-bel",f:"Bain & Company",n:"Building Entrepreneurial Leaders (BEL)",t:"div",r:"US",c:"expected",now:true,d:[["opens","2026-12-01"],["deadline","2027-02-15"]],e:"Sophomores",u:"https://www.bain.com/careers/work-with-us/internships-programs/building-entrepreneurial-leaders",note:"Bain's sophomore program. US deadlines have fallen in February."});
+add({id:"bain-aci28",f:"Bain & Company",n:"2028 Associate Consultant Intern (US)",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2027-06-01"],["deadline","2027-07-15"]],e:"Class of 2029"});
+add({id:"bain-me",f:"Bain & Company",n:"Middle East internship (Dubai, Riyadh, Doha)",t:"sa",r:"ME",c:"rolling",now:true,d:[],e:"Undergraduates"});
+// Tier 2
+add({id:"sand-me27",f:"Strategy&",n:"Middle East Summer Associate 2027",t:"sa",r:"ME",c:"rolling",now:true,d:[["opens","2026-09-01"],["deadline","2026-12-15"]],e:"Undergraduates",note:"Rolling recruiting 12–18 months ahead, so summer 2027 spots are being filled now. Saudi nationals should also look at the Misk × Strategy& summer program."});
+add({id:"sand-me28",f:"Strategy&",n:"Middle East Summer Associate 2028",t:"sa",r:"ME",c:"expected",now:true,d:[["opens","2027-07-01"],["deadline","2027-09-30"]],e:"Undergraduates"});
+add({id:"ow-us",f:"Oliver Wyman",n:"Summer 2027 Intern (US)",t:"soph",r:"US",c:"expected",now:true,d:[["opens","2026-11-01"],["deadline","2027-03-29"]],e:"Sophomores (Class of 2029)",note:"One of the few strategy internships aimed at sophomores. Review is rolling, so apply in the first weeks after it posts."});
+add({id:"ow-me",f:"Oliver Wyman",n:"Internship Middle East 2027",t:"sa",r:"ME",c:"rolling",now:true,d:[["opens","2026-09-15"],["deadline","2026-12-31"]],e:"Undergraduates",u:"https://www.oliverwyman.com/middle-east/careers/recruiting-events.html",note:"The 2027 Middle East posting is live. Also check their Middle East recruiting-events page for info sessions."});
+add({id:"kea-me",f:"Kearney",n:"Middle East internships / vacation schemes",t:"sa",r:"ME",c:"rolling",now:true,d:[["opens","2026-10-01"]],e:"Undergraduates",note:"Ruwwad Kearney (Saudi) is a separate track for final-year students."});
+add({id:"kea-us",f:"Kearney",n:"2028 Summer Business Analyst (US)",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2027-06-01"]],e:"Class of 2029"});
+add({id:"rb-me",f:"Roland Berger",n:"Middle East internships (3–6 months)",t:"sa",r:"ME",c:"rolling",now:true,d:[],e:"Undergraduates"});
+add({id:"adl-me",f:"Arthur D. Little",n:"Middle East internships",t:"sa",r:"ME",c:"rolling",now:true,d:[],e:"Undergraduates"});
+add({id:"lek-sa28",f:"L.E.K. Consulting",n:"2028 Summer Consultant Intern (US)",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2027-07-01"],["deadline","2027-09-15"]],e:"Class of 2029"});
+add({id:"alix-sa28",f:"AlixPartners",n:"2028 Summer Analyst (US)",t:"sa",r:"US",c:"expected",now:true,d:[["opens","2027-08-01"]],e:"Class of 2029"});
+// Big 4 + Accenture
+add({id:"dtt-disc",f:"Deloitte",n:"Discovery Internship (US)",t:"soph",r:"US",c:"expected",now:true,d:[["opens","2026-09-01"],["deadline","2026-11-15"]],e:"First- and second-year students",note:"Deloitte's early-talent internship. Check your school's Deloitte recruiting page for the exact close."});
+add({id:"dtt-me",f:"Deloitte",n:"Middle East summer internship",t:"sa",r:"ME",c:"expected",now:true,d:[["opens","2027-01-15"],["deadline","2027-03-31"]],e:"Undergraduates",u:"https://www.deloitte.com/middle-east/en/careers.html"});
+add({id:"pwc-start",f:"PwC",n:"Start internship (US)",t:"soph",r:"US",c:"expected",now:true,d:[["opens","2026-09-01"],["deadline","2026-12-31"]],e:"Sophomores"});
+add({id:"pwc-me",f:"PwC",n:"Middle East internships (Deals, Consulting)",t:"sa",r:"ME",c:"rolling",now:true,d:[["opens","2027-01-15"]],e:"Undergraduates",u:"https://www.pwc.com/m1/en/careers.html"});
+add({id:"ey-launch",f:"EY-Parthenon",n:"EY sophomore program (US)",t:"soph",r:"US",c:"expected",now:true,d:[["opens","2026-09-01"],["deadline","2026-11-30"]],e:"Sophomores"});
+add({id:"eyp-me",f:"EY-Parthenon",n:"MENA internship",t:"sa",r:"ME",c:"rolling",now:true,d:[["opens","2027-01-15"]],e:"Undergraduates"});
+add({id:"kpmg-soph",f:"KPMG",n:"Sophomore leadership program (US)",t:"soph",r:"US",c:"expected",now:true,d:[["opens","2026-10-01"],["deadline","2026-12-31"]],e:"Sophomores"});
+add({id:"kpmg-me",f:"KPMG",n:"Lower Gulf internship",t:"sa",r:"ME",c:"rolling",now:true,d:[],e:"Undergraduates"});
+add({id:"acn-soph",f:"Accenture",n:"Sophomore programs (US)",t:"soph",r:"US",c:"expected",now:true,d:[["opens","2026-10-01"]],e:"Sophomores"});
+add({id:"acn-me",f:"Accenture",n:"Middle East internship",t:"sa",r:"ME",c:"rolling",now:true,d:[],e:"Undergraduates"});
+// Your milestones
+const ME = (id,n,date,note)=>add({id,f:"You",n,t:"milestone",r:"all",c:"confirmed",now:true,d:[["task",date]],note});
+ME("m-resume","One-page banking-format résumé reviewed by career center","2026-10-02","Needed for GS Emerging Leaders on Oct 4.");
+ME("m-list","Build networking tracker: 2 alumni per firm on this list","2026-10-15","Start with alumni at firms whose programs close soonest.");
+ME("m-chats","Hit 15 coffee chats","2026-11-30","Target 3 a week. Ask about sophomore programs and who screens résumés.");
+ME("m-tech","Technicals: accounting, EV/equity value, DCF, comps","2026-12-01","US summer 2028 applications start opening in December. HireVues follow quickly.");
+ME("m-cover","Cover-letter and \"why this firm\" bank ready","2026-12-01");
+ME("m-case","Case interview basics: 10 practice cases","2027-02-15","Before Bain BEL, Oliver Wyman and the McKinsey deadlines.");
+ME("m-summer","Lock a sophomore summer role (any finance or strategy)","2027-04-30","A GCC boutique, family office or corporate strategy internship all strengthen a 2028 application.");
+
+/* ---------- labels ---------- */
+const TYPE = {insight:"Insight / early program",soph:"Sophomore program",div:"Diversity program",sa:"Summer internship",offcycle:"Off-cycle",network:"Rolling / networking",milestone:"Milestone",custom:"Event"};
+const KIND = {opens:"Opens",deadline:"Deadline",event:"Event",task:"To do"};
+const REGION = {US:"US",ME:"Middle East",EMEA:"UK/EMEA",all:"All"};
+const CONF = {confirmed:["conf","Confirmed"],expected:["est","Est. from last cycle"],rolling:["roll","Rolling"],watch:["wait","Watch"]};
+const STATUSES = [["","Not started"],["interested","Interested"],["registered","Registered"],["applied","Applied"],["interview","Interviewing"],["offer","Offer / accepted"],["done","Done / attended"],["rejected","Rejected"],["skip","Skipping"]];
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const MONTHS_L = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+/* ---------- dates ---------- */
+const day = 864e5;
+const parse = (s)=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d);};
+const today = (()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate());})();
+const diff = (s)=>Math.round((parse(s)-today)/day);
+const fmt = (s)=>{const d=parse(s);return MONTHS[d.getMonth()]+" "+String(d.getDate()).padStart(2,"0");};
+const fmtLong = (s)=>{const d=parse(s);return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d.getDay()]+", "+MONTHS[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();};
+const left = (n)=> n===0?"today":n===1?"tomorrow":n>0?(n+"d left"):(Math.abs(n)+"d ago");
+
+/* ---------- state ---------- */
+const LS_KEY = "pipeline27.v1";
+const UI_KEY = "pipeline27.ui";
+let progress = {};           // id -> {s, note, custom?}
+let mode = "none";           // db | local | readonly
+let db = null, uid = null;
+const ui = Object.assign({tab:"agenda",sector:"all",region:"all",elig:true,past:false,q:"",type:"all",status:"all"}, readLS(UI_KEY)||{});
+
+function readLS(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
+function writeLS(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+const saveUI = ()=>writeLS(UI_KEY,{tab:ui.tab,sector:ui.sector,region:ui.region,elig:ui.elig,past:ui.past});
+
+progress = readLS(LS_KEY) || {};
+mode = "local";
+
+function allItems(){
+  const custom = Object.entries(progress).filter(([,v])=>v&&v.custom).map(([id,v])=>{
+    const c=v.custom; return {id,f:c.f||"Custom",n:c.n||"Untitled",t:"custom",r:c.r||"all",c:"confirmed",now:true,d:c.date?[[c.k||"event",c.date]]:[],u:c.u||"",note:c.note||"",sector:c.sector||"You",isCustom:true};
+  });
+  return P.concat(custom);
+}
+const sectorOf = (it)=> it.sector || (FIRM[it.f]?FIRM[it.f].sector:"You");
+const statusOf = (id)=> (progress[id]&&progress[id].s)||"";
+
+function passes(it){
+  const sec = sectorOf(it);
+  if(ui.sector!=="all" && sec!==ui.sector && sec!=="You") return false;
+  if(ui.region!=="all" && it.r!==ui.region && it.r!=="all") return false;
+  if(ui.elig && !it.now) return false;
+  return true;
+}
+
+/* ---------- writes ---------- */
+const chains = {};
+function persist(id){
+  const body = progress[id];
+  if(mode==="db" && db && uid){
+    const ref = db.collection("data/users/"+uid).doc(id);
+    chains[id] = (chains[id]||Promise.resolve()).then(()=> body ? ref.set(body) : ref.delete()).catch(err=>{
+      if(err && err.code==="invalid_argument"){ setMode("readonly"); }
+      else if(err && err.code==="quota_exceeded"){ flash("Storage is full. Delete a few custom events."); }
+      else { setTimeout(()=>persist(id), 1500+Math.random()*1000); }
+    });
+  }
+  writeLS(LS_KEY, progress);
+}
+function setStatus(id,s){
+  const cur = Object.assign({}, progress[id]||{});
+  if(s) cur.s=s; else delete cur.s;
+  if(!cur.s && !cur.note && !cur.custom){ delete progress[id]; } else progress[id]=cur;
+  persist(id); render();
+}
+const noteTimers = {};
+function setNote(id,text,onSaved){
+  const cur = Object.assign({}, progress[id]||{}); cur.note=text;
+  if(!cur.s && !cur.note && !cur.custom) delete progress[id]; else progress[id]=cur;
+  clearTimeout(noteTimers[id]);
+  noteTimers[id]=setTimeout(()=>{persist(id); onSaved&&onSaved();},600);
+}
+
+/* ---------- sync ---------- */
+const syncEl = document.getElementById("sync");
+function setMode(m){
+  mode=m; syncEl.dataset.mode = m==="db"?"db":"local";
+  syncEl.textContent = m==="db" ? "Saved to your account" : m==="readonly" ? "View only. Changes stay in this browser" : "Saved in this browser";
+  if(m==="readonly") mode="local";
+}
+setMode("local");
+
+(async function connect(){
+  if(!window.claude || typeof window.claude.use!=="function") return;
+  try{
+    const [d,u] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+    if(!d || !u) return;
+    const id = await u.id();
+    if(!id) return;
+    db=d; uid=id;
+    let first = true;
+    db.collection("data/users/"+uid).onSnapshot(snap=>{
+      const remote = {};
+      snap.docs.forEach(doc=>{ if(doc.exists) remote[doc.id]=doc.data(); });
+      if(first){
+        first=false;
+        // carry over anything saved in this browser before the account store existed
+        const localOnly = Object.keys(progress).filter(k=>!(k in remote));
+        progress = Object.assign({}, remote);
+        const cached = readLS(LS_KEY)||{};
+        setMode("db");
+        localOnly.forEach(k=>{ if(cached[k]){ progress[k]=JSON.parse(JSON.stringify(cached[k])); persist(k);} });
+      } else {
+        progress = Object.assign({}, remote);
+      }
+      writeLS(LS_KEY, progress);
+      render();
+    }, ()=>{ setMode("local"); });
+  }catch(e){ /* stay local */ }
+})();
+
+/* ---------- render: header ---------- */
+document.getElementById("today").textContent = fmtLong(today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0"));
+
+function entries(items){
+  const out=[];
+  items.forEach(it=>it.d.forEach(([k,date,label])=>out.push({it,k,date,label,n:diff(date)})));
+  return out.sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:(a.k==="deadline"?-1:1));
+}
+
+function renderStats(items){
+  const es = entries(items).filter(e=>e.n>=0 && !["applied","registered","offer","done","rejected","skip"].includes(statusOf(e.it.id)));
+  const nextDl = es.find(e=>e.k==="deadline");
+  const in30 = es.filter(e=>e.k==="deadline" && e.n<=30).length;
+  const vals = Object.values(progress);
+  const applied = vals.filter(v=>["applied","interview","offer"].includes(v.s)).length;
+  const events = vals.filter(v=>["registered","done"].includes(v.s)).length;
+  const est = nextDl && nextDl.it.c==="expected" ? "~" : "";
+  document.getElementById("stats").innerHTML = `
+    <div class="stat next"><div class="k">Next open deadline</div>${nextDl?`<div class="v">${est}${nextDl.n===0?"Today":nextDl.n+" days"}</div><div class="s">${esc(nextDl.it.f)}: ${esc(nextDl.it.n)} · ${fmt(nextDl.date)}</div>`:`<div class="v">Clear</div><div class="s">Nothing due in the current filter</div>`}</div>
+    <div class="stat"><div class="k">Deadlines ≤30 days</div><div class="v">${in30}</div><div class="s">not yet applied</div></div>
+    <div class="stat"><div class="k">Applications</div><div class="v">${applied}</div><div class="s">applied, interviewing or offer</div></div>
+    <div class="stat"><div class="k">Events</div><div class="v">${events}</div><div class="s">registered or attended</div></div>`;
+}
+
+function monthKeys(){
+  const start = new Date(2026,8,1); const out=[];
+  for(let i=0;i<14;i++){const d=new Date(start.getFullYear(),start.getMonth()+i,1);out.push(d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"));}
+  return out;
+}
+function renderStrip(items){
+  const es = entries(items); const keys = monthKeys();
+  const counts = keys.map(k=>({k,dl:es.filter(e=>e.date.startsWith(k)&&e.k!=="event").length,ev:es.filter(e=>e.date.startsWith(k)&&e.k==="event").length}));
+  const max = Math.max(4,...counts.map(c=>c.dl+c.ev));
+  const curKey = today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0");
+  document.getElementById("strip").innerHTML = counts.map(c=>{
+    const [y,m]=c.k.split("-").map(Number);
+    return `<button class="m ${c.k===curKey?"cur":""}" data-month="${c.k}" title="${MONTHS_L[m-1]} ${y}: ${c.dl} dates, ${c.ev} events"><span class="bar"><span class="dl" style="height:${c.dl/max*100}%"></span><span class="ev" style="height:${c.ev/max*100}%"></span></span><span class="lbl">${MONTHS[m-1].slice(0,3)}${m===1||c.k===keys[0]?"<br>'"+String(y).slice(2):""}</span></button>`;
+  }).join("");
+}
+
+/* ---------- render: views ---------- */
+const view = document.getElementById("view");
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function statusSelect(id){
+  const s = statusOf(id);
+  return `<select class="status" data-id="${esc(id)}" data-s="${s}" aria-label="Status">${STATUSES.map(([v,l])=>`<option value="${v}" ${v===s?"selected":""}>${l}</option>`).join("")}</select>`;
+}
+function tagsFor(it){
+  const sec = sectorOf(it); const cf = CONF[it.c];
+  return `<span class="chip ${sec}">${sec==="You"?(it.isCustom?"Custom":"Milestone"):sec}</span>${it.r!=="all"?`<span class="chip rg ${it.r}">${REGION[it.r]}</span>`:""}${it.t!=="milestone"&&it.t!=="custom"?`<span class="chip rg">${TYPE[it.t]}</span>`:""}${cf&&it.t!=="milestone"&&it.t!=="custom"?`<span class="chip ${cf[0]}">${cf[1]}</span>`:""}${!it.now?`<span class="chip wait">Eligible next year</span>`:""}`;
+}
+function row(e){
+  const it=e.it; const est = it.c==="expected"; const s=statusOf(it.id);
+  const closed = ["applied","registered","offer","done","rejected","skip","interview"].includes(s);
+  const hot = e.k==="deadline" && e.n>=0 && e.n<=14 && !closed;
+  return `<div class="row ${e.n<0?"past":""} ${hot?"urgent":""}" data-open="${esc(it.id)}">
+    <div class="date ${est?"est":""}">${est?"~":""}${fmt(e.date)}<small>${e.label?esc(e.label):(est?"estimate":"")}</small></div>
+    <div class="kindcell"><span class="kind ${e.k}">${KIND[e.k]}</span></div>
+    <div class="what"><span class="fn">${esc(it.f)}</span> <span class="prog">${esc(it.n)}</span><div class="tags">${tagsFor(it)}</div></div>
+    <div class="right"><span class="left ${hot?"hot":""}">${left(e.n)}</span>${statusSelect(it.id)}</div>
+  </div>`;
+}
+
+function renderAgenda(items){
+  const es = entries(items);
+  const upcoming = es.filter(e=>e.n>=0 && e.n<=21);
+  const groups = {};
+  es.forEach(e=>{const k=e.date.slice(0,7); (groups[k]=groups[k]||[]).push(e);});
+  const curKey = today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0");
+  const keys = Object.keys(groups).sort().filter(k=>ui.past || k>=curKey);
+  const pastCount = Object.keys(groups).filter(k=>k<curKey).length;
+  let html = `<div class="soon"><div class="soon-head"><h3>Next three weeks</h3><span>${upcoming.length} dates</span></div>${upcoming.length?`<div class="list">${upcoming.map(row).join("")}</div>`:`<div class="empty" style="border:0">Nothing in the next 21 days for this filter.</div>`}</div>`;
+  html += `<div style="display:flex;justify-content:flex-end;margin-top:14px">${pastCount?`<label class="chk"><input type="checkbox" id="show-past" ${ui.past?"checked":""}> Show past months</label>`:""}</div>`;
+  html += keys.map(k=>{
+    const [y,m]=k.split("-").map(Number);
+    const g=groups[k]; const dl=g.filter(e=>e.k==="deadline").length;
+    return `<section class="month ${k<curKey?"past":""}" id="m-${k}"><h2>${MONTHS_L[m-1]} ${y} <small>${g.length} dates · ${dl} deadlines</small></h2><div class="list">${g.map(row).join("")}</div></section>`;
+  }).join("");
+  const undated = items.filter(it=>!it.d.length);
+  if(undated.length) html += `<section class="month"><h2>Rolling and watch list <small>${undated.length} with no fixed date</small></h2><div class="list">${undated.map(it=>`<div class="row" data-open="${esc(it.id)}"><div class="date est">—<small>${it.c==="watch"?"watch":"rolling"}</small></div><div class="kindcell"><span class="kind task">${it.c==="watch"?"Watch":"Rolling"}</span></div><div class="what"><span class="fn">${esc(it.f)}</span> <span class="prog">${esc(it.n)}</span><div class="tags">${tagsFor(it)}</div></div><div class="right"><span class="left"></span>${statusSelect(it.id)}</div></div>`).join("")}</div></section>`;
+  view.innerHTML = html;
+}
+
+function keyDate(it){
+  const up = it.d.filter(([,d])=>diff(d)>=0).sort((a,b)=>a[1]<b[1]?-1:1);
+  const pick = up.find(x=>x[0]==="deadline") || up[0] || it.d[it.d.length-1];
+  return pick||null;
+}
+function renderPrograms(items){
+  const types = ["all","insight","soph","div","sa","offcycle","network","milestone","custom"];
+  let list = items.filter(it=>{
+    if(ui.type!=="all" && it.t!==ui.type) return false;
+    if(ui.status!=="all"){ const s=statusOf(it.id); if(ui.status==="none"? s!=="" : s!==ui.status) return false; }
+    if(ui.q){ const q=ui.q.toLowerCase(); if(!(it.f+" "+it.n+" "+(it.note||"")).toLowerCase().includes(q)) return false; }
+    return true;
+  });
+  list.sort((a,b)=>{const ka=keyDate(a),kb=keyDate(b);const da=ka?ka[1]:"9999",dbb=kb?kb[1]:"9999";return da<dbb?-1:da>dbb?1:a.f.localeCompare(b.f);});
+  view.innerHTML = `<div class="prog-tools">
+      <input type="search" id="q" placeholder="Search firm, program or notes" value="${esc(ui.q)}" aria-label="Search">
+      <select id="f-type" aria-label="Type">${types.map(t=>`<option value="${t}" ${ui.type===t?"selected":""}>${t==="all"?"All types":TYPE[t]}</option>`).join("")}</select>
+      <select id="f-status" aria-label="Status filter"><option value="all">Any status</option><option value="none" ${ui.status==="none"?"selected":""}>Not started</option>${STATUSES.slice(1).map(([v,l])=>`<option value="${v}" ${ui.status===v?"selected":""}>${l}</option>`).join("")}</select>
+      <span style="font-size:12.5px;color:var(--muted)">${list.length} of ${items.length}</span>
+    </div>
+    ${list.length?`<div class="list"><div class="prow head"><div>Firm</div><div>Program</div><div>Type</div><div>Next key date</div><div>Status</div></div>
+    ${list.map(it=>{const k=keyDate(it);const est=it.c==="expected";return `<div class="prow" data-open="${esc(it.id)}">
+      <div class="c-firm"><b>${esc(it.f)}</b><div class="tags" style="display:flex;gap:4px;margin-top:3px;flex-wrap:wrap"><span class="chip ${sectorOf(it)}">${sectorOf(it)==="You"?"You":sectorOf(it)}</span>${it.r!=="all"?`<span class="chip rg ${it.r}">${REGION[it.r]}</span>`:""}</div></div>
+      <div class="c-prog">${esc(it.n)}${!it.now?` <span class="chip wait">Eligible next year</span>`:""}</div>
+      <div class="c-type" style="font-size:12.5px;color:var(--muted)">${TYPE[it.t]}</div>
+      <div class="c-key keyd">${k?`${est?"~":""}${fmt(k[1])} <small>${KIND[k[0]]}${diff(k[1])>=0?" · "+left(diff(k[1])):""}</small>`:`<span style="color:var(--muted)">${it.c==="watch"?"Watch":"Rolling"}</span>`}</div>
+      <div class="c-stat">${statusSelect(it.id)}</div></div>`;}).join("")}</div>`:`<div class="empty">No programs match. Clear the search or widen the filters.</div>`}`;
+}
+
+function renderFirms(items){
+  view.innerHTML = TIERS.map(([key,title,blurb])=>{
+    const firms = FIRMS.filter(f=>f.tier===key && (ui.sector==="all"||f.sector===ui.sector));
+    if(!firms.length) return "";
+    return `<section class="tier"><h2>${title}</h2><p>${blurb}</p><div class="firms">${firms.map(f=>{
+      const its = items.filter(it=>it.f===f.name);
+      const nx = entries(its).find(e=>e.n>=0);
+      const pips = its.map(it=>{const s=statusOf(it.id);return `<span class="pip ${["applied","registered","interview","offer","done"].includes(s)?"on":s==="interested"?"int":""}" title="${esc(it.n)}"></span>`;}).join("");
+      return `<article class="firm"><h3>${esc(f.name)}<span>${its.length} item${its.length===1?"":"s"}</span></h3>
+        ${f.focus?`<div class="focus">${esc(f.focus)}</div>`:""}
+        <div class="nx">${nx?`Next: <b>${nx.it.c==="expected"?"~":""}${fmt(nx.date)}</b> ${KIND[nx.k].toLowerCase()} · ${esc(nx.it.n)}`:`<span style="color:var(--muted)">No dated items in this filter</span>`}</div>
+        ${its.length?`<div class="pips" aria-label="Progress">${pips}</div>`:""}
+        <div class="act"><button data-firm="${esc(f.name)}">See programs</button><a href="${esc(f.url)}" target="_blank" rel="noopener">Careers site ↗</a></div></article>`;
+    }).join("")}</div></section>`;
+  }).join("");
+}
+
+function renderPlaybook(){
+  const phases = [
+    ["2026-09-01","2026-10-31","Now → Oct 31","Lock in the fall sophomore programs",[
+      "<b>Oct 4:</b> Goldman Sachs Emerging Leaders Series closes. Submit this week.",
+      "<b>Oct 30:</b> Morgan Stanley Early Insights registration closes (sessions Nov 2 and 5).",
+      "Apply to J.P. Morgan CIB Insights and the BofA Sophomore Insight Program early. Both review on a rolling basis.",
+      "Consulting: Deloitte Discovery, PwC Start and EY sophomore programs have fall deadlines.",
+      "Middle East: Strategy& and Oliver Wyman are filling summer 2027 intern spots now. Apply if you want a Gulf internship next summer.",
+      "Join your finance and consulting clubs and get your résumé reviewed."]],
+    ["2026-11-01","2026-12-31","Nov – Dec 2026","Network hard and learn the technicals",[
+      "Attend every on-campus info session and coffee chat for the firms on your list. Recruiters remember names.",
+      "UK/EMEA spring insights (Barclays, Rothschild, MS EMEA, UBS, DB) mostly close Dec–Jan.",
+      "Citi Early ID, Mizuho and MUFG sophomore programs should open.",
+      "Get technicals interview-ready by Dec 1: accounting, EV bridge, DCF, comps.",
+      "<b>December:</b> US summer 2028 analyst applications start opening (GS, JPM, Citi, BofA, HL). Have your résumé and cover letters finished before they post."]],
+    ["2027-01-01","2027-03-31","Jan – Mar 2027","The 2027 recruitment season",[
+      "US bulge-bracket summer 2028 windows (last cycle MS ran Jan 1 – Feb 15). Expect HireVues within days of applying.",
+      "Elite boutique sophomore programs: Evercore Young Leaders (Jan 1 – Feb 1 last cycle), Lazard, Moelis.",
+      "Consulting: Bain BEL (~Feb), Citi Early ID closes (~late Feb), Oliver Wyman US and McKinsey SBA (~late March).",
+      "GCC banks (EFG Hermes, Arqaam, FAB, ENBD) recruit summer 2027 interns Feb–Apr, mostly through CVs and referrals."]],
+    ["2027-04-01","2027-08-31","Apr – Aug 2027","Sophomore summer and consulting applications",[
+      "Work a sophomore summer role. A GCC boutique, corporate strategy or search fund internship all count.",
+      "BCG summer associate priority deadline (~late June). Bain ACI (~July). Kearney and L.E.K. (summer).",
+      "Strategy& Middle East opens summer 2028 recruiting around July."]],
+    ["2027-08-01","2027-10-31","Aug – Oct 2027","Middle East and EMEA summer 2028 wave",[
+      "Goldman Sachs EMEA summer analyst (Dubai, Riyadh, Doha) opened Aug 15 last cycle, with rolling review.",
+      "J.P. Morgan, Citi, BofA, HSBC and BNP Middle East summer programs follow in Aug–Oct.",
+      "As a penultimate-year student you're now eligible for off-cycle roles (Barclays, Jefferies, BofA Dubai)."]]
+  ];
+  view.innerHTML = `<div class="phases">${phases.map(([a,b,w,t,li])=>{
+      const cur = (()=>{const s=a,e=b;const d=today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");return d>=s&&d<=e;})();
+      return `<section class="phase ${cur?"now":""}"><div class="when">${w}${cur?" · now":""}<b>${t}</b></div><ul>${li.map(x=>`<li>${x}</li>`).join("")}</ul></section>`;}).join("")}</div>
+    <div class="note">
+      <h3>How to read the dates</h3>
+      <p><span class="chip conf">Confirmed</span> means the 2026–27 date was published by the firm or a university career office. <span class="chip est">Est. from last cycle</span> means the date is projected from last year's window. Firms move these every year, sometimes by weeks, so check the careers page when the window gets close. <span class="chip roll">Rolling</span> means there's no fixed close: offers go out as applications arrive, so earlier is better. <span class="chip wait">Eligible next year</span> marks penultimate-year programs you can't apply to yet; untick “Open to sophomores” to see them.</p>
+      <p>Summer 2028 internships ("junior summer") are the main prize. In the US they open during your sophomore spring. In Dubai and Riyadh they open the following fall. Sophomore insight programs are how firms find people before those windows open.</p>
+      <h3 style="margin-top:18px">Sources checked Sep 2026</h3>
+      <ul class="srcs">
+        <li><a href="https://www.goldmansachs.com/careers/students/programs-and-internships/americas/emerging-leaders-series" target="_blank" rel="noopener">Goldman Sachs: Emerging Leaders Series</a></li>
+        <li><a href="https://www.goldmansachs.com/careers/students/programs-and-internships/emea/summer-analyst-programme" target="_blank" rel="noopener">Goldman Sachs: EMEA Summer Analyst</a></li>
+        <li><a href="https://careerconnects.washcoll.edu/events/2026/11/02/2026-morgan-stanley-early-insights-november-2nd-2026/" target="_blank" rel="noopener">Morgan Stanley Early Insights 2026 listing</a></li>
+        <li><a href="https://www.morganstanley.com/people-opportunities/emea-early-insight-faq" target="_blank" rel="noopener">Morgan Stanley: EMEA Early Insight FAQ</a></li>
+        <li><a href="https://connections.villanova.edu/blog/2026/02/13/apply-to-citi-banks-early-id-program/" target="_blank" rel="noopener">Villanova: Citi Early ID</a></li>
+        <li><a href="https://career.cornell.edu/events/2026/02/04/2026-sophomore-insight-program-new-york/" target="_blank" rel="noopener">Cornell: 2026 Sophomore Insight Program (BofA)</a></li>
+        <li><a href="https://careers.bankofamerica.com/en-us/students/application-process" target="_blank" rel="noopener">Bank of America: application process</a></li>
+        <li><a href="https://www.rothschildandco.com/en/careers/students-and-graduates/opportunities/2027-uk-global-advisory-spring-insight-programme/" target="_blank" rel="noopener">Rothschild & Co: 2027 Spring Insight</a></li>
+        <li><a href="https://www.ubs.com/global/en/careers/early-careers/tomorrows-talent-program.html" target="_blank" rel="noopener">UBS: Tomorrow's Talent</a></li>
+        <li><a href="https://www.hsbc.com/careers/students-and-graduates/insight-programmes" target="_blank" rel="noopener">HSBC: insight programmes</a></li>
+        <li><a href="https://ocs.yale.edu/blog/2025/09/16/investment-banking-2027-summer-internship-overview-for-sophomores/" target="_blank" rel="noopener">Yale OCS: IB timeline for sophomores</a></li>
+        <li><a href="https://www.wallstreetplaybook.org/blog/summer-analyst-recruiting-timeline-2027" target="_blank" rel="noopener">Wall Street Playbook: SA recruiting timeline</a></li>
+        <li><a href="https://www.bain.com/careers/work-with-us/internships-programs/building-entrepreneurial-leaders" target="_blank" rel="noopener">Bain: BEL</a></li>
+        <li><a href="https://www.hackingthecaseinterview.com/pages/mckinsey-application-deadlines" target="_blank" rel="noopener">McKinsey application deadlines</a></li>
+        <li><a href="https://www.hackingthecaseinterview.com/pages/bridge-to-bcg" target="_blank" rel="noopener">Bridge to BCG status</a></li>
+        <li><a href="https://www.case-prep.com/blog/oliver-wyman-consulting-internship-deadline-2027" target="_blank" rel="noopener">Oliver Wyman 2027 timeline</a></li>
+        <li><a href="https://www.oliverwyman.com/middle-east/careers/recruiting-events.html" target="_blank" rel="noopener">Oliver Wyman: Middle East recruiting events</a></li>
+        <li><a href="https://www.strategyand.pwc.com/m1/en/careers/student-jobs.html" target="_blank" rel="noopener">Strategy& Middle East: student jobs</a></li>
+        <li><a href="https://www.middle-east.kearney.com/careers" target="_blank" rel="noopener">Kearney Middle East careers</a></li>
+        <li><a href="https://search.jobs.barclays/job/dubai/banking-off-cycle-internship-programme-2027-dubai/13015/99719474960" target="_blank" rel="noopener">Barclays: Dubai off-cycle 2027</a></li>
+        <li><a href="https://www.emiratesnbd.com/en/careers/join-emirates-nbd/students" target="_blank" rel="noopener">Emirates NBD: students</a></li>
+        <li><a href="https://careers.efghldg.com/joinUs/Index/en" target="_blank" rel="noopener">EFG Holding: careers</a></li>
+      </ul>
+    </div>`;
+}
+
+function render(){
+  const items = allItems().filter(passes);
+  renderStats(items);
+  renderStrip(items);
+  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected", String(t.dataset.tab===ui.tab)));
+  const y = window.scrollY; const active = document.activeElement && document.activeElement.id;
+  if(ui.tab==="agenda") renderAgenda(items);
+  else if(ui.tab==="programs") renderPrograms(items);
+  else if(ui.tab==="firms") renderFirms(items);
+  else renderPlaybook();
+  if(active==="q"){const q=document.getElementById("q"); if(q){q.focus(); q.setSelectionRange(q.value.length,q.value.length);}}
+  window.scrollTo(0,y);
+  if(openId) refreshDrawer();
+}
+
+/* ---------- drawer ---------- */
+const root = document.getElementById("drawer-root");
+let openId = null;
+function findItem(id){return allItems().find(i=>i.id===id);}
+function openDrawer(id){ openId=id; drawDrawer(); }
+function closeDrawer(){ openId=null; root.innerHTML=""; }
+function refreshDrawer(){ const sel=root.querySelector(".status"); if(sel){const s=statusOf(openId); sel.value=s; sel.dataset.s=s;} }
+function drawDrawer(){
+  const it = findItem(openId); if(!it){closeDrawer();return;}
+  const firm = FIRM[it.f]; const cf = CONF[it.c]; const p = progress[it.id]||{};
+  const url = it.u || (firm&&firm.url) || "";
+  root.innerHTML = `<div class="scrim" data-close></div>
+  <aside class="drawer" role="dialog" aria-modal="true" aria-label="${esc(it.n)}">
+    <header><div><p style="margin:0 0 4px;font-weight:600;color:var(--ink)">${esc(it.f)}</p><h2>${esc(it.n)}</h2></div><button class="x" data-close aria-label="Close">×</button></header>
+    <div class="body">
+      <div class="tags" style="display:flex;flex-wrap:wrap;gap:4px">${tagsFor(it)}</div>
+      ${it.d.length?`<div class="dates">${it.d.map(([k,d,l])=>`<div><span class="kind ${k}">${KIND[k]}</span><span class="mono">${it.c==="expected"?"~ ":""}${fmtLong(d)}</span><span style="color:var(--muted);font-size:12px">${l?esc(l)+" · ":""}${left(diff(d))}</span></div>`).join("")}</div>`:""}
+      <dl class="kv">
+        ${it.t!=="milestone"?`<dt>Eligibility</dt><dd>${esc(it.e||"See firm site")}</dd>`:""}
+        ${it.t!=="milestone"&&!it.isCustom?`<dt>Type</dt><dd>${TYPE[it.t]}</dd><dt>Date basis</dt><dd>${cf?cf[1]:""}</dd>`:""}
+        ${firm&&firm.focus?`<dt>Focus</dt><dd>${esc(firm.focus)}</dd>`:""}
+        ${url?`<dt>Link</dt><dd><a href="${esc(url)}" target="_blank" rel="noopener">${esc(url.replace(/^https?:\/\//,"").slice(0,48))}${url.length>56?"…":""} ↗</a></dd>`:""}
+      </dl>
+      ${it.note?`<p style="margin:0;line-height:1.55">${esc(it.note)}</p>`:""}
+      <label class="fl" for="d-status">Status ${statusSelect(it.id).replace('class="status"','class="status" id="d-status"')}</label>
+      <label class="fl" for="d-note">Your notes (contacts, referral, login, essay prompts)<textarea id="d-note" placeholder="e.g. Coffee chat with 2nd-year analyst on Oct 12, referred me. Portal login: …">${esc(p.note||"")}</textarea></label>
+      <div class="saved" id="d-saved"></div>
+      ${it.isCustom?`<div><button class="btn" id="d-del">Delete this event</button> <span id="d-del-confirm" hidden><button class="btn" id="d-del-yes" style="color:var(--danger)">Yes, delete</button></span></div>`:""}
+    </div>
+  </aside>`;
+  const ta = root.querySelector("#d-note");
+  ta.addEventListener("input",()=>{ root.querySelector("#d-saved").textContent="Saving…"; setNote(it.id, ta.value, ()=>{const s=root.querySelector("#d-saved"); if(s) s.textContent = mode==="db"?"Saved to your account":"Saved in this browser";}); });
+  const del = root.querySelector("#d-del");
+  if(del){ del.addEventListener("click",()=>{root.querySelector("#d-del-confirm").hidden=false;}); root.querySelector("#d-del-yes").addEventListener("click",()=>{delete progress[it.id]; persist(it.id); closeDrawer(); render();}); }
+  root.querySelector(".x").focus();
+}
+
+function openAdd(){
+  openId=null;
+  root.innerHTML = `<div class="scrim" data-close></div>
+  <aside class="drawer" role="dialog" aria-modal="true" aria-label="Add an event">
+    <header><div><h2>Add an event</h2><p>Info sessions, coffee chats, club treks, anything with a date.</p></div><button class="x" data-close aria-label="Close">×</button></header>
+    <form class="body" id="add-form">
+      <div class="form-grid">
+        <label class="fl full" for="a-firm">Firm<input type="text" id="a-firm" list="firm-list" required placeholder="e.g. Evercore"><datalist id="firm-list">${FIRMS.map(f=>`<option value="${esc(f.name)}">`).join("")}</datalist></label>
+        <label class="fl full" for="a-name">What<input type="text" id="a-name" required placeholder="e.g. On-campus info session, Room 204"></label>
+        <label class="fl" for="a-date">Date<input type="date" id="a-date" required></label>
+        <label class="fl" for="a-kind">Kind<select id="a-kind"><option value="event">Event</option><option value="deadline">Deadline</option><option value="opens">Opens</option><option value="task">To do</option></select></label>
+        <label class="fl" for="a-region">Region<select id="a-region"><option value="all">Any</option><option value="US">US</option><option value="ME">Middle East</option><option value="EMEA">UK/EMEA</option></select></label>
+        <label class="fl" for="a-url">Link<input type="url" id="a-url" placeholder="https://"></label>
+        <label class="fl full" for="a-note">Notes<textarea id="a-note"></textarea></label>
+      </div>
+      <div><button class="btn primary" type="submit">Add to agenda</button></div>
+    </form>
+  </aside>`;
+  const today10 = today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
+  root.querySelector("#a-date").value = today10;
+  root.querySelector("#add-form").addEventListener("submit",ev=>{
+    ev.preventDefault();
+    const g = (id)=>root.querySelector(id).value.trim();
+    const f=g("#a-firm"); const id = "c-"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+    progress[id] = {custom:{f,n:g("#a-name"),date:g("#a-date"),k:g("#a-kind"),r:g("#a-region"),u:g("#a-url"),note:g("#a-note"),sector:FIRM[f]?FIRM[f].sector:"You"}};
+    persist(id); closeDrawer(); ui.tab="agenda"; saveUI(); render(); flash("Added to your agenda");
+  });
+  root.querySelector("#a-firm").focus();
+}
+
+function flash(msg){
+  const el=document.createElement("div");
+  el.textContent=msg; el.setAttribute("role","status");
+  el.style.cssText="position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:8px;font-size:13px;z-index:30";
+  document.body.appendChild(el); setTimeout(()=>el.remove(),2400);
+}
+
+/* ---------- events ---------- */
+document.addEventListener("change",e=>{
+  const t=e.target;
+  if(t.classList.contains("status")){ t.dataset.s=t.value; setStatus(t.dataset.id,t.value); return; }
+  if(t.id==="show-past"){ ui.past=t.checked; saveUI(); render(); }
+  if(t.id==="f-elig"){ ui.elig=t.checked; saveUI(); render(); }
+  if(t.id==="f-type"){ ui.type=t.value; render(); }
+  if(t.id==="f-status"){ ui.status=t.value; render(); }
+});
+document.addEventListener("input",e=>{ if(e.target.id==="q"){ ui.q=e.target.value; render(); } });
+document.addEventListener("click",e=>{
+  const t=e.target;
+  if(t.closest("select,a,input,textarea,label.chk")) return;
+  const tab=t.closest(".tab"); if(tab){ ui.tab=tab.dataset.tab; saveUI(); render(); return; }
+  const seg=t.closest(".seg button"); if(seg){ const g=seg.parentElement.id==="f-sector"?"sector":"region"; ui[g]=seg.dataset.v; seg.parentElement.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b===seg))); saveUI(); render(); return; }
+  const m=t.closest(".strip .m"); if(m){ const k=m.dataset.month; const curKey=today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0"); if(k<curKey) ui.past=true; ui.tab="agenda"; render(); const s=document.getElementById("m-"+k); if(s) s.scrollIntoView({behavior:"smooth",block:"start"}); return; }
+  const fb=t.closest("[data-firm]"); if(fb){ ui.tab="programs"; ui.q=fb.dataset.firm; ui.type="all"; ui.status="all"; render(); window.scrollTo(0,document.querySelector(".bar-row").offsetTop-8); return; }
+  if(t.closest("[data-close]")){ closeDrawer(); return; }
+  if(t.id==="add-btn"){ openAdd(); return; }
+  const o=t.closest("[data-open]"); if(o){ openDrawer(o.dataset.open); }
+});
+document.addEventListener("keydown",e=>{ if(e.key==="Escape" && root.innerHTML) closeDrawer(); });
+
+// restore filter UI
+document.querySelectorAll("#f-sector button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===ui.sector)));
+document.querySelectorAll("#f-region button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===ui.region)));
+document.getElementById("f-elig").checked = ui.elig;
+
+render();
+})();
+</script>
+
+</body>
+</html>
