@@ -5,6 +5,10 @@ import { accounting } from './sections/01-accounting';
 import { walkthroughs } from './sections/02-walkthroughs';
 import { evEquity } from './sections/03-ev-equity';
 import { valuation } from './sections/04-valuation';
+import { comps } from './sections/05-comps';
+import { dcf } from './sections/06-dcf';
+import { mna } from './sections/07-mna';
+import { lbo } from './sections/08-lbo';
 
 export interface SectionContent {
   /**
@@ -31,6 +35,10 @@ const REGISTRY: Partial<Record<SectionId, SectionContent>> = {
   walkthroughs,
   'ev-equity': evEquity,
   valuation,
+  comps,
+  dcf,
+  mna,
+  lbo,
 };
 
 /** Every registered section's content (for tests and global search). */

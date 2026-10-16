@@ -54,7 +54,13 @@ const META: Record<QuizMode, { title: string; feedback: 'immediate' | 'end'; ico
   },
 };
 
+/** Keyed by section and mode so moving between quizzes always starts fresh. */
 export function QuizPage() {
+  const { sectionId, mode } = useParams();
+  return <QuizPageInner key={`${sectionId}-${mode}`} />;
+}
+
+function QuizPageInner() {
   const ctx = useSection();
   const { mode: rawMode } = useParams();
   const navigate = useNavigate();

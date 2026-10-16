@@ -1,0 +1,448 @@
+import type { Question } from '../../../types/questions';
+import { builders } from '../../helpers';
+
+const { mcq, num, rapid, order, free } = builders('lbo');
+
+export const questions: Question[] = [
+  // ── Sources & uses ──
+  mcq(
+    { id: 'lbo-q-001', subtopic: 'sources-uses', difficulty: 'basic', pools: ['pre', 'post'] },
+    'What is a leveraged buyout?',
+    [
+      ['A private equity firm buys a company using a large amount of debt and a smaller equity check, then uses the company’s cash flows to repay debt before exiting', 'Leverage magnifies the equity return if the company performs.', true],
+      ['A company buys back all of its own shares with cash', 'That is a self-tender or buyback, not an LBO.'],
+      ['A merger of two public companies paid in stock', 'That is a stock merger.'],
+      ['A bank lending money to a company to fund operations', 'That is ordinary corporate borrowing.'],
+    ],
+    'Debt-funded acquisition, cash flows repay debt, exit in 3–7 years.',
+  ),
+  mcq(
+    { id: 'lbo-q-002', subtopic: 'sources-uses', difficulty: 'basic', pools: ['pre', 'post'] },
+    'What goes into the “uses” side of an LBO’s sources & uses table?',
+    [
+      ['Purchase of the target’s equity, refinancing of its existing debt, and transaction and financing fees', 'Uses = everything the cash is needed for at close; sources = the debt and equity that fund it.', true],
+      ['The new debt tranches and the sponsor’s equity', 'Those are sources.'],
+      ['The target’s projected free cash flow', 'Future cash flows aren’t part of sources & uses at close.'],
+      ['The exit proceeds', 'Exit happens years later.'],
+    ],
+    'Sources must equal uses.',
+  ),
+  num(
+    { id: 'lbo-q-003', subtopic: 'sources-uses', difficulty: 'intermediate', pools: ['pre', 'post'] },
+    'A sponsor buys a company with EBITDA of $125 at 8.0x (purchase enterprise value $1,000, including refinancing all existing debt). Fees are $30. It raises 5.0x EBITDA of new debt. How much equity must the sponsor contribute?',
+    405,
+    ['Uses = 1,000 + 30 = 1,030', 'Debt = 5.0 × 125 = 625', 'Sponsor equity = 1,030 − 625 = 405'],
+    'Equity plugs the gap between uses and debt.',
+  ),
+  num(
+    { id: 'lbo-q-041', subtopic: 'sources-uses', difficulty: 'advanced', pools: ['mock'] },
+    'Uses: purchase equity $2,000, refinance existing debt $500, fees $50. Sources: new debt $1,500 and $150 of equity rolled over by management. How much new equity does the sponsor contribute?',
+    900,
+    ['Total uses = 2,000 + 500 + 50 = 2,550', 'Sources besides sponsor equity = 1,500 + 150 = 1,650', 'Sponsor equity = 2,550 − 1,650 = 900'],
+    'Rollover equity reduces the cash the sponsor must put in.',
+  ),
+  num(
+    { id: 'lbo-q-043', subtopic: 'sources-uses', difficulty: 'basic', pools: ['pre'] },
+    'Purchase enterprise value is $600, funded with 60% debt and the rest sponsor equity. Ignoring fees, how big is the equity check?',
+    240,
+    ['Equity = 40% × 600 = 240'],
+    'Equity % = 1 − debt %.',
+  ),
+  mcq(
+    { id: 'lbo-q-004', subtopic: 'sources-uses', difficulty: 'intermediate', pools: ['post'] },
+    'Why do private equity firms use so much leverage?',
+    [
+      ['Less equity means any gain in value is spread over a smaller equity base, magnifying returns; interest is also tax-deductible', 'Leverage raises returns if the business performs and the cost of debt is below the return on assets; it also raises risk.', true],
+      ['Because debt is free', 'Debt carries interest and covenants.'],
+      ['Because regulations require 70% debt', 'There is no such regulation.'],
+      ['To increase the company’s EBITDA', 'Leverage doesn’t change EBITDA.'],
+    ],
+    'Leverage magnifies equity returns (both ways).',
+  ),
+  mcq(
+    { id: 'lbo-q-029', subtopic: 'sources-uses', difficulty: 'intermediate', pools: ['post'] },
+    'What is rollover equity?',
+    [
+      ['Equity that existing owners or management reinvest into the new company instead of taking cash', 'It aligns management with the sponsor and reduces the sponsor’s check.', true],
+      ['Debt that is refinanced at closing', 'That’s refinancing.'],
+      ['Profits rolled into next year’s budget', 'Not a deal term.'],
+      ['The sponsor’s fee for arranging the deal', 'Unrelated.'],
+    ],
+    'Management “skin in the game”.',
+  ),
+  mcq(
+    { id: 'lbo-q-030', subtopic: 'sources-uses', difficulty: 'intermediate', pools: ['post'] },
+    'Why are transaction and financing fees included in uses?',
+    [
+      ['They are cash needed at closing (advisory, legal, financing fees), so they must be funded like the purchase price', 'Financing fees are typically capitalized and amortized over the life of the debt.', true],
+      ['Because they are paid by the seller', 'If the buyer pays, they must be funded.'],
+      ['They are non-cash, so they don’t matter', 'They are real cash costs.'],
+      ['They are added to EBITDA', 'Fees aren’t operating income.'],
+    ],
+    'Every dollar needed at close is a use.',
+  ),
+
+  // ── Debt tranches ──
+  mcq(
+    { id: 'lbo-q-014', subtopic: 'debt-tranches', difficulty: 'basic', pools: ['pre', 'post'] },
+    'Which ordering of an LBO capital structure, from most senior to most junior, is correct?',
+    [
+      ['Revolver and term loans (senior secured) → senior notes → subordinated notes → mezzanine / PIK → equity', 'Seniority determines who gets paid first in bankruptcy, and inversely, the interest rate.', true],
+      ['Equity → mezzanine → senior notes → term loans', 'That is the reverse order.'],
+      ['Senior notes → revolver → equity → term loans', 'Equity is always last.'],
+      ['All debt ranks equally', 'Tranches have different priority and security.'],
+    ],
+    'Senior and secured first, equity last.',
+  ),
+  mcq(
+    { id: 'lbo-q-015', subtopic: 'debt-tranches', difficulty: 'intermediate', pools: ['post'] },
+    'Which describes a typical Term Loan B?',
+    [
+      ['Floating-rate, senior secured, about 1% annual amortization with a bullet at maturity (often ~7 years), held by institutional investors, often covenant-lite', 'TLBs are the workhorse of sponsor financing.', true],
+      ['Fixed-rate, unsecured, held mainly by retail investors', 'That sounds more like some bonds.'],
+      ['Fully amortizing over 3 years with strict maintenance covenants', 'That describes a Term Loan A, held by banks.'],
+      ['Equity that converts into debt', 'Not a term loan.'],
+    ],
+    'TLA: bank-held, amortizing. TLB: institutional, minimal amortization.',
+  ),
+  mcq(
+    { id: 'lbo-q-016', subtopic: 'debt-tranches', difficulty: 'intermediate', pools: ['post', 'mock'] },
+    'How do high-yield bonds typically differ from bank term loans in an LBO?',
+    [
+      ['Usually fixed-rate, unsecured or junior, bullet repayment, with call protection and incurrence (not maintenance) covenants', 'Higher rate for higher risk, but more flexibility for the borrower.', true],
+      ['They are always secured by all assets and amortize monthly', 'That is closer to bank debt.'],
+      ['They pay no interest', 'They pay a coupon, sometimes PIK.'],
+      ['They are senior to the revolver', 'The revolver is usually senior.'],
+    ],
+    'Bonds: fixed, longer, looser covenants, call protection.',
+  ),
+  mcq(
+    { id: 'lbo-q-017', subtopic: 'debt-tranches', difficulty: 'advanced', pools: ['mock'] },
+    'What does PIK interest mean?',
+    [
+      ['Payment-in-kind: interest accrues and is added to the principal instead of being paid in cash', 'It preserves cash but compounds the debt.', true],
+      ['Interest paid in advance', 'That’s prepaid interest.'],
+      ['Interest that is waived', 'PIK interest is owed, just not paid in cash.'],
+      ['Interest paid in company stock', 'That would be a different structure; PIK adds to principal.'],
+    ],
+    'PIK = non-cash interest that grows the balance.',
+  ),
+  mcq(
+    { id: 'lbo-q-018', subtopic: 'debt-tranches', difficulty: 'advanced', pools: ['mock'] },
+    'What is the difference between maintenance and incurrence covenants?',
+    [
+      ['Maintenance covenants must be met every period (e.g. max leverage tested quarterly); incurrence covenants are tested only when the company takes an action, such as raising more debt', 'Bank loans traditionally have maintenance covenants; bonds and cov-lite loans have incurrence covenants.', true],
+      ['Maintenance covenants cover equipment upkeep', 'They’re financial tests, not physical maintenance.'],
+      ['Incurrence covenants are tested monthly', 'They are tested on specific actions.'],
+      ['They are the same', 'They differ in when they’re tested.'],
+    ],
+    'Ongoing tests vs action-triggered tests.',
+  ),
+  mcq(
+    { id: 'lbo-q-019', subtopic: 'debt-tranches', difficulty: 'intermediate', pools: ['post'] },
+    'What determines how much debt an LBO can support?',
+    [
+      ['The stability and size of the company’s cash flows, its sector and asset base, and credit-market conditions; often expressed as a multiple of EBITDA (frequently ~4–7x)', 'Lenders size debt to leverage and coverage limits they’re comfortable with.', true],
+      ['The sponsor’s preference only', 'Lenders decide how much they’ll lend.'],
+      ['The target’s revenue alone', 'Cash flow and EBITDA matter more than revenue.'],
+      ['A fixed regulatory cap of 3x', 'No fixed cap exists (though regulators have issued leveraged-lending guidance).'],
+    ],
+    'Cash flow stability drives debt capacity.',
+  ),
+  num(
+    { id: 'lbo-q-020', subtopic: 'debt-tranches', difficulty: 'intermediate', pools: ['post'] },
+    'EBITDA is $200 and annual interest expense is $50. What is the interest coverage ratio (EBITDA / interest)?',
+    4,
+    ['Coverage = 200 / 50 = 4.0x'],
+    'Lenders often require a minimum coverage ratio.',
+    { unit: 'x', tolerance: { kind: 'abs', value: 0.05 } },
+  ),
+  num(
+    { id: 'lbo-q-021', subtopic: 'debt-tranches', difficulty: 'advanced', pools: ['mock'] },
+    'EBITDA is $100. Lenders allow at most 6.0x leverage and require at least 2.0x interest coverage. The interest rate is 9%. What is the maximum debt?',
+    555.6,
+    ['Leverage limit: 6.0 × 100 = 600', 'Coverage limit: interest ≤ 100 / 2.0 = 50 → debt ≤ 50 / 9% = 555.6', 'The binding constraint is the lower: 555.6'],
+    'Debt capacity is the tightest of several constraints.',
+    { tolerance: { kind: 'abs', value: 0.5 } },
+  ),
+  mcq(
+    { id: 'lbo-q-040', subtopic: 'debt-tranches', difficulty: 'intermediate', pools: ['post'] },
+    'What is the revolver used for in an LBO?',
+    [
+      ['A flexible credit line for liquidity and working capital, drawn and repaid as needed, with a fee on undrawn amounts', 'Usually undrawn or lightly drawn at close.', true],
+      ['The main source of acquisition funding', 'Term loans and bonds do that.'],
+      ['Paying the sponsor’s dividend at close', 'Not its purpose.'],
+      ['A long-term fixed-rate bond', 'It’s a short-term, floating credit line.'],
+    ],
+    'The revolver is the company’s overdraft.',
+  ),
+  mcq(
+    { id: 'lbo-q-044', subtopic: 'debt-tranches', difficulty: 'elite', pools: ['mock'] },
+    'Why might a sponsor add a PIK note issued by a holding company above the operating company?',
+    [
+      ['It adds leverage without cash interest, is structurally subordinated to the operating company’s debt, and sits outside the operating company’s covenants', 'Holdco lenders are paid only from distributions up from the opco, so they charge a high rate.', true],
+      ['It is senior to all operating company debt', 'It’s structurally subordinated.'],
+      ['It reduces the total debt in the structure', 'It increases total debt.'],
+      ['It’s a form of common equity', 'It’s debt, though deeply subordinated.'],
+    ],
+    'Structural subordination: holdco creditors sit behind every opco creditor.',
+  ),
+
+  // ── Returns drivers ──
+  mcq(
+    { id: 'lbo-q-005', subtopic: 'returns-drivers', difficulty: 'basic', pools: ['pre', 'post', 'mock'] },
+    'What are the main drivers of returns in an LBO?',
+    [
+      ['EBITDA growth, multiple expansion and debt paydown (plus any dividends along the way)', 'Each increases the equity value at exit relative to the equity invested.', true],
+      ['Interest rates and inflation only', 'They affect returns indirectly.'],
+      ['Revenue growth only', 'Revenue matters through EBITDA; the other drivers matter too.'],
+      ['The size of the management fee', 'Fees reduce LP returns; they don’t drive deal returns.'],
+    ],
+    'Grow EBITDA, exit at a higher multiple, pay down debt.',
+  ),
+  mcq(
+    { id: 'lbo-q-006', subtopic: 'returns-drivers', difficulty: 'intermediate', pools: ['post', 'mock'] },
+    'Which company makes the best LBO candidate?',
+    [
+      ['One with stable, predictable cash flows, low capex needs, a strong market position, room for operational improvement and a reasonable price', 'Stable cash flows service the debt; improvements and growth drive returns.', true],
+      ['A pre-revenue startup with high growth potential', 'No cash flow to service debt.'],
+      ['A highly cyclical company at the peak of its cycle', 'Cash flows may collapse while the debt remains.'],
+      ['A capital-intensive company needing heavy reinvestment', 'Capex consumes cash needed for debt service.'],
+    ],
+    'Cash flow first.',
+  ),
+  num(
+    { id: 'lbo-q-026', subtopic: 'returns-drivers', difficulty: 'intermediate', pools: ['post'] },
+    'A sponsor buys at 8.0x EBITDA of $100 with $500 of debt. EBITDA and debt don’t change, but it exits at 9.0x. What is the MOIC (to 2 decimals)?',
+    1.33,
+    ['Entry equity = 800 − 500 = 300', 'Exit EV = 9 × 100 = 900; exit equity = 900 − 500 = 400', 'MOIC = 400 / 300 = 1.33x'],
+    'Multiple expansion alone; a 12.5% higher EV becomes a 33% higher equity value because of leverage.',
+    { unit: 'x', tolerance: { kind: 'abs', value: 0.01 } },
+  ),
+  mcq(
+    { id: 'lbo-q-007', subtopic: 'returns-drivers', difficulty: 'advanced', pools: ['mock'] },
+    'If a sponsor achieves the same MOIC but holds the investment longer, what happens to IRR?',
+    [
+      ['IRR falls, because the same gain is spread over more years', '2x in 3 years ≈ 26% IRR; 2x in 5 years ≈ 15%.', true],
+      ['IRR rises', 'Time works against IRR.'],
+      ['IRR is unchanged', 'IRR depends on timing.'],
+      ['MOIC falls', 'The question holds MOIC constant.'],
+    ],
+    'IRR rewards speed.',
+  ),
+  mcq(
+    { id: 'lbo-q-027', subtopic: 'returns-drivers', difficulty: 'advanced', pools: ['mock'] },
+    'What is a dividend recapitalization, and how does it affect returns?',
+    [
+      ['The company raises new debt to pay the sponsor a dividend; returning cash early usually raises IRR, while MOIC may be flat or slightly lower because of the extra interest', 'It’s a way to get money back before the exit.', true],
+      ['The company issues new shares to pay down debt', 'That’s an equity raise.'],
+      ['The sponsor sells the company to another sponsor', 'That’s a secondary buyout.'],
+      ['It always raises MOIC substantially', 'Its main effect is on IRR (timing).'],
+    ],
+    'Earlier cash → higher IRR.',
+  ),
+  mcq(
+    { id: 'lbo-q-028', subtopic: 'returns-drivers', difficulty: 'elite', pools: ['mock'] },
+    'Holding the purchase price and exit constant, the sponsor raises debt from 50% to 70% of the price. What happens?',
+    [
+      ['If the business performs, MOIC and IRR rise because the equity check is smaller, but higher interest cuts free cash flow and the risk of default rises', 'Leverage amplifies outcomes in both directions.', true],
+      ['Returns always fall because interest costs more', 'With a smaller equity base, returns usually rise unless the business struggles.'],
+      ['Nothing changes because EV is the same', 'Equity returns depend on how EV is split between debt and equity.'],
+      ['The exit multiple rises automatically', 'Leverage doesn’t change the exit multiple.'],
+    ],
+    'More leverage → higher expected equity returns and higher risk.',
+  ),
+  mcq(
+    { id: 'lbo-q-042', subtopic: 'paper-lbo', difficulty: 'advanced', pools: ['mock'] },
+    'A sponsor exits at the same multiple it paid. Where do its returns come from?',
+    [
+      ['EBITDA growth and debt paydown (plus any interim dividends)', 'With no multiple expansion, value creation comes from operations and deleveraging.', true],
+      ['Multiple expansion', 'The multiple is unchanged by assumption.'],
+      ['Nowhere: returns must be zero', 'Growth and paydown still create equity value.'],
+      ['Only from fees', 'Fees aren’t a returns driver for the fund.'],
+    ],
+    'Most underwriting assumes exit multiple = entry multiple, for exactly this reason.',
+  ),
+
+  // ── IRR and MOIC ──
+  mcq(
+    { id: 'lbo-q-008', subtopic: 'irr-moic', difficulty: 'intermediate', pools: ['post'] },
+    'What is the difference between MOIC and IRR?',
+    [
+      ['MOIC is total cash returned divided by cash invested; IRR is the annualized rate of return, which accounts for timing', 'A 2.0x MOIC is a 26% IRR over 3 years but 15% over 5 years.', true],
+      ['They are the same metric expressed differently', 'MOIC ignores time; IRR doesn’t.'],
+      ['MOIC accounts for time; IRR doesn’t', 'The reverse.'],
+      ['IRR is only used for debt investments', 'IRR is central to equity returns.'],
+    ],
+    'MOIC = how much; IRR = how fast.',
+  ),
+  num(
+    { id: 'lbo-q-009', subtopic: 'irr-moic', difficulty: 'basic', pools: ['pre', 'post', 'mock'], followUps: ['lbo-q-010'] },
+    'A sponsor invests $100 of equity and receives $250 at exit. What is the MOIC?',
+    2.5,
+    ['MOIC = 250 / 100 = 2.5x'],
+    'Total proceeds over total invested.',
+    { unit: 'x', tolerance: { kind: 'abs', value: 0.01 } },
+  ),
+  num(
+    { id: 'lbo-q-010', subtopic: 'irr-moic', difficulty: 'intermediate', pools: ['post', 'mock'] },
+    'What IRR does a 2.0x MOIC over 5 years imply (in %, nearest whole number)?',
+    15,
+    ['IRR = 2^(1/5) − 1 = 14.9% ≈ 15%', 'Rule of thumb: 2x in 5 years ≈ 15%'],
+    'Memorize: 2x/5yrs ≈ 15%, 3x/5yrs ≈ 25%, 2x/3yrs ≈ 26%.',
+    { unit: '%', tolerance: { kind: 'abs', value: 0.6 } },
+  ),
+  num(
+    { id: 'lbo-q-011', subtopic: 'irr-moic', difficulty: 'intermediate', pools: ['post'] },
+    'What IRR does a 3.0x MOIC over 5 years imply (in %, nearest whole number)?',
+    25,
+    ['IRR = 3^(1/5) − 1 = 24.6% ≈ 25%'],
+    'The other rule of thumb to memorize.',
+    { unit: '%', tolerance: { kind: 'abs', value: 0.6 } },
+  ),
+  num(
+    { id: 'lbo-q-012', subtopic: 'irr-moic', difficulty: 'advanced', pools: ['mock'] },
+    'What IRR does a 2.0x MOIC over 3 years imply (in %, nearest whole number)?',
+    26,
+    ['IRR = 2^(1/3) − 1 = 26.0%'],
+    'Same money, faster: much higher IRR.',
+    { unit: '%', tolerance: { kind: 'abs', value: 0.6 } },
+  ),
+  num(
+    { id: 'lbo-q-032', subtopic: 'irr-moic', difficulty: 'elite', pools: ['mock'] },
+    'A sponsor invests $100, receives a $50 dividend in year 2 and exits for $150 in year 4. What is the MOIC?',
+    2,
+    ['MOIC = (50 + 150) / 100 = 2.0x', '(The IRR is about 22%: higher than a 2.0x paid entirely in year 4, which would be about 19%)'],
+    'MOIC counts all distributions; IRR also rewards the early dividend.',
+    { unit: 'x', tolerance: { kind: 'abs', value: 0.01 } },
+  ),
+  mcq(
+    { id: 'lbo-q-031', subtopic: 'irr-moic', difficulty: 'advanced', pools: ['mock'] },
+    'Why do sponsors and their investors look at both IRR and MOIC?',
+    [
+      ['IRR measures the speed of returns but can look high on quick, small gains; MOIC measures how much money was actually made', 'A 1.3x flip in one year has a 30% IRR but doesn’t create much money for a fund.', true],
+      ['Because IRR is required by law', 'It’s an industry convention, not a law.'],
+      ['Because MOIC accounts for time and IRR doesn’t', 'The reverse.'],
+      ['They always agree, so either suffices', 'They can rank deals differently.'],
+    ],
+    'Investors want both speed and scale.',
+  ),
+  rapid(
+    { id: 'lbo-q-013', subtopic: 'irr-moic', difficulty: 'basic', pools: ['pre'] },
+    'Money doubles in 4 years. Roughly what IRR is that (in %)?',
+    19,
+    '2^(1/4) − 1 = 18.9%. Rule of 72: 72 / 4 = 18, close enough.',
+    { unit: '%', seconds: 20, tolerance: { kind: 'abs', value: 1.5 } },
+  ),
+  rapid(
+    { id: 'lbo-q-037', subtopic: 'irr-moic', difficulty: 'basic', pools: ['post', 'mock'] },
+    'Invest $50, exit with $150. What is the MOIC?',
+    3,
+    '150 / 50 = 3.0x.',
+    { unit: 'x' },
+  ),
+  rapid(
+    { id: 'lbo-q-038', subtopic: 'irr-moic', difficulty: 'intermediate', pools: ['post'] },
+    '3x in 5 years is roughly what IRR (in %)?',
+    25,
+    '3^(1/5) − 1 ≈ 24.6% ≈ 25%.',
+    { unit: '%', tolerance: { kind: 'abs', value: 1.5 } },
+  ),
+  rapid(
+    { id: 'lbo-q-039', subtopic: 'sources-uses', difficulty: 'intermediate', pools: ['pre'] },
+    'EBITDA is $80 and lenders allow 5.0x leverage. How much debt can the deal raise?',
+    400,
+    '5 × 80 = 400.',
+  ),
+
+  // ── Paper LBO ──
+  num(
+    { id: 'lbo-q-022', subtopic: 'paper-lbo', difficulty: 'advanced', pools: ['mock'], followUps: ['lbo-q-023', 'lbo-q-024'] },
+    'Paper LBO: a sponsor buys a company at 10.0x EBITDA of $100 (EV $1,000), funded 50% with debt. EBITDA grows to $150 by year 5, cumulative free cash flow of $200 repays debt, and it exits at 10.0x. What is the MOIC?',
+    2.4,
+    ['Entry equity = 50% × 1,000 = 500; debt = 500', 'Exit EV = 10 × 150 = 1,500', 'Debt at exit = 500 − 200 = 300', 'Exit equity = 1,500 − 300 = 1,200', 'MOIC = 1,200 / 500 = 2.4x'],
+    'Exit equity = exit EV − remaining debt.',
+    { unit: 'x', tolerance: { kind: 'abs', value: 0.01 } },
+  ),
+  num(
+    { id: 'lbo-q-023', subtopic: 'paper-lbo', difficulty: 'advanced', pools: ['mock'] },
+    'Continuing: a 2.4x MOIC over 5 years is roughly what IRR (in %)?',
+    19,
+    ['IRR = 2.4^(1/5) − 1 = 19.1%', 'Mental math: 2x/5yrs ≈ 15% and 3x/5yrs ≈ 25%, so 2.4x lands around 19%'],
+    'Interpolate between the rules of thumb.',
+    { unit: '%', tolerance: { kind: 'abs', value: 1 } },
+  ),
+  num(
+    { id: 'lbo-q-024', subtopic: 'paper-lbo', difficulty: 'elite', pools: ['mock'] },
+    'Continuing: of the $700 of equity value created, what share came from EBITDA growth (in %, to 1 decimal)?',
+    71.4,
+    ['EBITDA growth: (150 − 100) × 10.0x = 500', 'Multiple expansion: 0 (entry = exit multiple)', 'Debt paydown: 200', 'Share from EBITDA growth = 500 / 700 = 71.4%'],
+    'Returns attribution: EBITDA growth × entry multiple + change in multiple × exit EBITDA + debt paydown.',
+    { unit: '%', tolerance: { kind: 'abs', value: 0.5 } },
+  ),
+  mcq(
+    { id: 'lbo-q-025', subtopic: 'paper-lbo', difficulty: 'intermediate', pools: ['post'] },
+    'Which simplifications are standard in a paper LBO?',
+    [
+      ['Round numbers, entry multiple = exit multiple unless told otherwise, FCF ≈ net income + D&A − capex, and all free cash flow used to repay debt', 'The goal is a defensible answer in 5–10 minutes without a calculator.', true],
+      ['Ignore taxes and debt entirely', 'Taxes and debt paydown are central to the answer.'],
+      ['Model monthly cash flows', 'Far too detailed for pen and paper.'],
+      ['Use a computer to calculate IRR exactly', 'The point is to estimate using rules of thumb.'],
+    ],
+    'Simplify the math, not the logic.',
+  ),
+  order(
+    { id: 'lbo-q-033', subtopic: 'paper-lbo', difficulty: 'basic', pools: ['pre'] },
+    'Put the steps of an LBO model in order.',
+    [
+      'Set the purchase price and build sources & uses',
+      'Project the income statement and free cash flow',
+      'Build the debt schedule (interest and paydown)',
+      'Calculate the exit value and remaining debt',
+      'Calculate returns (MOIC and IRR)',
+    ],
+    'Entry → projections → debt → exit → returns.',
+  ),
+
+  // ── Verbal ──
+  free(
+    { id: 'lbo-q-034', subtopic: 'sources-uses', difficulty: 'basic', pools: ['mock'], followUps: ['lbo-q-006', 'lbo-q-005'] },
+    'Walk me through a basic LBO model.',
+    [
+      ['entry', 'Purchase price, sources & uses, and the debt / equity split', [['purchase price|entry|sources', 'debt|equity']]],
+      ['proj', 'Project the financials and free cash flow', [['project*|forecast*', 'cash flow|fcf']]],
+      ['debt', 'Use cash flow to pay interest and repay debt', [['repay*|pay down|paydown|debt schedule']]],
+      ['exit', 'Exit value (multiple × EBITDA) minus remaining debt = exit equity', [['exit']]],
+      ['returns', 'Calculate MOIC and IRR', [['irr|moic|multiple of invested|returns']]],
+    ],
+    'First, you set the purchase price, usually as a multiple of EBITDA, and build sources and uses: how much debt you can raise and how much equity the sponsor puts in. Then you project the company’s income statement and free cash flow over the holding period, typically five years. You use that cash flow to pay interest and repay debt in a debt schedule. At the end, you assume an exit, usually at a multiple of EBITDA, subtract the remaining debt to get exit equity value, and compare it with the equity invested to calculate the MOIC and IRR.',
+    'Entry → projections → debt paydown → exit → returns.',
+  ),
+  free(
+    { id: 'lbo-q-035', subtopic: 'returns-drivers', difficulty: 'intermediate', pools: ['mock'] },
+    'What makes a company a good LBO candidate?',
+    [
+      ['cash', 'Stable, predictable cash flows to service debt', [['stable|predictable|recurring', 'cash flow*']]],
+      ['capex', 'Low capex and working capital needs', [['capex|capital expenditure*|capital intensive']]],
+      ['position', 'Strong market position and management', [['market position|competitive|moat|management']]],
+      ['upside', 'Room to improve operations or grow, a reasonable price and clear exit options', [['improve*|cost*|growth|exit|price']]],
+    ],
+    'A good LBO candidate has stable, predictable cash flows, because those pay the interest and repay the debt. It should have low capex and working capital needs, so more of its EBITDA turns into free cash flow. A strong market position and a good management team reduce risk. And there should be upside: room to improve margins or cut costs, a reasonable purchase price and clear exit options, whether a sale to a strategic buyer, another sponsor or an IPO.',
+    'Cash flow, capital intensity, position, upside.',
+    45,
+  ),
+  free(
+    { id: 'lbo-q-036', subtopic: 'returns-drivers', difficulty: 'advanced', pools: ['mock'] },
+    'How could a sponsor increase its returns in an LBO?',
+    [
+      ['price', 'Pay a lower purchase price', [['lower purchase price|pay less|lower price|entry multiple']]],
+      ['leverage', 'Use more leverage (with more risk)', [['leverage|more debt']]],
+      ['ops', 'Grow EBITDA through revenue growth or margin improvement', [['ebitda|margin*|revenue growth|cost*']]],
+      ['exit', 'Exit at a higher multiple or sooner', [['higher multiple|multiple expansion|exit sooner|earlier']]],
+      ['cash', 'Return cash earlier through dividend recaps or faster paydown', [['dividend|recap*|pay down|paydown']]],
+    ],
+    'There are a few levers. Pay a lower purchase price, or a lower entry multiple. Use more leverage, which shrinks the equity check, though it adds risk. Grow EBITDA through revenue growth or margin improvement. Exit at a higher multiple, or exit sooner, which raises IRR. And return cash earlier, with a dividend recap or faster debt paydown.',
+    'Price, leverage, operations, exit, timing of cash.',
+    45,
+  ),
+];

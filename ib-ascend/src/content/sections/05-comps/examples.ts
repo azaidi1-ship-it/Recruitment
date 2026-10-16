@@ -1,0 +1,92 @@
+import type { WorkedExample } from '../../../types/models';
+
+export const examples: WorkedExample[] = [
+  {
+    id: 'co-ex1',
+    sectionId: 'comps',
+    subtopic: 'spreading',
+    difficulty: 'basic',
+    title: 'From a peer median to a share price',
+    prompt: 'Peers trade at a median 9.0x EV/EBITDA. The target’s EBITDA is $80, net debt $160 and diluted shares 40. What is the implied share price?',
+    steps: [
+      { title: 'EV', body: '9.0 × 80 = 720.' },
+      { title: 'Equity value', body: '720 − 160 = 560.' },
+      { title: 'Per share', body: '560 / 40 = $14.00.' },
+    ],
+    answer: '$14.00 per share.',
+  },
+  {
+    id: 'co-ex2',
+    sectionId: 'comps',
+    subtopic: 'spreading',
+    difficulty: 'intermediate',
+    title: 'Calculating LTM',
+    prompt: 'FY2025 revenue $1,000 and EBITDA $200. Nine months to Sep-2026: revenue $800, EBITDA $170. Nine months to Sep-2025: revenue $720, EBITDA $150. What are LTM revenue and EBITDA?',
+    steps: [
+      { title: 'Formula', body: 'LTM = FY2025 + 9M 2026 − 9M 2025.' },
+      { title: 'Revenue', body: '1,000 + 800 − 720 = 1,080.' },
+      { title: 'EBITDA', body: '200 + 170 − 150 = 220.' },
+    ],
+    answer: 'LTM revenue $1,080; LTM EBITDA $220 (20.4% margin).',
+  },
+  {
+    id: 'co-ex3',
+    sectionId: 'comps',
+    subtopic: 'calendarization',
+    difficulty: 'intermediate',
+    title: 'Calendarizing two peers',
+    prompt: 'Peer X has a March year-end: EBITDA 400 (FY Mar-26) and 480 (FY Mar-27). Peer Y has a June year-end: 200 (FY Jun-26) and 260 (FY Jun-27). What is each one’s calendar 2026 EBITDA?',
+    steps: [
+      { title: 'Peer X', body: 'Jan–Mar 2026 from FY Mar-26, Apr–Dec 2026 from FY Mar-27: 3/12 × 400 + 9/12 × 480 = 100 + 360 = 460.' },
+      { title: 'Peer Y', body: 'Jan–Jun from FY Jun-26, Jul–Dec from FY Jun-27: 6/12 × 200 + 6/12 × 260 = 230.' },
+    ],
+    answer: 'X: 460; Y: 230.',
+  },
+  {
+    id: 'co-ex4',
+    sectionId: 'comps',
+    subtopic: 'precedents',
+    difficulty: 'advanced',
+    title: 'Calculating a precedent multiple',
+    prompt: 'A buyer paid $50 per share for 40m diluted shares. The target had $600 of debt, $100 of cash and LTM EBITDA of $250, and its unaffected share price was $40. What were the transaction multiple and the premium?',
+    steps: [
+      { title: 'Equity purchase price', body: '50 × 40 = 2,000.' },
+      { title: 'Transaction value', body: '2,000 + 600 − 100 = 2,500.' },
+      { title: 'Multiple', body: '2,500 / 250 = 10.0x LTM EBITDA.' },
+      { title: 'Premium', body: '50 / 40 − 1 = 25%.' },
+    ],
+    answer: '10.0x EV/LTM EBITDA at a 25% premium.',
+  },
+  {
+    id: 'co-ex5',
+    sectionId: 'comps',
+    subtopic: 'control-premium',
+    difficulty: 'advanced',
+    title: 'Premiums-paid analysis',
+    prompt: 'The target’s unaffected price is $40. Comparable deals paid premiums with a 25th percentile of 20%, median 28% and 75th percentile of 35%. What range does this imply, and what is the main caveat?',
+    steps: [
+      { title: 'Low', body: '40 × 1.20 = $48.00.' },
+      { title: 'Median', body: '40 × 1.28 = $51.20.' },
+      { title: 'High', body: '40 × 1.35 = $54.00.' },
+      { title: 'Caveat', body: 'If the unaffected price was depressed or inflated by speculation, a “normal” premium misprices the deal. Cross-check against intrinsic value.' },
+    ],
+    answer: '$48.00–$54.00 (median $51.20).',
+  },
+  {
+    id: 'co-ex6',
+    sectionId: 'comps',
+    subtopic: 'spreading',
+    difficulty: 'elite',
+    title: 'A full comps range with quartiles',
+    prompt:
+      'Peers: A (EV 1,200, EBITDA 150), B (2,000, 200), C (900, 100), D (3,300, 300). Target: EBITDA 120, net debt 180, 60 diluted shares. What are the 25th percentile, median and 75th percentile multiples, and the implied share price range?',
+    steps: [
+      { title: 'Multiples', body: 'A 8.0x, B 10.0x, C 9.0x, D 11.0x. Sorted: 8.0, 9.0, 10.0, 11.0.' },
+      { title: 'Quartiles (Excel QUARTILE.INC)', body: '25th: 8.0 + 0.75 × (9.0 − 8.0) = 8.75x. Median: 9.5x. 75th: 10.0 + 0.25 × (11.0 − 10.0) = 10.25x.' },
+      { title: 'EV range', body: '8.75 × 120 = 1,050; 9.5 × 120 = 1,140; 10.25 × 120 = 1,230.' },
+      { title: 'Equity value', body: 'Subtract net debt of 180: 870; 960; 1,050.' },
+      { title: 'Per share', body: 'Divide by 60: $14.50; $16.00; $17.50.' },
+    ],
+    answer: '8.75x / 9.5x / 10.25x → $14.50 / $16.00 / $17.50 per share.',
+  },
+];

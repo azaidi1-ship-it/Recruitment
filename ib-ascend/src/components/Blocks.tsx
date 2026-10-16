@@ -54,17 +54,16 @@ function Block({ block: b }: { block: LessonBlock }) {
           <p className="text-sm leading-relaxed">{b.text}</p>
         </div>
       );
-    case 'table':
+    case 'table': {
+      // A column is numeric when every non-blank cell is numeric; numeric columns are right-aligned.
+      const numeric = b.headers.map((_, i) => b.rows.some((r) => (r[i] ?? '').trim()) && b.rows.every((r) => !(r[i] ?? '').trim() || NUMERIC.test(r[i]!)));
       return (
         <figure className="break-inside-avoid overflow-x-auto">
           <table className="w-full min-w-[320px] border-collapse text-sm">
             <thead>
               <tr>
                 {b.headers.map((h, i) => (
-                  <th
-                    key={h}
-                    className={`border-b border-line px-3 py-2 font-semibold ${i > 0 && b.rows.every((r) => NUMERIC.test(r[i] ?? '')) ? 'text-right' : 'text-left'}`}
-                  >
+                  <th key={h || i} className={`border-b border-line px-3 py-2 font-semibold ${numeric[i] ? 'text-right' : 'text-left'}`}>
                     {h}
                   </th>
                 ))}
@@ -74,7 +73,7 @@ function Block({ block: b }: { block: LessonBlock }) {
               {b.rows.map((r, ri) => (
                 <tr key={ri} className="border-b border-line/60">
                   {r.map((c, ci) => (
-                    <td key={ci} className={`px-3 py-1.5 ${NUMERIC.test(c) ? 'text-right tabular' : ''}`}>
+                    <td key={ci} className={`px-3 py-1.5 ${numeric[ci] ? 'text-right tabular' : ''}`}>
                       {c}
                     </td>
                   ))}
@@ -85,6 +84,7 @@ function Block({ block: b }: { block: LessonBlock }) {
           {b.caption && <figcaption className="mt-1 text-xs text-faint">{b.caption}</figcaption>}
         </figure>
       );
+    }
     case 'example':
       return (
         <div className="break-inside-avoid rounded-lg border border-line bg-sunk p-4">
