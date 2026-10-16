@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { CheckCircle2, Circle, Flame, Lock, Snowflake } from 'lucide-react';
+import { CheckCircle2, Circle, Flame, Lock, Snowflake, Video } from 'lucide-react';
 import { SECTIONS } from '../../content/sections';
 import { useGameStore } from '../../store/useGameStore';
 import { useProfileStore } from '../../store/useProfileStore';
@@ -102,6 +102,19 @@ export function Dashboard() {
           </ul>
         </Card>
       </div>
+
+      <Link to="/hirevue" className="mb-4 block">
+        <Card className="flex items-center gap-4 transition hover:border-faint">
+          <span className="grid size-10 place-items-center rounded-lg border border-line bg-sunk text-accent">
+            <Video size={18} />
+          </span>
+          <div className="flex-1">
+            <h2 className="font-semibold">HireVue practice</h2>
+            <p className="text-sm text-muted">Timed one-way video answers with prep countdowns, retakes and a scored review.</p>
+          </div>
+          <span className="text-sm text-accent">Start →</span>
+        </Card>
+      </Link>
 
       <Card>
         <div className="mb-2 flex items-center justify-between">

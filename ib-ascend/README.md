@@ -47,6 +47,10 @@ Rubric keywords: each point lists keyword groups; a group matches when all its t
 - **Unlocks**: a section's post-quiz at 80%+ clears it for the next tier; a pre-quiz at 90%+ lets you fast-track to the post-quiz.
 - **Streaks**: one freeze earned per active week (max 2 banked), spent automatically to cover missed days.
 
+## HireVue practice
+
+`/hirevue` simulates a one-way video interview: choose 3/5/7 questions, a focus, prep time, answer time and retakes. Each question gives a prep countdown, then records from your camera (or audio-only) with an answer countdown, playback and limited retakes. A live transcript is used where the browser supports the Web Speech API (in Chrome it is processed by Google). The review screen shows pace (words per minute), filler words, rubric points detected from the transcript and a delivery checklist; the score is 70% content + 30% delivery. Recordings stay in memory and are never uploaded; download any you want to keep. Questions live in `src/content/hirevue/questions.ts`; resume-based outlines use only facts from your resume and mark personal details as `[your detail]`.
+
 ## Your data
 
 Progress, stories, notes and settings are stored only in this browser (IndexedDB). Use **Settings → Export backup** regularly; **Import backup** replaces everything with the file's contents. The optional LLM API key is left out of backups unless you tick "Include API key".
@@ -57,7 +61,8 @@ Progress, stories, notes and settings are stored only in this browser (IndexedDB
 - [x] 1. Setup, data models, state, persistence, export/import
 - [x] 2. Gamification engine (XP, levels, ranks, stats, mastery, unlocks, achievements, quests)
 - [x] 3. Section flow UI and all question types
-- [ ] 4–6. Content for sections 1–12
+- [x] 4. Content for sections 1–4 (174 questions, 24 worked examples, 16 chapters) + HireVue practice
+- [ ] 5–6. Content for sections 5–12
 - [ ] 7. Spaced repetition, dashboard, analytics
 - [ ] 8. Superday Simulator, Paper LBO, model builders, Mental Math Arcade
 - [ ] 9. Story Bank, Firm Tracker, Deal Journal, Recruiting Calendar

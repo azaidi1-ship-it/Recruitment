@@ -218,7 +218,9 @@ export type AttemptMode =
   | 'weeklyBoss'
   | 'arcade'
   /** Behavioral story practice (Story Bank practice mode). */
-  | 'behavioral';
+  | 'behavioral'
+  /** HireVue-style one-way video interview practice. */
+  | 'hirevue';
 
 export interface Attempt {
   id: string;

@@ -5,6 +5,7 @@ import { SkillTree } from './features/skilltree/SkillTree';
 import { ResumePage } from './features/profile/ResumePage';
 import { Settings } from './features/settings/Settings';
 import { Achievements } from './features/achievements/Achievements';
+import { HireVuePage } from './features/hirevue/HireVue';
 import { ComingSoon } from './components/ComingSoon';
 import { SectionLayout } from './features/section/SectionLayout';
 import { SectionPath } from './features/section/SectionPath';
@@ -53,6 +54,7 @@ export const router = createHashRouter([
         element: <ComingSoon title="Tools" phase={8} what="Paper LBO Trainer, DCF / accretion-dilution / LBO builders and the Mental Math Arcade. Firm Tracker, Deal Journal and Recruiting Calendar follow in Phase 9." />,
       },
       { path: 'achievements', element: <Achievements /> },
+      { path: 'hirevue', element: <HireVuePage /> },
       { path: 'resume', element: <ResumePage /> },
       { path: 'settings', element: <Settings /> },
       { path: '*', element: <ComingSoon title="Not found" what="That page doesn’t exist." /> },

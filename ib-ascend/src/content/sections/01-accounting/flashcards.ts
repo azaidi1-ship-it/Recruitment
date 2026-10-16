@@ -19,4 +19,8 @@ export const flashcards: Flashcard[] = [
     back: 'Accrual timing (credit sales, unpaid bills), non-cash charges (D&A, SBC, impairments), and cash items that skip the income statement (capex, debt principal).',
   },
   { id: 'acc-fc6', sectionId: 'accounting', subtopic: 'linkages', front: 'Where does a share buyback show up on the balance sheet?', back: 'Cash falls and treasury stock (a contra-equity account) reduces equity. Retained earnings are unchanged.' },
+  { id: 'acc-fc7', sectionId: 'accounting', subtopic: 'cash-flow-statement', front: 'Gain on an asset sale: CFS treatment', back: 'Subtract the gain in CFO; show the full proceeds in CFI.' },
+  { id: 'acc-fc8', sectionId: 'accounting', subtopic: 'working-capital', front: 'Cash conversion cycle', back: 'CCC = DSO + DIO − DPO. DSO = AR/Revenue × 365; DIO = Inventory/COGS × 365; DPO = AP/COGS × 365.' },
+  { id: 'acc-fc9', sectionId: 'accounting', subtopic: 'balance-sheet', front: 'How is goodwill created?', back: 'Only by acquisitions: purchase price above the fair value of identifiable net assets.' },
+  { id: 'acc-fc10', sectionId: 'accounting', subtopic: 'income-statement', front: 'EBITDA’s biggest weakness', back: 'It ignores capex and working capital, so it isn’t cash flow.' },
 ];

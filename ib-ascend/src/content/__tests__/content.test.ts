@@ -76,8 +76,23 @@ describe.each(sections)('section %s', (sectionId, c) => {
         expect(val('is.ni'), `${q.id} IS NI = CFS NI`).toBeCloseTo(val('cfs.ni')!, 6);
       }
       if (val('is.ebt') !== undefined && val('is.tax') !== undefined && val('is.ni') !== undefined) {
-        expect(val('is.tax'), `${q.id} tax = EBT × t`).toBeCloseTo(val('is.ebt')! * q.taxRate, 6);
+        if (!q.tags?.includes('tax-nondeductible')) {
+          expect(val('is.tax'), `${q.id} tax = EBT × t`).toBeCloseTo(val('is.ebt')! * q.taxRate, 6);
+        }
         expect(val('is.ni'), `${q.id} NI = EBT − tax`).toBeCloseTo(val('is.ebt')! - val('is.tax')!, 6);
+      }
+      // CFS arithmetic: every CFS line other than subtotals sums to the net change in cash,
+      // and the operating lines (those listed before cfs.cfo) sum to CFO.
+      const cfs = q.lines.filter((l) => l.statement === 'CFS');
+      const net = cfs.find((l) => l.key === 'cfs.net');
+      if (net) {
+        const items = cfs.filter((l) => l.key !== 'cfs.net' && l.key !== 'cfs.cfo');
+        expect(items.reduce((n, l) => n + l.expected, 0), `${q.id} CFS items sum to net change`).toBeCloseTo(net.expected, 6);
+        const cfoIdx = cfs.findIndex((l) => l.key === 'cfs.cfo');
+        if (cfoIdx > 0) {
+          const op = cfs.slice(0, cfoIdx).reduce((n, l) => n + l.expected, 0);
+          expect(op, `${q.id} operating lines sum to CFO`).toBeCloseTo(cfs[cfoIdx]!.expected, 6);
+        }
       }
     }
   });

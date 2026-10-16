@@ -178,3 +178,28 @@ describe('quests', () => {
     expect(xp()).toBe(8 + 8 + 80 + 25);
   });
 });
+
+describe('HireVue answers', () => {
+  it('count as story practice, feed quests, and never create mistakes', async () => {
+    await db.quests.clear();
+    await db.quests.add({
+      id: '2026-10-16-0',
+      date: '2026-10-16',
+      templateId: 'pol-stories',
+      title: 'Practice 2 behavioral stories out loud',
+      stat: 'polish',
+      sectionId: null,
+      metric: 'storiesPracticed',
+      target: 2,
+      progress: 0,
+      xpReward: 80,
+      completedAt: null,
+    });
+    const hv = { ...q, questionId: 'hv-12', sectionId: 'fit' as const, subtopic: 'behavioral-stories', difficulty: 'intermediate' as const, mode: 'hirevue' as const, response: { type: 'freeText' as const, text: 'x', selfScore: 0.4 } };
+    await answerQuestion({ ...hv, correct: false, score: 0.4 }, now);
+    await answerQuestion({ ...hv, questionId: 'hv-13', correct: true, score: 0.9 }, later(5));
+    expect(await db.mistakes.count()).toBe(0);
+    expect((await db.quests.get('2026-10-16-0'))?.completedAt).not.toBeNull();
+    expect(useGameStore.getState().snapshot!.stats.polish).toBeGreaterThan(0);
+  });
+});

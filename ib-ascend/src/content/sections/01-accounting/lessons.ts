@@ -1,6 +1,5 @@
 import type { Lesson } from '../../../types/models';
 
-// TODO(Phase 4): add chapters on line items in depth, accrual vs cash, and working capital.
 export const lessons: Lesson[] = [
   {
     id: 'acc-l1',
@@ -133,5 +132,95 @@ export const lessons: Lesson[] = [
     ],
     sixtySecond:
       'Net income starts the cash flow statement and, less dividends, increases retained earnings. Non-cash charges are added back and working capital changes adjust cash from operations: an increase in an asset uses cash, an increase in a liability provides cash. Capex adds to PP&E and depreciation reduces it. Financing flows change debt and equity. Ending cash on the cash flow statement is the cash on the balance sheet, and the balance sheet must always balance.',
+  },
+  {
+    id: 'acc-l3',
+    sectionId: 'accounting',
+    order: 3,
+    title: 'Line items that trip people up',
+    minutes: 7,
+    blocks: [
+      {
+        kind: 'p',
+        text: 'Most accounting mistakes in interviews come from a handful of line items. Know what each one is, which statement it lives on and how it moves.',
+      },
+      {
+        kind: 'table',
+        headers: ['Item', 'What it is', 'Where it lives'],
+        rows: [
+          ['Deferred revenue', 'Cash received before the product or service is delivered', 'Liability (BS); increase is a source of cash'],
+          ['Prepaid expenses', 'Cash paid before the benefit is received (e.g. insurance)', 'Asset (BS); increase is a use of cash'],
+          ['Accrued expenses', 'Costs incurred but not yet invoiced or paid (wages, utilities)', 'Liability (BS)'],
+          ['Goodwill', 'Purchase price above fair value of identifiable net assets acquired', 'Asset (BS); impaired, never amortized (US GAAP, public companies)'],
+          ['Other intangibles', 'Acquired customer lists, technology, brands', 'Asset (BS); amortized if finite-lived'],
+          ['Treasury stock', 'Shares the company has bought back', 'Contra-equity (BS), negative'],
+          ['Noncontrolling interest', 'The part of a consolidated subsidiary the parent doesn’t own', 'Equity (BS); its share of NI is deducted on the IS'],
+          ['Deferred tax liability', 'Taxes owed in the future because book tax exceeds cash tax today', 'Liability (BS)'],
+          ['Deferred tax asset', 'Future tax savings, e.g. from NOLs', 'Asset (BS)'],
+        ],
+      },
+      {
+        kind: 'trap',
+        title: 'Dividends are not an expense',
+        text: 'Dividends never appear on the income statement. They are paid out of net income: they reduce retained earnings and appear in financing cash flow. Interest is the expense; dividends are a distribution.',
+      },
+      {
+        kind: 'h',
+        text: 'Gains and losses on asset sales',
+      },
+      {
+        kind: 'p',
+        text: 'If a company sells equipment with a $50 book value for $80, it records a $30 gain in net income. On the cash flow statement, the full $80 shows up in cash from investing, so the $30 gain must be subtracted in cash from operations; otherwise it would be counted twice. Losses are added back.',
+      },
+      {
+        kind: 'formula',
+        title: 'EBITDA and adjusted EBITDA',
+        lines: ['EBITDA = EBIT + D&A', 'Adjusted EBITDA = EBITDA + genuinely non-recurring charges (restructuring, one-off legal settlements)'],
+        note: 'Be skeptical of “adjustments” that recur every year. Stock-based compensation is the most debated add-back.',
+      },
+    ],
+    sixtySecond:
+      'Deferred revenue is a liability and prepaid expenses are an asset; accrued expenses are liabilities for costs incurred but not invoiced. Goodwill arises only from acquisitions and is impaired, not amortized. Treasury stock reduces equity. Dividends are never an expense. Gains on asset sales are subtracted in cash from operations because the proceeds appear in investing. Adjusted EBITDA adds back only truly non-recurring items.',
+  },
+  {
+    id: 'acc-l4',
+    sectionId: 'accounting',
+    order: 4,
+    title: 'Accrual accounting and working capital',
+    minutes: 7,
+    blocks: [
+      {
+        kind: 'p',
+        text: 'Accrual accounting records revenue when it is earned and expenses when they are incurred, regardless of when cash moves. US public companies must use it under GAAP (IFRS elsewhere) because it matches costs to the revenue they generate, giving a truer picture of a period’s performance. The cost is that net income and cash drift apart, and working capital is where most of the gap lives.',
+      },
+      {
+        kind: 'formula',
+        title: 'Working capital',
+        lines: [
+          'Working capital = Current assets − Current liabilities',
+          'Operating WC = (AR + Inventory + Prepaids) − (AP + Accrued expenses + Deferred revenue)',
+          'Increase in operating WC → reduces cash from operations',
+        ],
+        note: 'Operating WC excludes cash and debt: they are financing items, handled in the EV bridge.',
+      },
+      {
+        kind: 'formula',
+        title: 'Cash conversion cycle',
+        lines: ['DSO = AR / Revenue × 365', 'DIO = Inventory / COGS × 365', 'DPO = AP / COGS × 365', 'CCC = DSO + DIO − DPO'],
+        note: 'How many days cash is tied up between paying suppliers and collecting from customers.',
+      },
+      {
+        kind: 'example',
+        title: 'Why fast growth can burn cash',
+        text: 'A distributor with a 60-day cash conversion cycle grows revenue from $1,000 to $1,500. Its receivables and inventory grow with it, so it must fund roughly 60 days of extra sales before collecting. Net income can rise while cash from operations falls, which is how profitable companies run out of money.',
+      },
+      {
+        kind: 'trap',
+        title: 'Negative working capital isn’t automatically bad',
+        text: 'Retailers, restaurants and subscription businesses often collect cash before paying suppliers. Their working capital is negative by design, and growth generates cash rather than consuming it. Judge it by the business model.',
+      },
+    ],
+    sixtySecond:
+      'Accrual accounting recognizes revenue when earned and expenses when incurred, which is why net income and cash differ. Operating working capital is receivables, inventory and prepaids minus payables, accrued expenses and deferred revenue, excluding cash and debt. An increase in it uses cash. The cash conversion cycle, DSO plus DIO minus DPO, measures how long cash is tied up. Negative working capital can be a strength.',
   },
 ];

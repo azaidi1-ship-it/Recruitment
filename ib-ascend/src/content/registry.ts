@@ -1,6 +1,10 @@
 import type { CheatSheet, Flashcard, Lesson, SectionId, WorkedExample } from '../types/models';
 import type { Question } from '../types/questions';
+import { HIREVUE_QUESTIONS } from './hirevue/questions';
 import { accounting } from './sections/01-accounting';
+import { walkthroughs } from './sections/02-walkthroughs';
+import { evEquity } from './sections/03-ev-equity';
+import { valuation } from './sections/04-valuation';
 
 export interface SectionContent {
   /**
@@ -24,6 +28,9 @@ const EMPTY: SectionContent = { status: 'empty', lessons: [], examples: [], ques
  */
 const REGISTRY: Partial<Record<SectionId, SectionContent>> = {
   accounting,
+  walkthroughs,
+  'ev-equity': evEquity,
+  valuation,
 };
 
 /** Every registered section's content (for tests and global search). */
@@ -37,10 +44,12 @@ export function getSectionContent(id: SectionId): SectionContent {
 
 let questionIndex: Map<string, Question> | null = null;
 
+/** Any question by id: section banks plus the HireVue bank. */
 export function getQuestion(id: string): Question | undefined {
   if (!questionIndex) {
     questionIndex = new Map();
     for (const c of Object.values(REGISTRY)) for (const q of c?.questions ?? []) questionIndex.set(q.id, q);
+    for (const q of HIREVUE_QUESTIONS) questionIndex.set(q.id, q);
   }
   return questionIndex.get(id);
 }

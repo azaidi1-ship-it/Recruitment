@@ -1,17 +1,20 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Check, X } from 'lucide-react';
 import type { MultipleChoiceQuestion } from '../../types/questions';
 import { Button, cx } from '../../components/ui';
+import { mulberry32, shuffle } from '../../lib/random';
 import type { QuestionProps } from './types';
 
 export function MultipleChoice({ question, submitted, reveal, onSubmit }: QuestionProps<MultipleChoiceQuestion>) {
   const [choice, setChoice] = useState<string | null>(null);
+  // Shuffle once per mount so the correct answer's position can't be learned.
+  const options = useMemo(() => shuffle(question.options, mulberry32((Math.random() * 2 ** 32) >>> 0)), [question]);
   const picked = submitted?.response.type === 'mcq' ? submitted.response.optionId : choice;
 
   return (
     <div>
       <ul className="space-y-2" role="radiogroup" aria-label="Answer options">
-        {question.options.map((o, i) => {
+        {options.map((o, i) => {
           const isPicked = picked === o.id;
           const showRight = submitted && reveal && o.correct;
           const showWrong = submitted && reveal && isPicked && !o.correct;
@@ -53,7 +56,7 @@ export function MultipleChoice({ question, submitted, reveal, onSubmit }: Questi
         <details className="mt-3 text-xs text-muted">
           <summary className="cursor-pointer select-none">Why the other options are wrong</summary>
           <ul className="mt-2 space-y-1.5">
-            {question.options
+            {options
               .filter((o) => !o.correct && o.id !== picked)
               .map((o) => (
                 <li key={o.id}>

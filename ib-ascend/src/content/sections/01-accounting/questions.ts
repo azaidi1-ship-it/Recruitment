@@ -1,9 +1,6 @@
 import type { Question } from '../../../types/questions';
 
-/**
- * Accounting Foundations question bank.
- * TODO(Phase 4): extend to 40+ questions across all subtopics and difficulties.
- */
+/** Accounting Foundations question bank, part 1 (see questions2.ts for part 2). */
 export const questions: Question[] = [
   {
     id: 'acc-q-001',

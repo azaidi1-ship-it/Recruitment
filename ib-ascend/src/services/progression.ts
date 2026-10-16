@@ -118,7 +118,7 @@ async function computeDerived(now: Date): Promise<Derived> {
     number
   >;
   const behavioral = attempts
-    .filter((a) => a.mode === 'behavioral')
+    .filter((a) => a.mode === 'behavioral' || a.mode === 'hirevue')
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
     .slice(0, 10);
   const recentArcade = arcade.slice(-5);
@@ -179,7 +179,7 @@ async function computeDerived(now: Date): Promise<Derived> {
     longestStreak: profile.streak.longest,
     rankId: rank.id,
     minStoriesPerCompetency: competencyCounts.length ? Math.min(...competencyCounts) : 0,
-    behavioralPractices: attempts.filter((a) => a.mode === 'behavioral').length,
+    behavioralPractices: attempts.filter((a) => a.mode === 'behavioral' || a.mode === 'hirevue').length,
     superdayAdvances: finished.filter((s) => s.mode === 'superday' && s.meta?.wouldAdvance === true).length,
     weeklyBossClears: finished.filter((s) => s.mode === 'weeklyBoss' && (s.score ?? 0) >= 0.8).length,
     personalBests: finished.filter((s) => s.meta?.personalBest === true).length,
@@ -346,7 +346,8 @@ export async function answerQuestion(input: AnswerInput, now: Date = new Date())
   let resolvedMistakes = 0;
   await db.transaction('rw', db.attempts, db.mistakes, async () => {
     await db.attempts.add(attempt);
-    if (!attempt.correct) {
+    // HireVue answers are reviewed in their own flow, not the Mistake Log.
+    if (!attempt.correct && attempt.mode !== 'hirevue') {
       const mistake: Mistake = {
         id: newId('mis'),
         questionId: attempt.questionId,
@@ -376,6 +377,7 @@ export async function answerQuestion(input: AnswerInput, now: Date = new Date())
     },
   ];
   for (let i = 0; i < resolvedMistakes; i++) events.push({ kind: 'mistakeResolved', sectionId: input.sectionId });
+  if (input.mode === 'behavioral' || input.mode === 'hirevue') events.push({ kind: 'storyPracticed' });
 
   await applyGains({ xp: xp.xp, reason: 'Answer', lines: xp.lines, events }, now);
   return { attempt, xp, resolvedMistakes };

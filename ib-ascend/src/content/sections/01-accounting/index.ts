@@ -4,13 +4,13 @@ import { examples } from './examples';
 import { flashcards } from './flashcards';
 import { lessons } from './lessons';
 import { questions } from './questions';
+import { questions2 } from './questions2';
 
 export const accounting: SectionContent = {
-  // TODO(Phase 4): switch to 'complete' once the bank meets CONTENT_MINIMUMS.
-  status: 'starter',
+  status: 'complete',
   lessons,
   examples,
-  questions,
+  questions: [...questions, ...questions2],
   flashcards,
   cheatSheet,
 };

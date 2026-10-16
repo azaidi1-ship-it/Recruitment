@@ -1,0 +1,95 @@
+import type { WorkedExample } from '../../../types/models';
+
+export const examples: WorkedExample[] = [
+  {
+    id: 'wt-ex1',
+    sectionId: 'walkthroughs',
+    subtopic: 'depreciation',
+    difficulty: 'basic',
+    title: 'Depreciation up $10',
+    prompt: 'Depreciation increases by $10 at a 25% tax rate. Walk it through the three statements.',
+    steps: [
+      { title: 'Income statement', body: 'Pre-tax income −10. Taxes −2.50. Net income −7.50.' },
+      { title: 'Cash flow statement', body: 'Net income −7.50, add back depreciation +10. Cash from operations +2.50; net change in cash +2.50.' },
+      { title: 'Balance sheet', body: 'Cash +2.50, PP&E −10, so assets −7.50. Retained earnings −7.50, so liabilities + equity −7.50.' },
+      { title: 'Check', body: 'Both sides −7.50. Balanced.' },
+    ],
+    answer: 'NI −7.50, cash +2.50, PP&E −10, retained earnings −7.50.',
+  },
+  {
+    id: 'wt-ex2',
+    sectionId: 'walkthroughs',
+    subtopic: 'inventory',
+    difficulty: 'intermediate',
+    title: 'Inventory write-down of $40',
+    prompt: 'The company writes down $40 of inventory (tax-deductible, 25% tax rate). Walk it through.',
+    steps: [
+      { title: 'Income statement', body: 'The write-down runs through COGS: pre-tax income −40, taxes −10, net income −30.' },
+      { title: 'Cash flow statement', body: 'Net income −30, add back the non-cash write-down +40: cash +10.' },
+      { title: 'Balance sheet', body: 'Cash +10, inventory −40: assets −30. Retained earnings −30.' },
+    ],
+    answer: 'NI −30, cash +10, inventory −40, retained earnings −30.',
+  },
+  {
+    id: 'wt-ex3',
+    sectionId: 'walkthroughs',
+    subtopic: 'sbc',
+    difficulty: 'intermediate',
+    title: 'Stock-based compensation of $20',
+    prompt: 'The company records $20 of SBC, deductible this year, 25% tax rate. Walk it through.',
+    steps: [
+      { title: 'Income statement', body: 'Operating expenses +20: pre-tax income −20, taxes −5, net income −15.' },
+      { title: 'Cash flow statement', body: 'Net income −15, add back SBC +20: cash +5.' },
+      { title: 'Balance sheet', body: 'Assets: cash +5. Equity: common stock & APIC +20 (shares issued), retained earnings −15, so equity +5.' },
+    ],
+    answer: 'NI −15, cash +5, APIC +20, retained earnings −15.',
+  },
+  {
+    id: 'wt-ex4',
+    sectionId: 'walkthroughs',
+    subtopic: 'ppe-debt',
+    difficulty: 'advanced',
+    title: 'PP&E bought with debt, then year 1',
+    prompt:
+      'The company buys $100 of PP&E with $100 of 10% debt. In year 1 it depreciates $10, pays interest in cash and repays $20 of principal. Tax rate 25%. Walk through the purchase, then year 1.',
+    steps: [
+      { title: 'At purchase', body: 'No IS impact. CFS: capex −100 in CFI, debt +100 in CFF, net change 0. BS: PP&E +100, debt +100.' },
+      { title: 'Year 1 income statement', body: 'Depreciation 10 + interest 10 = 20 pre-tax; taxes −5; net income −15.' },
+      { title: 'Year 1 cash flow statement', body: 'Net income −15, add back depreciation +10: CFO −5. Repay principal −20 in CFF. Net change in cash −25.' },
+      { title: 'Year 1 balance sheet', body: 'Cash −25, PP&E −10: assets −35. Debt −20, retained earnings −15: liabilities + equity −35.' },
+    ],
+    answer: 'At purchase: PP&E +100, debt +100. Year 1: NI −15, cash −25, PP&E −10, debt −20, retained earnings −15.',
+  },
+  {
+    id: 'wt-ex5',
+    sectionId: 'walkthroughs',
+    subtopic: 'ppe-debt',
+    difficulty: 'advanced',
+    title: 'Selling equipment at a gain',
+    prompt: 'Equipment with a $60 book value is sold for $100 in cash; tax on the gain is paid in cash at 25%. Walk it through.',
+    steps: [
+      { title: 'Income statement', body: 'Gain on sale +40; taxes +10; net income +30.' },
+      { title: 'Cash flow statement', body: 'Net income +30, subtract the non-cash gain −40: CFO −10. Proceeds from the sale +100 in CFI. Net change in cash +90.' },
+      { title: 'Balance sheet', body: 'Cash +90, PP&E −60: assets +30. Retained earnings +30.' },
+      { title: 'Why subtract the gain?', body: 'The $100 of cash is already in CFI. Leaving the $40 gain in CFO would count it twice.' },
+    ],
+    answer: 'NI +30, CFO −10, CFI +100, cash +90, PP&E −60, retained earnings +30.',
+  },
+  {
+    id: 'wt-ex6',
+    sectionId: 'walkthroughs',
+    subtopic: 'deferred-taxes',
+    difficulty: 'elite',
+    title: 'Using NOLs with a DTA on the books',
+    prompt:
+      'The company has $40 of NOLs, recorded as a $10 DTA. This year it earns $100 of pre-tax income and uses all the NOLs. Tax rate 25%. Walk it through, then say what changes if there had been a full valuation allowance.',
+    steps: [
+      { title: 'Income statement', body: 'Pre-tax income +100. Book tax expense is the normal 25%: +25. Net income +75.' },
+      { title: 'Cash taxes', body: 'Taxable income = 100 − 40 = 60; cash tax = 15. Book tax 25 − cash tax 15 = 10 of deferred tax: the DTA unwinding.' },
+      { title: 'Cash flow statement', body: 'Net income +75, add back the 10 of deferred tax (non-cash): CFO +85.' },
+      { title: 'Balance sheet', body: 'Cash +85, DTA −10: assets +75. Retained earnings +75.' },
+      { title: 'Valuation allowance case', body: 'With no DTA recorded, book tax expense equals the cash tax of 15, so net income is +85 and cash +85, with nothing to unwind.' },
+    ],
+    answer: 'NI +75, cash +85, DTA −10 (with a recorded DTA); NI +85, cash +85 with a full valuation allowance.',
+  },
+];

@@ -42,6 +42,7 @@ export const XP = {
     weeklyBoss: 1.5,
     arcade: 1,
     behavioral: 1,
+    hirevue: 1,
   } satisfies Record<AttemptMode, number>,
   /** Correct on the very first attempt at a question. */
   firstTryMultiplier: 1.5,

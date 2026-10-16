@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { BookOpen, FileText, Gauge, GitBranch, Repeat, Settings, Swords, Trophy, Wrench } from 'lucide-react';
+import { BookOpen, FileText, Gauge, GitBranch, Repeat, Settings, Swords, Trophy, Video, Wrench } from 'lucide-react';
 import { CelebrationLayer } from '../features/gamification/CelebrationLayer';
 import { useGameStore } from '../store/useGameStore';
 import type { ComponentType } from 'react';
@@ -17,6 +17,7 @@ const NAV: NavItem[] = [
   { to: '/tree', label: 'Skill Tree', icon: GitBranch, mobile: true },
   { to: '/review', label: 'Review', icon: Repeat, mobile: true },
   { to: '/stories', label: 'Story Bank', icon: BookOpen, mobile: true },
+  { to: '/hirevue', label: 'HireVue', icon: Video },
   { to: '/superday', label: 'Superday', icon: Swords },
   { to: '/tools', label: 'Tools', icon: Wrench },
   { to: '/achievements', label: 'Achievements', icon: Trophy },

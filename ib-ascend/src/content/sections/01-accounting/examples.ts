@@ -1,6 +1,5 @@
 import type { WorkedExample } from '../../../types/models';
 
-// TODO(Phase 4): add examples up to "hard interview" level (5+ total).
 export const examples: WorkedExample[] = [
   {
     id: 'acc-ex1',
@@ -57,5 +56,52 @@ export const examples: WorkedExample[] = [
       },
     ],
     answer: 'Ending cash $212.50; ending retained earnings $1,047.50.',
+  },
+  {
+    id: 'acc-ex4',
+    sectionId: 'accounting',
+    subtopic: 'cash-flow-statement',
+    difficulty: 'advanced',
+    title: 'Rebuild CFO from two balance sheets',
+    prompt:
+      'Net income is $90, D&A $30 and SBC $10. Balance sheet changes from last year: AR 200 → 240, inventory 150 → 135, prepaid expenses 20 → 25, AP 110 → 125, accrued expenses 40 → 36, deferred revenue 30 → 45. What is cash from operations?',
+    steps: [
+      { title: 'Start', body: 'NI 90 + D&A 30 + SBC 10 = 130.' },
+      { title: 'Operating assets (up = use of cash)', body: 'AR +40 → −40; inventory −15 → +15; prepaids +5 → −5. Subtotal: −30.' },
+      { title: 'Operating liabilities (up = source of cash)', body: 'AP +15 → +15; accrued −4 → −4; deferred revenue +15 → +15. Subtotal: +26.' },
+      { title: 'CFO', body: '130 − 30 + 26 = 126.' },
+    ],
+    answer: 'Cash from operations = $126.',
+  },
+  {
+    id: 'acc-ex5',
+    sectionId: 'accounting',
+    subtopic: 'working-capital',
+    difficulty: 'advanced',
+    title: 'Cash conversion cycle',
+    prompt: 'Revenue $1,200, COGS $720, accounts receivable $150, inventory $120, accounts payable $90. Calculate DSO, DIO, DPO and the cash conversion cycle.',
+    steps: [
+      { title: 'DSO', body: 'AR / revenue × 365 = 150 / 1,200 × 365 = 45.6 days.' },
+      { title: 'DIO', body: 'Inventory / COGS × 365 = 120 / 720 × 365 = 60.8 days.' },
+      { title: 'DPO', body: 'AP / COGS × 365 = 90 / 720 × 365 = 45.6 days.' },
+      { title: 'CCC', body: '45.6 + 60.8 − 45.6 = 60.8 days: cash is tied up for about two months between paying suppliers and collecting from customers.' },
+    ],
+    answer: 'DSO 45.6, DIO 60.8, DPO 45.6, CCC ≈ 60.8 days.',
+  },
+  {
+    id: 'acc-ex6',
+    sectionId: 'accounting',
+    subtopic: 'linkages',
+    difficulty: 'elite',
+    title: 'Profitable but running out of cash',
+    prompt:
+      'A company earns $50 of net income with $20 of D&A. Growth pushes AR up $60 and inventory up $40; AP rises $15. Capex is $45 and a $30 debt maturity comes due. It starts the year with $40 of cash and can’t raise new money. What happens?',
+    steps: [
+      { title: 'CFO', body: '50 + 20 − 60 − 40 + 15 = −15. Profitable, but operations consume cash.' },
+      { title: 'After capex', body: '−15 − 45 = −60 of free cash flow.' },
+      { title: 'After the maturity', body: '−60 − 30 = −90 net change in cash.' },
+      { title: 'Liquidity', body: 'Starting cash of 40 − 90 = −50: the company can’t meet its obligations without new financing, despite positive net income.' },
+    ],
+    answer: 'It runs $50 short: positive net income, negative cash flow, and a liquidity crisis unless it refinances or raises capital.',
   },
 ];
