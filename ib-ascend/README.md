@@ -63,7 +63,7 @@ Progress, stories, notes and settings are stored only in this browser (IndexedDB
 - [x] 3. Section flow UI and all question types
 - [x] 4. Content for sections 1–4 (174 questions, 24 worked examples, 16 chapters) + HireVue practice
 - [x] 5. Content for sections 5–8 (177 questions, 24 worked examples, 16 chapters)
-- [ ] 6. Content for sections 9–12
+- [x] 6. Content for sections 9–12 (171 questions, 24 worked examples, 16 chapters)
 - [ ] 7. Spaced repetition, dashboard, analytics
 - [ ] 8. Superday Simulator, Paper LBO, model builders, Mental Math Arcade
 - [ ] 9. Story Bank, Firm Tracker, Deal Journal, Recruiting Calendar

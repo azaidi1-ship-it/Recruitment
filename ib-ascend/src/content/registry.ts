@@ -9,6 +9,10 @@ import { comps } from './sections/05-comps';
 import { dcf } from './sections/06-dcf';
 import { mna } from './sections/07-mna';
 import { lbo } from './sections/08-lbo';
+import { restructuring } from './sections/09-restructuring';
+import { mentalMath } from './sections/10-mental-math';
+import { markets } from './sections/11-markets';
+import { fit } from './sections/12-fit';
 
 export interface SectionContent {
   /**
@@ -39,6 +43,10 @@ const REGISTRY: Partial<Record<SectionId, SectionContent>> = {
   dcf,
   mna,
   lbo,
+  restructuring,
+  'mental-math': mentalMath,
+  markets,
+  fit,
 };
 
 /** Every registered section's content (for tests and global search). */
