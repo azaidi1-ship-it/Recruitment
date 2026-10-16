@@ -93,7 +93,29 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+/* Print always uses the light palette. */
 @media print {
+  :root,
+  :root.light {
+    color-scheme: light;
+    --c-bg: #ffffff;
+    --c-surface: #ffffff;
+    --c-sunk: #f3f4f6;
+    --c-line: #d1d5db;
+    --c-ink: #111827;
+    --c-muted: #4b5563;
+    --c-faint: #6b7280;
+    --c-accent: #8a5a00;
+    --c-accent-soft: #fbf3e0;
+    --c-info: #1d4ed8;
+    --c-info-soft: #eef3fe;
+    --c-warn: #92400e;
+    --c-warn-soft: #fdf5e6;
+    --c-ok: #166534;
+    --c-ok-soft: #e9f7ee;
+    --c-bad: #991b1b;
+    --c-bad-soft: #fdecec;
+  }
   body {
     background: #fff;
     color: #000;

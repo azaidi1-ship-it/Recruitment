@@ -34,7 +34,7 @@ function linkClass({ isActive }: { isActive: boolean }) {
 export function Layout() {
   const snap = useGameStore((s) => s.snapshot);
   return (
-    <div className="min-h-dvh md:grid md:grid-cols-[220px_1fr]">
+    <div className="min-h-dvh md:grid md:grid-cols-[220px_1fr] print:block">
       <aside className="no-print sticky top-0 hidden h-dvh flex-col border-r border-line bg-surface p-4 md:flex">
         <div className="mb-6 flex items-center gap-2 px-2">
           <img src="./favicon.svg" alt="" className="size-7" />
@@ -61,7 +61,7 @@ export function Layout() {
         </nav>
       </aside>
 
-      <main className="mx-auto w-full max-w-6xl px-4 pb-24 pt-5 sm:px-6 md:pb-10 md:pt-8">
+      <main className="mx-auto w-full max-w-6xl px-4 pb-24 pt-5 sm:px-6 md:pb-10 md:pt-8 print:p-0">
         <Outlet />
       </main>
       <CelebrationLayer />

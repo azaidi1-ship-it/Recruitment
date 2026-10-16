@@ -26,6 +26,18 @@ npm run build      # static build in dist/, works from any sub-path
 | `src/store/` | Zustand stores, hydrated from IndexedDB on launch. |
 | `src/features/` | Screens, one folder per feature. |
 
+## Adding content
+
+Each section lives in `src/content/sections/NN-name/` (`lessons.ts`, `examples.ts`, `questions.ts`, `flashcards.ts`, `cheatsheet.ts`, `index.ts`) and is registered in `src/content/registry.ts`. `npm test` validates everything:
+
+- every MCQ has exactly one correct option and an explanation for every option;
+- every walk-through balances (assets = liabilities + equity), CFS net change = BS cash, IS net income = CFS net income, and tax = pre-tax income × tax rate;
+- every free-text model answer hits 100% of its own rubric;
+- follow-ups exist and are in the mock pool; subtopics exist; ids are unique;
+- a section marked `complete` has 40+ questions, 5+ worked examples, 3+ chapters and every difficulty.
+
+Rubric keywords: each point lists keyword groups; a group matches when all its terms appear as whole words. Use `a|b` for alternatives and a trailing `*` for stems (`generat*`).
+
 ## How progression works
 
 - **XP** per answer = base by difficulty (Basic 5, Intermediate 10, Advanced 20, Elite 35) × score × mode (pre-quiz 0.5, mock 1.25, Superday 1.5) × 1.5 if right on the first try × up to +20% for your streak. A Basic question earns nothing once its subtopic is 85%+ mastered and you've answered it correctly in the last 14 days; repeats within 24h earn 25%. Mocks pay +50 on a first clear and +50 + 5 per point for a new best.
@@ -44,7 +56,7 @@ Progress, stories, notes and settings are stored only in this browser (IndexedDB
 - [x] 0. Resume summary
 - [x] 1. Setup, data models, state, persistence, export/import
 - [x] 2. Gamification engine (XP, levels, ranks, stats, mastery, unlocks, achievements, quests)
-- [ ] 3. Section flow UI and all question types
+- [x] 3. Section flow UI and all question types
 - [ ] 4–6. Content for sections 1–12
 - [ ] 7. Spaced repetition, dashboard, analytics
 - [ ] 8. Superday Simulator, Paper LBO, model builders, Mental Math Arcade

@@ -68,15 +68,26 @@ export type StatementKind = 'IS' | 'CFS' | 'BS';
 
 export interface WalkthroughLine {
   statement: StatementKind;
-  /** Stable key, e.g. "is.da", "cfs.cfo", "bs.ppe". */
+  /**
+   * Stable key, e.g. "is.da", "cfs.cfo", "bs.ppe". Conventions checked by the
+   * content tests: "is.ni" = "cfs.ni", "cfs.net" = "bs.cash".
+   */
   key: string;
   label: string;
-  /** Signed change. Positive = increase. */
+  /**
+   * Signed change. IS: change in the line as reported, with expenses positive
+   * when the expense goes up. CFS: effect on cash (+ inflow, − outflow).
+   * BS: change in the balance.
+   */
   expected: number;
+  /** Balance sheet lines only: assets, or liabilities & equity. Must balance. */
+  side?: 'A' | 'LE';
 }
 
 export interface WalkthroughQuestion extends QuestionBase {
   type: 'walkthrough';
+  /** Optional assumptions shown above the grid (e.g. "Taxes are paid in cash."). */
+  assumptions?: string[];
   /** Tax rate assumed by this question, as a decimal (0.25 = 25%). */
   taxRate: number;
   /** Every line the user must fill in, in display order. */

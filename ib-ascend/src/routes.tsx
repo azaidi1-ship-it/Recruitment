@@ -6,6 +6,14 @@ import { ResumePage } from './features/profile/ResumePage';
 import { Settings } from './features/settings/Settings';
 import { Achievements } from './features/achievements/Achievements';
 import { ComingSoon } from './components/ComingSoon';
+import { SectionLayout } from './features/section/SectionLayout';
+import { SectionPath } from './features/section/SectionPath';
+import { Chapter, ReadingList } from './features/section/Reading';
+import { Examples } from './features/section/Examples';
+import { Flashcards } from './features/section/Flashcards';
+import { MistakeLog } from './features/section/MistakeLog';
+import { CheatSheet } from './features/section/CheatSheet';
+import { QuizPage } from './features/section/QuizPage';
 
 /** Hash router so the static build works from any path without server rewrites. */
 export const router = createHashRouter([
@@ -16,7 +24,17 @@ export const router = createHashRouter([
       { path: 'tree', element: <SkillTree /> },
       {
         path: 'section/:sectionId',
-        element: <ComingSoon title="Section flow" phase={3} what="Pre-quiz → reading → worked examples → post-quiz → Boss Fight, plus flashcards, mistake log and cheat sheet." />,
+        element: <SectionLayout />,
+        children: [
+          { index: true, element: <SectionPath /> },
+          { path: 'read', element: <ReadingList /> },
+          { path: 'read/:lessonId', element: <Chapter /> },
+          { path: 'examples', element: <Examples /> },
+          { path: 'flashcards', element: <Flashcards /> },
+          { path: 'mistakes', element: <MistakeLog /> },
+          { path: 'cheatsheet', element: <CheatSheet /> },
+          { path: 'quiz/:mode', element: <QuizPage /> },
+        ],
       },
       {
         path: 'review',
