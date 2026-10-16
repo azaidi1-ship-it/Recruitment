@@ -16,6 +16,7 @@ const PRIMARY_KEY: Record<TableName, string> = {
   sessions: 'id',
   mistakes: 'id',
   cards: 'id',
+  reviewLogs: 'id',
   achievements: 'id',
   quests: 'id',
   resumes: 'id',

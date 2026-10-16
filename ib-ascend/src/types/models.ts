@@ -162,7 +162,9 @@ export interface AchievementDef {
   id: string;
   title: string;
   description: string;
+  /** lucide-react icon name. */
   icon: string;
+  xpReward: number;
   /** Hidden until unlocked. */
   secret?: boolean;
 }
@@ -214,7 +216,9 @@ export type AttemptMode =
   | 'drill'
   | 'superday'
   | 'weeklyBoss'
-  | 'arcade';
+  | 'arcade'
+  /** Behavioral story practice (Story Bank practice mode). */
+  | 'behavioral';
 
 export interface Attempt {
   id: string;
@@ -280,23 +284,50 @@ export interface Card {
   createdAt: ISODateTime;
 }
 
+/** One SRS review, kept for streaks, quests, achievements and the activity heatmap. */
+export interface ReviewLog {
+  id: string;
+  cardId: string;
+  source: CardSource;
+  sectionId: SectionId | null;
+  /** SM-2 quality, 0–5. */
+  quality: number;
+  reviewedAt: ISODateTime;
+}
+
 export interface UnlockedAchievement {
   id: string;
   unlockedAt: ISODateTime;
 }
+
+export type QuestMetric =
+  | 'correctAnswers'
+  | 'sessionScore'
+  | 'flawlessWalkthroughs'
+  | 'lessonsRead'
+  | 'examplesCompleted'
+  | 'cardsReviewed'
+  | 'mistakesResolved'
+  | 'storiesPracticed'
+  | 'arcadeRuns'
+  | 'dealsLogged'
+  | 'mocksCompleted';
 
 export interface Quest {
   id: string;
   date: ISODate;
   templateId: string;
   title: string;
-  stat: StatKey;
+  /** Stat this quest trains; null for general quests (reviews, mistakes). */
+  stat: StatKey | null;
+  sectionId: SectionId | null;
+  metric: QuestMetric;
   target: number;
   progress: number;
   xpReward: number;
   completedAt: ISODateTime | null;
-  /** Template-specific parameters, e.g. { sectionId: 'dcf', minScore: 0.8 }. */
-  params?: Record<string, unknown>;
+  /** For sessionScore quests: minimum score (0–1) that counts. */
+  minScore?: number;
 }
 
 // ── Resume & Story Bank ──

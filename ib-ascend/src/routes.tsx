@@ -4,6 +4,7 @@ import { Dashboard } from './features/dashboard/Dashboard';
 import { SkillTree } from './features/skilltree/SkillTree';
 import { ResumePage } from './features/profile/ResumePage';
 import { Settings } from './features/settings/Settings';
+import { Achievements } from './features/achievements/Achievements';
 import { ComingSoon } from './components/ComingSoon';
 
 /** Hash router so the static build works from any path without server rewrites. */
@@ -33,6 +34,7 @@ export const router = createHashRouter([
         path: 'tools',
         element: <ComingSoon title="Tools" phase={8} what="Paper LBO Trainer, DCF / accretion-dilution / LBO builders and the Mental Math Arcade. Firm Tracker, Deal Journal and Recruiting Calendar follow in Phase 9." />,
       },
+      { path: 'achievements', element: <Achievements /> },
       { path: 'resume', element: <ResumePage /> },
       { path: 'settings', element: <Settings /> },
       { path: '*', element: <ComingSoon title="Not found" what="That page doesn’t exist." /> },

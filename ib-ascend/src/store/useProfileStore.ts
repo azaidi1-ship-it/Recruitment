@@ -3,11 +3,11 @@ import { db } from '../db/db';
 import { defaultProfile } from '../db/defaults';
 import type { UserProfile } from '../types/models';
 
+/** Profile row (XP total, streak). XP is only ever changed by services/progression.ts. */
 interface ProfileState {
   profile: UserProfile;
   load: () => Promise<void>;
   update: (patch: Partial<Omit<UserProfile, 'id'>>) => Promise<void>;
-  // TODO(Phase 2): awardXp, level/rank derivation, streak tick, achievements.
 }
 
 export const useProfileStore = create<ProfileState>((set, get) => ({

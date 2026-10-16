@@ -9,6 +9,7 @@ import type {
   MarketNote,
   Mistake,
   Quest,
+  ReviewLog,
   Resume,
   SectionProgress,
   Session,
@@ -35,6 +36,7 @@ export class IbAscendDb extends Dexie {
   sessions!: EntityTable<Session, 'id'>;
   mistakes!: EntityTable<Mistake, 'id'>;
   cards!: EntityTable<Card, 'id'>;
+  reviewLogs!: EntityTable<ReviewLog, 'id'>;
   achievements!: EntityTable<UnlockedAchievement, 'id'>;
   quests!: EntityTable<Quest, 'id'>;
   resumes!: EntityTable<Resume, 'id'>;
@@ -67,6 +69,9 @@ export class IbAscendDb extends Dexie {
       events: 'id, date, firmId',
       arcadeScores: 'id, drillId, createdAt',
     });
+    this.version(2).stores({
+      reviewLogs: 'id, cardId, sectionId, reviewedAt',
+    });
   }
 }
 
@@ -79,6 +84,7 @@ export const TABLE_NAMES = [
   'sessions',
   'mistakes',
   'cards',
+  'reviewLogs',
   'achievements',
   'quests',
   'resumes',
