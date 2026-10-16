@@ -57,6 +57,11 @@ export function Layout() {
             <NavLink key={to} to={to} end={to === '/'} className={linkClass}>
               <Icon size={17} />
               {label}
+              {to === '/review' && snap && snap.cardsDue > 0 && (
+                <span className="ml-auto rounded-full bg-accent-soft px-1.5 text-[11px] font-medium text-accent tabular" aria-label={`${snap.cardsDue} due`}>
+                  {snap.cardsDue}
+                </span>
+              )}
             </NavLink>
           ))}
         </nav>

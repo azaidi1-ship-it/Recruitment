@@ -109,6 +109,27 @@ export function buildMock(questions: Question[], rng: () => number, shape = MOCK
   return { items, timeLimitSec };
 }
 
+/**
+ * Subtopic drill: up to `size` questions from one subtopic across every pool,
+ * favoring ones you haven't answered correctly yet, easiest first, untimed.
+ */
+export function buildDrill(
+  questions: Question[],
+  subtopic: string,
+  rng: () => number,
+  size: number,
+  correctIds: ReadonlySet<string> = new Set(),
+): BuiltQuiz {
+  const pool = shuffle(
+    questions.filter((q) => q.subtopic === subtopic),
+    rng,
+  );
+  const fresh = pool.filter((q) => !correctIds.has(q.id));
+  const seen = pool.filter((q) => correctIds.has(q.id));
+  const picked = [...fresh, ...seen].slice(0, size).sort(byDifficulty);
+  return { items: picked.map((question) => ({ question })), timeLimitSec: null };
+}
+
 /** Redo My Mistakes: each distinct missed question once, most recent first. */
 export function buildMistakeQuiz(questions: Question[], mistakeQuestionIds: string[]): BuiltQuiz {
   const byId = new Map(questions.map((q) => [q.id, q]));

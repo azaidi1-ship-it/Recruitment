@@ -16,6 +16,7 @@ import { sectionGrade } from '../engine/grades';
 import { describeXpChange, levelFromXp, nextRank, rankForLevel } from '../engine/levels';
 import { sectionMastery, subtopicMastery, type MasteryResult } from '../engine/mastery';
 import { applyQuestEvent, generateDailyQuests, type ActivityEvent } from '../engine/quests';
+import { buildQueue, schedule } from '../engine/srs';
 import { computeStats, storyCoverage } from '../engine/stats';
 import { displayStreak, tickStreak } from '../engine/streaks';
 import { isSectionUnlocked, passesPostQuiz, qualifiesForFastTrack, type ProgressMap } from '../engine/unlocks';
@@ -36,10 +37,11 @@ import { useGameStore, type GameSnapshot } from '../store/useGameStore';
 import { useProfileStore } from '../store/useProfileStore';
 import { useProgressStore } from '../store/useProgressStore';
 import { useUiEvents } from '../store/useUiEvents';
+import { enrolSectionDeck, upsertMissedQuestionCard } from './cards';
 import type {
   Attempt,
   AttemptMode,
-  CardSource,
+  Card,
   Difficulty,
   Mistake,
   Quest,
@@ -81,6 +83,7 @@ async function computeDerived(now: Date): Promise<Derived> {
   const mastery = {} as Record<SectionId, MasteryResult>;
   const grades = {} as Record<SectionId, Grade | null>;
   const subtopic: Record<string, number> = {};
+  const subtopicAttempts: Record<string, number> = {};
   const peakPatches: [SectionId, number][] = [];
 
   for (const section of SECTIONS) {
@@ -103,10 +106,9 @@ async function computeDerived(now: Date): Promise<Derived> {
     if (m.mastery > p.masteryPeak + 1e-6) peakPatches.push([section.id, m.mastery]);
 
     for (const t of section.subtopics) {
-      subtopic[`${section.id}/${t.id}`] = subtopicMastery(
-        secAttempts.filter((a) => a.subtopic === t.id),
-        now,
-      );
+      const subAttempts = secAttempts.filter((a) => a.subtopic === t.id);
+      subtopic[`${section.id}/${t.id}`] = subtopicMastery(subAttempts, now);
+      subtopicAttempts[`${section.id}/${t.id}`] = subAttempts.length;
     }
   }
   for (const [id, peak] of peakPatches) {
@@ -137,6 +139,9 @@ async function computeDerived(now: Date): Promise<Derived> {
   const level = levelFromXp(profile.totalXp);
   const rank = rankForLevel(level.level);
   const unlocked = SECTIONS.filter((s) => isSectionUnlocked(s, progress)).map((s) => s.id);
+  const queue = buildQueue(cards, today);
+  const mistakesBySection: Partial<Record<SectionId, number>> = {};
+  for (const m of mistakes) if (m.resolvedAt === null) mistakesBySection[m.sectionId] = (mistakesBySection[m.sectionId] ?? 0) + 1;
 
   const snapshot: GameSnapshot = {
     level,
@@ -144,13 +149,16 @@ async function computeDerived(now: Date): Promise<Derived> {
     nextRank: nextRank(level.level),
     mastery,
     subtopicMastery: subtopic,
+    subtopicAttempts,
     grades,
     stats,
     unlocked,
     quests: quests.sort((a, b) => a.id.localeCompare(b.id)),
     displayStreak: displayStreak(profile.streak, today),
-    cardsDue: cards.filter((c) => c.due <= today).length,
+    cardsDue: queue.due.length + queue.fresh.length,
+    cardsNew: queue.fresh.length,
     openMistakes: mistakes.filter((m) => m.resolvedAt === null).length,
+    mistakesBySection,
     unlockedAchievements: unlockedRows.map((r) => r.id),
   };
 
@@ -366,6 +374,10 @@ export async function answerQuestion(input: AnswerInput, now: Date = new Date())
         .modify({ resolvedAt: at });
     }
   });
+  // Missed questions join the review queue; the review queue schedules its own.
+  if (!attempt.correct && attempt.mode !== 'hirevue' && attempt.mode !== 'review') {
+    await upsertMissedQuestionCard(attempt.questionId, attempt.sectionId, now);
+  }
   await useProgressStore.getState().updateSection(input.sectionId, { lastActivityAt: at });
 
   const events: ActivityEvent[] = [
@@ -452,6 +464,8 @@ export async function completeSession(input: SessionInput, now: Date = new Date(
       patch.mockBest = Math.max(p.mockBest ?? 0, input.score);
     }
     await useProgressStore.getState().updateSection(input.sectionId, patch);
+    // Starting real work in a section puts its flashcards into rotation.
+    await enrolSectionDeck(input.sectionId, now);
   }
 
   await applyGains(
@@ -474,6 +488,7 @@ export async function markLessonRead(sectionId: SectionId, lessonId: string, now
   await useProgressStore
     .getState()
     .updateSection(sectionId, { lessonsRead: [...p.lessonsRead, lessonId], lastActivityAt: now.toISOString() });
+  await enrolSectionDeck(sectionId, now);
   return applyGains(
     { xp: lessonXp(), reason: 'Chapter read', events: [{ kind: 'lessonRead', sectionId }], toast: true },
     now,
@@ -504,16 +519,27 @@ export async function markExampleCompleted(
   );
 }
 
+export interface ReviewResult {
+  card: Card;
+  xp: number;
+}
+
 /**
- * Log one spaced-repetition review. Scheduling (SM-2) is applied by the
- * review queue (Phase 7); this records the review for XP, quests and stats.
+ * Review one spaced-repetition card: apply SM-2, log the review and pay XP.
+ * Question cards earn their XP through answerQuestion (mode 'review'), so
+ * only flashcards and stories earn review XP here.
  */
-export async function logCardReview(
-  card: { id: string; source: CardSource; sectionId: SectionId | null },
-  quality: number,
-  now: Date = new Date(),
-): Promise<number> {
+export async function reviewCard(id: string, quality: number, now: Date = new Date()): Promise<ReviewResult> {
+  const card = await db.cards.get(id);
+  if (!card) throw new Error(`Unknown card ${id}`);
   const at = now.toISOString();
+  const updated: Card = {
+    ...card,
+    ...schedule(card, quality, toLocalDate(now)),
+    lastReviewedAt: at,
+    firstReviewedAt: card.firstReviewedAt ?? at,
+  };
+  await db.cards.put(updated);
   await db.reviewLogs.add({
     id: newId('rev'),
     cardId: card.id,
@@ -523,10 +549,12 @@ export async function logCardReview(
     reviewedAt: at,
   });
   if (card.sectionId) await useProgressStore.getState().updateSection(card.sectionId, { lastActivityAt: at });
-  return applyGains(
-    { xp: flashcardXp(quality), reason: 'Flashcard', events: [{ kind: 'cardReviewed', sectionId: card.sectionId }] },
+  const xp = card.source === 'question' ? 0 : flashcardXp(quality);
+  const gained = await applyGains(
+    { xp, reason: 'Review', events: [{ kind: 'cardReviewed', sectionId: card.sectionId }] },
     now,
   );
+  return { card: updated, xp: gained };
 }
 
 /**

@@ -1,22 +1,76 @@
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { CheckCircle2, Circle, Flame, Lock, Snowflake, Video } from 'lucide-react';
 import { SECTIONS } from '../../content/sections';
+import { getSectionContent } from '../../content/registry';
+import { db } from '../../db/db';
 import { useGameStore } from '../../store/useGameStore';
 import { useProfileStore } from '../../store/useProfileStore';
-import { STAT_LABEL, type StatKey } from '../../types/models';
+import { useProgressStore } from '../../store/useProgressStore';
+import { STAT_LABEL, type SectionId } from '../../types/models';
 import { totalXpForLevel } from '../../engine/levels';
+import { interviewReadiness } from '../../engine/readiness';
+import { nextBestAction } from '../../engine/recommend';
+import { weakestSubtopics } from '../../engine/analytics';
+import { buildQueue } from '../../engine/srs';
+import { DASHBOARD } from '../../config/gameConfig';
+import { toLocalDate } from '../../lib/dates';
 import { Badge, Card, PageHeader } from '../../components/ui';
 import { GradeBadge } from '../../components/GradeBadge';
 import { ProgressBar, masteryTone } from '../../components/Progress';
+import { DueTodayCard, NextActionCard, ReadinessCard, WeakSubtopicsCard } from './widgets';
+import { ActivityHeatmap, MockTrends, StatsRadar } from './DashboardCharts';
 
-/**
- * TODO(Phase 7): stats radar, Interview Readiness Score, weakest subtopics,
- * activity heatmap, mock trends, Due Today queue and next best action.
- */
+/** Static content facts the recommendations need (computed once). */
+const CONTENT = (() => {
+  const lessonIds = {} as Record<SectionId, string[]>;
+  const hasQuestions = {} as Record<SectionId, boolean>;
+  const questionCounts: Record<string, number> = {};
+  for (const s of SECTIONS) {
+    const c = getSectionContent(s.id);
+    lessonIds[s.id] = c.lessons.map((l) => l.id);
+    hasQuestions[s.id] = c.questions.length > 0;
+    for (const q of c.questions) questionCounts[`${s.id}/${q.subtopic}`] = (questionCounts[`${s.id}/${q.subtopic}`] ?? 0) + 1;
+  }
+  return { lessonIds, hasQuestions, questionCounts };
+})();
+
 export function Dashboard() {
   const profile = useProfileStore((s) => s.profile);
+  const progress = useProgressStore((s) => s.sections);
   const snap = useGameStore((s) => s.snapshot);
-  if (!snap) return null;
+  const cards = useLiveQuery(() => db.cards.toArray(), []);
+
+  const derived = useMemo(() => {
+    if (!snap) return null;
+    const mastery = Object.fromEntries(SECTIONS.map((s) => [s.id, snap.mastery[s.id].mastery])) as Record<SectionId, number>;
+    const weakest = weakestSubtopics({
+      sections: SECTIONS,
+      unlocked: snap.unlocked,
+      subtopicMastery: snap.subtopicMastery,
+      subtopicAttempts: snap.subtopicAttempts,
+      questionCounts: CONTENT.questionCounts,
+      ceiling: DASHBOARD.weakSubtopicCeiling,
+      n: 3,
+    });
+    const action = nextBestAction({
+      sections: SECTIONS,
+      unlocked: snap.unlocked,
+      progress,
+      lessonIds: CONTENT.lessonIds,
+      hasQuestions: CONTENT.hasQuestions,
+      cardsDue: snap.cardsDue,
+      mistakesBySection: snap.mistakesBySection,
+      weakest: weakest[0] ?? null,
+      grades: snap.grades,
+    });
+    return { readiness: interviewReadiness(SECTIONS, mastery, snap.stats.polish), weakest, action };
+  }, [snap, progress]);
+
+  const missedDue = useMemo(() => (cards ? buildQueue(cards, toLocalDate()).due.filter((c) => c.source === 'question').length : 0), [cards]);
+
+  if (!snap || !derived) return null;
 
   const toNextRank = snap.nextRank ? totalXpForLevel(snap.nextRank.minLevel) - profile.totalXp : 0;
 
@@ -60,6 +114,12 @@ export function Dashboard() {
         </Card>
       </div>
 
+      <div className="mb-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <ReadinessCard readiness={derived.readiness} />
+        <NextActionCard action={derived.action} />
+        <DueTodayCard due={snap.cardsDue - snap.cardsNew} fresh={snap.cardsNew} missed={missedDue} />
+      </div>
+
       <div className="mb-4 grid gap-4 lg:grid-cols-2">
         <Card>
           <h2 className="mb-3 font-semibold">Today’s quests</h2>
@@ -89,18 +149,16 @@ export function Dashboard() {
           </ul>
         </Card>
 
-        <Card>
-          <h2 className="mb-3 font-semibold">Stats</h2>
-          <ul className="space-y-2.5">
-            {(Object.keys(STAT_LABEL) as StatKey[]).map((k) => (
-              <li key={k} className="grid grid-cols-[90px_1fr_32px] items-center gap-3 text-sm">
-                <span className="text-muted">{STAT_LABEL[k]}</span>
-                <ProgressBar value={snap.stats[k] / 100} barClassName={masteryTone(snap.stats[k] / 100)} />
-                <span className="text-right tabular">{snap.stats[k]}</span>
-              </li>
-            ))}
-          </ul>
-        </Card>
+        <StatsRadar stats={snap.stats} />
+      </div>
+
+      <div className="mb-4 grid gap-4 lg:grid-cols-2">
+        <WeakSubtopicsCard items={derived.weakest} />
+        <MockTrends />
+      </div>
+
+      <div className="mb-4">
+        <ActivityHeatmap />
       </div>
 
       <Link to="/hirevue" className="mb-4 block">

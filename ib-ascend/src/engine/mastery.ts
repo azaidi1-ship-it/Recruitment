@@ -1,5 +1,6 @@
 import { MASTERY } from '../config/gameConfig';
 import { daysBetween, toLocalDate } from '../lib/dates';
+import { isNewFlashcard } from './srs';
 import type { Attempt, Card, ISODate } from '../types/models';
 
 const DAY = 86_400_000;
@@ -44,23 +45,24 @@ export function mockComponent(mockScores: number[]): number | null {
   return MASTERY.mockBestWeight * best + (1 - MASTERY.mockBestWeight) * avg;
 }
 
+type RetentionCard = Pick<Card, 'repetitions' | 'due' | 'intervalDays' | 'source' | 'lastReviewedAt'>;
+
 /**
  * Spaced-repetition retention (0–1). A card that has never been recalled
- * scores 0; an overdue card fades with how overdue it is relative to its
- * interval. Null if the section has no cards yet.
+ * (including a missed question not yet re-answered) scores 0; an overdue card
+ * fades with how overdue it is relative to its interval. Flashcards not yet
+ * introduced don't count. Null if there are no cards in rotation.
  */
-export function retentionComponent(
-  cards: Pick<Card, 'repetitions' | 'due' | 'intervalDays'>[],
-  today: ISODate,
-): number | null {
-  if (cards.length === 0) return null;
+export function retentionComponent(cards: RetentionCard[], today: ISODate): number | null {
+  const active = cards.filter((c) => !isNewFlashcard(c));
+  if (active.length === 0) return null;
   let sum = 0;
-  for (const c of cards) {
+  for (const c of active) {
     if (c.repetitions === 0) continue;
     const overdue = Math.max(0, daysBetween(c.due, today));
     sum += Math.exp(-overdue / Math.max(1, c.intervalDays));
   }
-  return sum / cards.length;
+  return sum / active.length;
 }
 
 /** Multiplier from inactivity: 1 during the grace period, then halving every halfLifeDays. */
@@ -75,7 +77,7 @@ export interface MasteryInput {
   attempts: ScoredAttempt[];
   /** Finished Boss Fight scores, oldest first. */
   mockScores: number[];
-  cards: Pick<Card, 'repetitions' | 'due' | 'intervalDays'>[];
+  cards: RetentionCard[];
   preQuizScore: number | null;
   /** Highest mastery ever reached in this section. */
   peak: number;

@@ -283,6 +283,8 @@ export interface Card {
   lapses: number;
   due: ISODate;
   lastReviewedAt: ISODateTime | null;
+  /** First review ever; drives the daily new-card limit. Optional for pre-Phase 7 backups. */
+  firstReviewedAt?: ISODateTime | null;
   createdAt: ISODateTime;
 }
 

@@ -32,7 +32,6 @@ const EMPTY: SectionContent = { status: 'empty', lessons: [], examples: [], ques
 /**
  * Section content, keyed by section id. Each section folder in
  * src/content/sections/ exports a SectionContent and is registered here.
- * TODO(Phases 4–6): register sections 1–12 as their content is written.
  */
 const REGISTRY: Partial<Record<SectionId, SectionContent>> = {
   accounting,
@@ -92,4 +91,15 @@ export function getFlashcardDeck(id: SectionId): Flashcard[] {
     ),
   );
   return [...c.flashcards, ...fromFormulas];
+}
+
+let flashcardIndex: Map<string, Flashcard> | null = null;
+
+/** Any flashcard (authored or formula-derived) by id. */
+export function getFlashcard(id: string): Flashcard | undefined {
+  if (!flashcardIndex) {
+    flashcardIndex = new Map();
+    for (const [sectionId] of allSectionContent()) for (const f of getFlashcardDeck(sectionId)) flashcardIndex.set(f.id, f);
+  }
+  return flashcardIndex.get(id);
 }

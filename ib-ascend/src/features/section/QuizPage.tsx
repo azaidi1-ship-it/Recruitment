@@ -1,18 +1,18 @@
 import { useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { Clock, CornerDownRight, ListChecks, Swords, Target } from 'lucide-react';
+import { Clock, Crosshair, CornerDownRight, ListChecks, Swords, Target } from 'lucide-react';
 import { db } from '../../db/db';
-import { buildMistakeQuiz, buildMock, buildPostQuiz, buildPreQuiz, type BuiltQuiz } from '../../engine/quiz/builder';
+import { buildDrill, buildMistakeQuiz, buildMock, buildPostQuiz, buildPreQuiz, type BuiltQuiz } from '../../engine/quiz/builder';
 import { hashString, mulberry32 } from '../../lib/random';
-import { UNLOCK } from '../../config/gameConfig';
+import { DASHBOARD, UNLOCK } from '../../config/gameConfig';
 import type { AttemptMode } from '../../types/models';
 import { Button, Card, PageHeader } from '../../components/ui';
 import { QuizRunner } from '../quiz/QuizRunner';
 import { GateNotice } from './Reading';
 import { useSection, type SectionCtx } from './useSection';
 
-type QuizMode = 'pre' | 'post' | 'mock' | 'mistakes';
+type QuizMode = 'pre' | 'post' | 'mock' | 'mistakes' | 'drill';
 
 const META: Record<QuizMode, { title: string; feedback: 'immediate' | 'end'; icon: typeof Target; rules: string[] }> = {
   pre: {
@@ -46,6 +46,16 @@ const META: Record<QuizMode, { title: string; feedback: 'immediate' | 'end'; ico
       'Questions are drawn at random, so every attempt is different.',
     ],
   },
+  drill: {
+    title: 'Subtopic drill',
+    feedback: 'immediate',
+    icon: Crosshair,
+    rules: [
+      `Up to ${DASHBOARD.drillSize} questions from one subtopic, ones you haven’t got right yet first.`,
+      'You see the answer and explanation after each question.',
+      'Misses join your review queue and Mistake Log.',
+    ],
+  },
   mistakes: {
     title: 'Redo my mistakes',
     feedback: 'immediate',
@@ -57,14 +67,24 @@ const META: Record<QuizMode, { title: string; feedback: 'immediate' | 'end'; ico
 /** Keyed by section and mode so moving between quizzes always starts fresh. */
 export function QuizPage() {
   const { sectionId, mode } = useParams();
-  return <QuizPageInner key={`${sectionId}-${mode}`} />;
+  const [params] = useSearchParams();
+  return <QuizPageInner key={`${sectionId}-${mode}-${params.get('subtopic') ?? ''}`} />;
 }
 
 function QuizPageInner() {
   const ctx = useSection();
   const { mode: rawMode } = useParams();
   const navigate = useNavigate();
-  const mode = (['pre', 'post', 'mock', 'mistakes'] as const).find((m) => m === rawMode);
+  const [params] = useSearchParams();
+  const mode = (['pre', 'post', 'mock', 'mistakes', 'drill'] as const).find((m) => m === rawMode);
+  const subtopic = mode === 'drill' ? ctx?.section.subtopics.find((t) => t.id === params.get('subtopic')) : undefined;
+  const correctIds = useLiveQuery(
+    async () =>
+      mode === 'drill' && ctx
+        ? new Set((await db.attempts.where('sectionId').equals(ctx.section.id).filter((a) => a.correct).toArray()).map((a) => a.questionId))
+        : new Set<string>(),
+    [mode, ctx?.section.id],
+  );
   const openMistakeIds = useLiveQuery(
     async () =>
       ctx
@@ -77,7 +97,9 @@ function QuizPageInner() {
   const [quiz, setQuiz] = useState<BuiltQuiz | null>(null);
 
   if (!ctx || !mode) return <p className="text-sm text-muted">Unknown quiz.</p>;
+  if (mode === 'drill' && !subtopic) return <p className="text-sm text-muted">Unknown subtopic.</p>;
   const meta = META[mode];
+  const title = subtopic ? `${meta.title}: ${subtopic.title}` : meta.title;
   const exit = () => navigate(`/section/${ctx.section.id}`);
 
   // Once started, a quiz runs to the end even if its gate changes underneath it
@@ -85,7 +107,7 @@ function QuizPageInner() {
   if (quiz) {
     return (
       <QuizRunner
-        title={`${ctx.section.shortTitle} · ${meta.title}`}
+        title={`${ctx.section.shortTitle} · ${title}`}
         mode={mode as AttemptMode}
         sectionId={ctx.section.id}
         quiz={quiz}
@@ -108,14 +130,16 @@ function QuizPageInner() {
           ? buildPostQuiz(qs, rng)
           : mode === 'mock'
             ? buildMock(qs, rng)
-            : buildMistakeQuiz(qs, openMistakeIds ?? []);
+            : mode === 'drill'
+              ? buildDrill(qs, subtopic!.id, rng, DASHBOARD.drillSize, correctIds)
+              : buildMistakeQuiz(qs, openMistakeIds ?? []);
     setQuiz(built);
   };
 
   const Icon = meta.icon;
   return (
     <div className="mx-auto max-w-xl">
-      <PageHeader title={meta.title} />
+      <PageHeader title={title} />
       <Card>
         <Icon className="mb-3 text-accent" size={28} />
         <ul className="mb-5 list-disc space-y-1.5 pl-5 text-sm text-muted">

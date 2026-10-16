@@ -149,3 +149,41 @@ export const QUESTS = {
   /** Otherwise swap it for a Redo Mistakes quest when this many are open. */
   mistakeQuestThreshold: 5,
 } as const;
+
+/** Spaced repetition (SM-2). */
+export const SRS = {
+  initialEase: 2.5,
+  minEase: 1.3,
+  /** Interval after the first and second successful reviews; later ones multiply by ease. */
+  firstIntervalDays: 1,
+  secondIntervalDays: 6,
+  /** Easy on a card's first successful review skips ahead (as in Anki), instead of plain SM-2's 1 day. */
+  easyFirstIntervalDays: 4,
+  maxIntervalDays: 365,
+  /** New flashcards introduced per day. Missed questions and weak stories don't count against it. */
+  newCardsPerDay: 20,
+  /** SM-2 quality (0–5) for each review button. Below 3 is a lapse. */
+  quality: { again: 1, hard: 3, good: 4, easy: 5 },
+  /** A missed question returns this many days later. */
+  missedQuestionDelayDays: 1,
+  /** Story practice below this score schedules the story for review. */
+  weakStoryScore: 0.7,
+} as const;
+
+export type ReviewButton = keyof typeof SRS.quality;
+
+/** Dashboard analytics. */
+export const DASHBOARD = {
+  /** Suggest clearing the review queue first when at least this many cards are due. */
+  reviewFirstThreshold: 15,
+  /** Suggest redoing mistakes when at least this many are open in one section. */
+  mistakeThreshold: 5,
+  /** Subtopics at or above this mastery aren't shown as weak. */
+  weakSubtopicCeiling: 0.85,
+  /** Questions in a subtopic drill. */
+  drillSize: 8,
+  /** Weeks shown in the activity heatmap. */
+  heatmapWeeks: 52,
+  /** Activity-count thresholds for heatmap shades 1–4 (0 is empty). */
+  heatBins: [1, 10, 25, 50],
+} as const;

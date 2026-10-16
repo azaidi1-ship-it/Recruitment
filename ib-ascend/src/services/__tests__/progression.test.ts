@@ -6,11 +6,14 @@ import { useGameStore } from '../../store/useGameStore';
 import { useProfileStore } from '../../store/useProfileStore';
 import { useProgressStore } from '../../store/useProgressStore';
 import { useUiEvents } from '../../store/useUiEvents';
+import { getFlashcardDeck } from '../../content/registry';
+import { SRS } from '../../config/gameConfig';
+import { cardId } from '../../engine/srs';
 import {
   answerQuestion,
   completeSession,
-  logCardReview,
   markLessonRead,
+  reviewCard,
   type AnswerInput,
 } from '../progression';
 
@@ -145,10 +148,54 @@ describe('other activities', () => {
     expect(useProgressStore.getState().sections.accounting.lessonsRead).toEqual(['acc-l1']);
   });
 
-  it('logs flashcard reviews for quests and stats', async () => {
-    await logCardReview({ id: 'c1', source: 'flashcard', sectionId: 'accounting' }, 4, now);
+});
+
+describe('spaced repetition', () => {
+  it('enrols a section’s flashcards when you start reading, and queues them as new', async () => {
+    await markLessonRead('accounting', 'acc-l1', now);
+    const deck = getFlashcardDeck('accounting');
+    expect(await db.cards.where('sectionId').equals('accounting').count()).toBe(deck.length);
+    await markLessonRead('accounting', 'acc-l2', later(1));
+    expect(await db.cards.count()).toBe(deck.length); // idempotent
+    const snap = useGameStore.getState().snapshot!;
+    expect(snap.cardsNew).toBe(Math.min(deck.length, SRS.newCardsPerDay));
+    expect(snap.cardsDue).toBe(snap.cardsNew);
+  });
+
+  it('reviews a card with SM-2, logs it and pays flashcard XP', async () => {
+    await markLessonRead('accounting', 'acc-l1', now);
+    const before = xp();
+    const id = cardId('flashcard', getFlashcardDeck('accounting')[0]!.id);
+    const r = await reviewCard(id, SRS.quality.good, later(1));
+    expect(r.card).toMatchObject({ repetitions: 1, intervalDays: 1, due: '2026-10-17' });
+    expect(r.card.firstReviewedAt).toBe(later(1).toISOString());
     expect(await db.reviewLogs.count()).toBe(1);
-    expect(xp()).toBe(2);
+    expect(xp() - before).toBe(2);
+    // One fewer new card left today.
+    expect(useGameStore.getState().snapshot!.cardsNew).toBe(Math.min(getFlashcardDeck('accounting').length - 1, SRS.newCardsPerDay - 1));
+  });
+
+  it('turns a missed question into a card due tomorrow, and lapses it if missed again', async () => {
+    await answerQuestion({ ...q, correct: false, score: 0 }, now);
+    const c = await db.cards.get(cardId('question', q.questionId));
+    expect(c).toMatchObject({ source: 'question', sectionId: 'accounting', due: '2026-10-17', repetitions: 0 });
+    await db.cards.update(c!.id, { repetitions: 3, intervalDays: 15 });
+    await answerQuestion({ ...q, correct: false, score: 0 }, later(5));
+    expect(await db.cards.get(c!.id)).toMatchObject({ repetitions: 0, lapses: 1, due: '2026-10-17' });
+  });
+
+  it('does not create cards from review-mode or HireVue answers', async () => {
+    await answerQuestion({ ...q, mode: 'review', correct: false, score: 0 }, now);
+    await answerQuestion({ ...q, questionId: 'hv-01', mode: 'hirevue', correct: false, score: 0.2 }, later(1));
+    expect(await db.cards.count()).toBe(0);
+  });
+
+  it('pays no extra XP for reviewing a question card (the answer already earned it)', async () => {
+    await answerQuestion({ ...q, correct: false, score: 0 }, now);
+    const before = xp();
+    await reviewCard(cardId('question', q.questionId), SRS.quality.good, later(60 * 24));
+    expect(xp()).toBe(before);
+    expect(await db.reviewLogs.count()).toBe(1);
   });
 });
 

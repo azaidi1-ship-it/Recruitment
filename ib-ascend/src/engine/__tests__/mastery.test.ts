@@ -11,6 +11,8 @@ import {
 import type { Difficulty, AttemptMode } from '../../types/models';
 
 const now = new Date('2026-10-16T12:00:00Z');
+/** A card in rotation (reviewed at least once). */
+const rc = { source: 'flashcard' as const, lastReviewedAt: '2026-10-01T00:00:00Z' };
 const daysAgo = (d: number) => new Date(now.getTime() - d * 86_400_000);
 
 function attempts(n: number, score: number, opts: { difficulty?: Difficulty; mode?: AttemptMode; ageDays?: number } = {}) {
@@ -69,11 +71,17 @@ describe('retentionComponent', () => {
     expect(retentionComponent([], today)).toBeNull();
   });
   it('scores never-recalled cards 0 and on-schedule cards 1', () => {
-    expect(retentionComponent([{ repetitions: 0, due: today, intervalDays: 0 }], today)).toBe(0);
-    expect(retentionComponent([{ repetitions: 2, due: '2026-10-20', intervalDays: 6 }], today)).toBe(1);
+    expect(retentionComponent([{ ...rc, repetitions: 0, due: today, intervalDays: 0 }], today)).toBe(0);
+    expect(retentionComponent([{ ...rc, repetitions: 2, due: '2026-10-20', intervalDays: 6 }], today)).toBe(1);
   });
   it('fades overdue cards: 5 days overdue on a 5-day interval → e^-1', () => {
-    expect(retentionComponent([{ repetitions: 2, due: '2026-10-11', intervalDays: 5 }], today)).toBeCloseTo(Math.exp(-1));
+    expect(retentionComponent([{ ...rc, repetitions: 2, due: '2026-10-11', intervalDays: 5 }], today)).toBeCloseTo(Math.exp(-1));
+  });
+  it('ignores flashcards not yet introduced but counts unrecalled missed questions', () => {
+    const unseen = { source: 'flashcard' as const, lastReviewedAt: null, repetitions: 0, due: today, intervalDays: 0 };
+    expect(retentionComponent([unseen], today)).toBeNull();
+    const missed = { ...unseen, source: 'question' as const };
+    expect(retentionComponent([unseen, missed], today)).toBe(0);
   });
 });
 
@@ -109,7 +117,7 @@ describe('sectionMastery', () => {
   });
 
   it('includes retention when cards exist: 0.35 + 0.35 + 0.3 × 0', () => {
-    const r = sectionMastery({ ...base, mockScores: [1], cards: [{ repetitions: 0, due: '2026-10-16', intervalDays: 0 }] });
+    const r = sectionMastery({ ...base, mockScores: [1], cards: [{ ...rc, repetitions: 0, due: '2026-10-16', intervalDays: 0 }] });
     expect(r.mastery).toBeCloseTo(0.7);
   });
 

@@ -1,13 +1,21 @@
 import { useMemo, useState } from 'react';
-import { ArrowLeft, ArrowRight, RotateCcw, Shuffle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { ArrowLeft, ArrowRight, Repeat, RotateCcw, Shuffle } from 'lucide-react';
+import { db } from '../../db/db';
 import { getFlashcardDeck } from '../../content/registry';
+import { buildQueue, isNewFlashcard } from '../../engine/srs';
+import { enrolSectionDeck } from '../../services/cards';
+import { refreshDerived } from '../../services/progression';
+import { toLocalDate } from '../../lib/dates';
 import { mulberry32, shuffle } from '../../lib/random';
 import { Button, Card } from '../../components/ui';
 import { useSection } from './useSection';
 
 /**
- * Browse the section deck (authored cards + every formula callout).
- * TODO(Phase 7): enrol cards in SM-2 spaced repetition and the Due Today queue.
+ * Browse the section deck (authored cards + every formula callout). The deck
+ * joins the spaced-repetition queue when you start the section (or on demand
+ * here); browsing doesn't affect scheduling.
  */
 export function Flashcards() {
   const ctx = useSection();
@@ -15,6 +23,18 @@ export function Flashcards() {
   const [deck, setDeck] = useState(base);
   const [i, setI] = useState(0);
   const [flipped, setFlipped] = useState(false);
+  const sectionId = ctx?.section.id;
+  const srs = useLiveQuery(async () => {
+    if (!sectionId) return null;
+    const all = await db.cards.toArray();
+    const own = all.filter((c) => c.sectionId === sectionId);
+    const q = buildQueue(all, toLocalDate(), { sectionId });
+    return {
+      enrolled: own.some((c) => c.source === 'flashcard'),
+      learned: own.filter((c) => c.source === 'flashcard' && !isNewFlashcard(c)).length,
+      queued: q.due.length + q.fresh.length,
+    };
+  }, [sectionId]);
   if (!ctx) return null;
   const card = deck[i];
   if (!card) return <p className="text-sm text-muted">No flashcards yet.</p>;
@@ -26,8 +46,33 @@ export function Flashcards() {
 
   return (
     <div className="mx-auto max-w-xl">
+      {srs && (
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-line bg-sunk px-3 py-2.5 text-sm">
+          <span className="flex items-center gap-2 text-muted">
+            <Repeat size={15} className="text-accent" />
+            {srs.enrolled
+              ? `In your review queue: ${srs.learned} of ${base.length} learned, ${srs.queued} to review today.`
+              : 'This deck isn’t in your review queue yet.'}
+          </span>
+          {srs.enrolled ? (
+            <Link to={`/review?section=${ctx.section.id}`} className="text-accent hover:underline">
+              Review this deck →
+            </Link>
+          ) : (
+            <Button
+              variant="primary"
+              onClick={async () => {
+                await enrolSectionDeck(ctx.section.id);
+                await refreshDerived();
+              }}
+            >
+              Add to review queue
+            </Button>
+          )}
+        </div>
+      )}
       <p className="mb-3 text-sm text-muted">
-        Card {i + 1} of {deck.length}. Spaced repetition scheduling arrives in Phase 7; for now, browse and self-test.
+        Card {i + 1} of {deck.length}. Browse and self-test here; grading happens in Review.
       </p>
       <button
         type="button"

@@ -15,6 +15,7 @@ import { Flashcards } from './features/section/Flashcards';
 import { MistakeLog } from './features/section/MistakeLog';
 import { CheatSheet } from './features/section/CheatSheet';
 import { QuizPage } from './features/section/QuizPage';
+import { ReviewPage } from './features/review/ReviewPage';
 
 /** Hash router so the static build works from any path without server rewrites. */
 export const router = createHashRouter([
@@ -37,10 +38,7 @@ export const router = createHashRouter([
           { path: 'quiz/:mode', element: <QuizPage /> },
         ],
       },
-      {
-        path: 'review',
-        element: <ComingSoon title="Review queue" phase={7} what="SM-2 spaced repetition across flashcards, missed questions and weak stories." />,
-      },
+      { path: 'review', element: <ReviewPage /> },
       {
         path: 'stories',
         element: <ComingSoon title="Story Bank" phase={9} what="STAR stories for every resume item, the 75+ question behavioral bank, coverage matrix and practice mode." />,

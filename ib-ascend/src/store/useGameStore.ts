@@ -13,13 +13,19 @@ export interface GameSnapshot {
   mastery: Record<SectionId, MasteryResult>;
   /** Key: `${sectionId}/${subtopicId}`, value 0–1. */
   subtopicMastery: Record<string, number>;
+  /** Key: `${sectionId}/${subtopicId}`, number of attempts. */
+  subtopicAttempts: Record<string, number>;
   grades: Record<SectionId, Grade | null>;
   stats: Stats;
   unlocked: SectionId[];
   quests: Quest[];
   displayStreak: number;
+  /** Today's review queue: due cards plus new flashcards within the daily limit. */
   cardsDue: number;
+  /** Of which new flashcards. */
+  cardsNew: number;
   openMistakes: number;
+  mistakesBySection: Partial<Record<SectionId, number>>;
   unlockedAchievements: string[];
 }
 
