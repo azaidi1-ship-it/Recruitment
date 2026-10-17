@@ -72,6 +72,19 @@ export class IbAscendDb extends Dexie {
     this.version(2).stores({
       reviewLogs: 'id, cardId, sectionId, reviewedAt',
     });
+    // v3: before AI features shipped, the stored default model was Sonnet.
+    // Move setups that never added a key to the current default, once.
+    this.version(3)
+      .stores({})
+      .upgrade((tx) =>
+        tx
+          .table('settings')
+          .toCollection()
+          .modify((s: Settings) => {
+            if (!s.llmApiKey && s.llmModel === 'claude-sonnet-5-5') s.llmModel = 'claude-opus-5-5';
+            if (s.llmAutoGrade === undefined) s.llmAutoGrade = true;
+          }),
+      );
   }
 }
 

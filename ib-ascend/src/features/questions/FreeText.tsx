@@ -4,17 +4,20 @@ import type { FreeTextQuestion } from '../../types/questions';
 import { matchRubric, scoreRubric, RUBRIC_PASS } from '../../engine/grading/rubric';
 import { Button, cx } from '../../components/ui';
 import type { QuestionProps } from './types';
+import { AiFeedback, PointNote, useAiGrade } from './useAiGrade';
 
 /**
  * Verbal answer: type it as you'd say it, then self-grade against the rubric.
- * Points detected by keyword matching are pre-ticked; you confirm or adjust.
- * TODO(Phase 10): LLM grading when an API key is set.
+ * Points detected by keyword matching are pre-ticked; with an API key, Claude
+ * grades the answer and its verdict replaces the keyword ticks. Either way
+ * you confirm or adjust before the score counts.
  */
 export function FreeText({ question, submitted, reveal, onSubmit }: QuestionProps<FreeTextQuestion>) {
   const [text, setText] = useState('');
   const [stage, setStage] = useState<'answer' | 'grade'>('answer');
   const [hits, setHits] = useState<string[]>([]);
   const [elapsed, setElapsed] = useState(0);
+  const ai = useAiGrade((g) => setHits(g.hits));
 
   useEffect(() => {
     if (stage !== 'answer' || submitted) return;
@@ -56,6 +59,10 @@ export function FreeText({ question, submitted, reveal, onSubmit }: QuestionProp
           onClick={() => {
             setHits(detected);
             setStage('grade');
+            void ai.run(
+              { prompt: question.prompt, rubric: question.rubric, modelAnswer: question.modelAnswer, answer: text },
+              Object.fromEntries(question.rubric.map((r) => [r.id, r.weight])),
+            );
           }}
         >
           Submit and grade
@@ -66,6 +73,7 @@ export function FreeText({ question, submitted, reveal, onSubmit }: QuestionProp
 
   return (
     <div className="space-y-4">
+      {!final && <AiFeedback state={ai.state} />}
       <div>
         <h4 className="mb-1 text-xs font-medium uppercase tracking-wide text-muted">Your answer</h4>
         <p className="whitespace-pre-wrap rounded-lg border border-line bg-sunk p-3 text-sm">{final?.text ?? text}</p>
@@ -86,7 +94,10 @@ export function FreeText({ question, submitted, reveal, onSubmit }: QuestionProp
                   className={cx('flex w-full items-start gap-2 rounded-md px-2 py-1.5 text-left text-sm', !final && 'hover:bg-sunk')}
                 >
                   {on ? <CheckSquare size={16} className="mt-0.5 shrink-0 text-ok" /> : <Square size={16} className="mt-0.5 shrink-0 text-faint" />}
-                  <span className={on ? '' : 'text-muted'}>{p.point}</span>
+                  <span className={on ? '' : 'text-muted'}>
+                    {p.point}
+                    {!final && <PointNote state={ai.state} id={p.id} />}
+                  </span>
                 </button>
               </li>
             );
@@ -105,7 +116,9 @@ export function FreeText({ question, submitted, reveal, onSubmit }: QuestionProp
       {!final && (
         <Button
           variant="primary"
-          onClick={() => onSubmit({ type: 'freeText', text, hitPointIds: hits, selfScore: score })}
+          onClick={() =>
+            onSubmit({ type: 'freeText', text, hitPointIds: hits, selfScore: score, ...(ai.state.status === 'done' ? { llmScore: ai.state.score } : {}) })
+          }
         >
           Confirm score
         </Button>

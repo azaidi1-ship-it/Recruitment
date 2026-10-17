@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { Camera, CameraOff, Download, Mic, RotateCcw, Square, Video } from 'lucide-react';
+import { Camera, CameraOff, Download, Mic, RotateCcw, Sparkles, Square, Video } from 'lucide-react';
 import { db } from '../../db/db';
 import { HIREVUE_QUESTIONS } from '../../content/hirevue/questions';
 import { HV_CATEGORY_LABEL, type HireVueQuestion } from '../../content/hirevue/types';
 import { buildHireVue, FOCUS_LABEL, type HireVueFocus } from '../../engine/hirevue/build';
 import { analyzeDelivery, DELIVERY_CHECKS, hireVueScore, PACE } from '../../engine/hirevue/delivery';
 import { matchRubric, scoreRubric } from '../../engine/grading/rubric';
+import { AiFeedback, useAiGrade } from '../questions/useAiGrade';
 import { answerQuestion, completeSession } from '../../services/progression';
 import { hashString, mulberry32 } from '../../lib/random';
 import { newId } from '../../lib/id';
@@ -606,6 +607,7 @@ function ReviewCard({
   const stats = analyzeDelivery(review.transcript, take.durationSec, take.allowedSec);
   const toggle = (list: string[], id: string) => (list.includes(id) ? list.filter((x) => x !== id) : [...list, id]);
   const ext = take.mimeType?.includes('mp4') ? 'mp4' : 'webm';
+  const ai = useAiGrade((g) => onChange({ hits: g.hits }), { manual: true });
 
   return (
     <Card>
@@ -655,6 +657,18 @@ function ReviewCard({
         </div>
 
         <div className="space-y-4">
+          {ai.enabled && !locked && (
+            <div className="space-y-2">
+              <Button
+                className="!px-2.5 !py-1 text-xs"
+                disabled={ai.state.status === 'loading' || review.transcript.trim().split(/\s+/).length < 5}
+                onClick={() => void ai.run({ prompt: q.prompt, rubric: q.rubric, modelAnswer: q.modelAnswer, answer: review.transcript, context: 'A one-way video interview answer, transcribed by speech recognition (ignore transcription errors and filler words).' })}
+              >
+                <Sparkles size={13} /> {ai.state.status === 'done' ? 'Re-grade with Claude' : 'Grade with Claude'}
+              </Button>
+              <AiFeedback state={ai.state} />
+            </div>
+          )}
           <Checklist
             title="Content (pre-ticked from your transcript)"
             items={q.rubric.map((p) => ({ id: p.id, label: p.point }))}

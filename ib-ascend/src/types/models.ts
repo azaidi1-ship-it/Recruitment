@@ -489,5 +489,7 @@ export interface Settings {
   /** Stored only in this browser. Never exported unless the user opts in. */
   llmApiKey: string;
   llmModel: string;
+  /** Grade verbal answers with Claude automatically when a key is set. */
+  llmAutoGrade: boolean;
   reduceMotion: boolean;
 }

@@ -4,6 +4,8 @@ import { useSettingsStore } from '../../store/useSettingsStore';
 import { hydrateAll } from '../../store/bootstrap';
 import { BackupError, backupFileName, exportBackup, importBackup, parseBackup, wipeAll } from '../../db/backup';
 import { Button, Card, PageHeader } from '../../components/ui';
+import { LLM_MODELS } from '../../engine/ai';
+import { testConnection } from '../../services/llm';
 
 const field = 'w-full rounded-lg border border-line bg-sunk px-3 py-2 text-sm text-ink placeholder:text-faint';
 
@@ -89,19 +91,53 @@ export function Settings() {
                 <Button onClick={() => setShowKey((v) => !v)}>{showKey ? 'Hide' : 'Show'}</Button>
               </div>
             </Row>
-            <Row label="Model">
-              <input
-                className={field}
-                value={settings.llmModel}
-                onChange={(e) => update({ llmModel: e.target.value.trim() })}
-              />
+            <Row label="Model" hint="Opus is the most thorough grader and interviewer; Sonnet and Haiku are faster and cost less per answer.">
+              <select className={field} value={settings.llmModel} onChange={(e) => update({ llmModel: e.target.value })}>
+                {LLM_MODELS.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.label}: {m.note}
+                  </option>
+                ))}
+                {!LLM_MODELS.some((m) => m.id === settings.llmModel) && <option value={settings.llmModel}>{settings.llmModel}</option>}
+              </select>
             </Row>
+            <label className="flex items-center gap-2">
+              <input type="checkbox" checked={settings.llmAutoGrade} onChange={(e) => update({ llmAutoGrade: e.target.checked })} />
+              Grade verbal answers with Claude automatically (you still confirm every score)
+            </label>
+            <TestKey disabled={!settings.llmApiKey} />
           </div>
         </Card>
 
         <BackupPanel />
       </div>
     </>
+  );
+}
+
+function TestKey({ disabled }: { disabled: boolean }) {
+  const [status, setStatus] = useState<{ ok: boolean; text: string } | null>(null);
+  const [busy, setBusy] = useState(false);
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Button
+        disabled={disabled || busy}
+        onClick={async () => {
+          setBusy(true);
+          setStatus(null);
+          try {
+            setStatus({ ok: true, text: await testConnection() });
+          } catch (e) {
+            setStatus({ ok: false, text: e instanceof Error ? e.message : String(e) });
+          } finally {
+            setBusy(false);
+          }
+        }}
+      >
+        {busy ? 'Testing…' : 'Test key'}
+      </Button>
+      {status && <span className={status.ok ? 'text-ok' : 'text-bad'}>{status.text}</span>}
+    </div>
   );
 }
 

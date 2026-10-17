@@ -10,6 +10,7 @@ import { toLocalDate } from '../../lib/dates';
 import type { DealEntry } from '../../types/models';
 import { Badge, Button, Card, PageHeader, cx } from '../../components/ui';
 import { FillInText, speakSeconds, wordCount } from '../stories/shared';
+import { AiFeedback, PointNote, useAiGrade } from '../questions/useAiGrade';
 
 const TABS = [
   { id: 'deals', label: 'Deals' },
@@ -267,6 +268,7 @@ function PitchRound({ deal, deals, onPick, onRandom }: { deal: DealEntry; deals:
     return () => clearInterval(t);
   }, [hits]);
   const score = hits ? scoreRubric(rubric, hits) : 0;
+  const ai = useAiGrade((g) => setHits(g.hits));
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1.2fr_1fr]">
@@ -298,12 +300,18 @@ function PitchRound({ deal, deals, onPick, onRandom }: { deal: DealEntry; deals:
               </span>
             </div>
             <textarea aria-label="Your pitch" rows={8} className={INPUT} value={text} onChange={(e) => setText(e.target.value)} />
-            <Button variant="primary" className="mt-3" disabled={wordCount(text) < 5} onClick={() => setHits(matchRubric(rubric, text))}>
+            <Button variant="primary" className="mt-3" disabled={wordCount(text) < 5} onClick={() => {
+                setHits(matchRubric(rubric, text));
+                void ai.run({ prompt: `Tell me about a deal you've been following (${deal.acquirer} / ${deal.target}).`, rubric, modelAnswer: dealModelAnswer(deal), answer: text, context: 'The reference answer was built from the candidate’s own deal journal entry.' });
+              }}>
               Submit and grade
             </Button>
           </>
         ) : (
           <>
+            <div className="mb-3">
+              <AiFeedback state={ai.state} />
+            </div>
             <ul className="space-y-1.5">
               {rubric.map((r) => (
                 <li key={r.id}>
@@ -315,7 +323,10 @@ function PitchRound({ deal, deals, onPick, onRandom }: { deal: DealEntry; deals:
                       checked={hits.includes(r.id)}
                       onChange={(e) => setHits(e.target.checked ? [...hits, r.id] : hits.filter((x) => x !== r.id))}
                     />
-                    {r.point}
+                    <span>
+                      {r.point}
+                      <PointNote state={ai.state} id={r.id} />
+                    </span>
                   </label>
                 </li>
               ))}

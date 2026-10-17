@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { Check, ChevronDown, Info, RotateCcw, Swords, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { Check, ChevronDown, Info, RotateCcw, Sparkles, Swords, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { db } from '../../db/db';
 import { PERSONAS, PERSONA_BY_ID, type Persona } from '../../content/superday/personas';
 import { resumeProbes } from '../../content/superday/probes';
@@ -18,11 +18,17 @@ import type { Question } from '../../types/questions';
 import { Badge, Button, Card, PageHeader, cx } from '../../components/ui';
 import { ProgressBar, masteryTone } from '../../components/Progress';
 import { SuperdayRun, type SuperdayLogEntry } from './SuperdayRun';
+import { AiInterview, type AiInterviewResult } from './AiInterview';
+import { transcriptText, type InterviewerSetup } from '../../engine/ai';
+import { llmEnabled } from '../../services/llm';
+import { useSettingsStore } from '../../store/useSettingsStore';
 
 type Stage =
   | { kind: 'setup' }
   | { kind: 'running'; persona: Persona; rounds: SuperdayRound[]; startedAt: string }
-  | { kind: 'done'; persona: Persona; rounds: SuperdayRound[]; scorecard: Scorecard; log: SuperdayLogEntry[]; xp: number };
+  | { kind: 'done'; persona: Persona; rounds: SuperdayRound[]; scorecard: Scorecard; log: SuperdayLogEntry[]; xp: number }
+  | { kind: 'ai'; setup: InterviewerSetup; startedAt: string }
+  | { kind: 'aiDone'; persona: Persona; result: AiInterviewResult; xp: number };
 
 const LENGTHS = [
   { minutes: 10, label: '10 min', note: 'Quick practice' },
@@ -38,12 +44,28 @@ export function Superday() {
   const [roundCount, setRoundCount] = useState(3);
   const [minutes, setMinutes] = useState(20);
   const [scope, setScope] = useState<'all' | 'unlocked'>('all');
+  const aiAvailable = useSettingsStore((s) => llmEnabled(s.settings));
+  const [aiMode, setAiMode] = useState(false);
+  const useAi = aiAvailable && aiMode;
   const unlocked = useGameStore((s) => s.snapshot?.unlocked ?? []);
+  const storyTitles = useLiveQuery(async () => (await db.stories.toArray()).map((s) => s.title), []);
   const resume = useLiveQuery(async () => (await db.resumes.orderBy('version').last()) ?? SEED_RESUME, []);
   const history = useLiveQuery(() => db.sessions.where('mode').equals('superday').reverse().sortBy('startedAt'), []);
 
   function start() {
     const persona = PERSONA_BY_ID[personaId]!;
+    if (useAi) {
+      const topics = (Object.entries(persona.sectionWeights) as [SectionId, number][])
+        .filter(([id]) => scope === 'all' || unlocked.includes(id))
+        .sort((a, b) => b[1] - a[1])
+        .map(([id]) => SECTIONS.find((x) => x.id === id)?.title ?? id);
+      setStage({
+        kind: 'ai',
+        setup: { persona, minutes, topics, resume: resume ?? SEED_RESUME, storyTitles: storyTitles ?? [] },
+        startedAt: new Date().toISOString(),
+      });
+      return;
+    }
     const technical: Partial<Record<SectionId, Question[]>> = {};
     for (const s of SECTIONS) {
       if (s.id === 'fit') continue;
@@ -91,8 +113,58 @@ export function Superday() {
     );
   }
 
+  if (stage.kind === 'ai') {
+    const { setup } = stage;
+    return (
+      <AiInterview
+        setup={setup}
+        onAbandon={() => setStage({ kind: 'setup' })}
+        onFinish={async (result) => {
+          const res = await completeSession({
+            mode: 'superday',
+            sectionId: null,
+            title: `AI Superday · ${setup.persona.title}`,
+            questionIds: [],
+            score: result.scorecard.overall,
+            startedAt: stage.startedAt,
+            meta: {
+              personaId: setup.persona.id,
+              wouldAdvance: result.scorecard.wouldAdvance,
+              categories: result.scorecard.categories,
+              rounds: result.scorecard.rounds,
+              minutes: setup.minutes,
+              ai: true,
+              aiWouldAdvance: result.ai.would_advance,
+              answers: result.turns.filter((t) => t.role === 'candidate').length,
+            },
+          });
+          setStage({ kind: 'aiDone', persona: setup.persona, result, xp: res.bonus.xp });
+        }}
+      />
+    );
+  }
+
+  if (stage.kind === 'aiDone') {
+    return (
+      <ScorecardView persona={stage.persona} scorecard={stage.result.scorecard} xp={stage.xp} onAgain={() => setStage({ kind: 'setup' })}>
+        <AiWriteUp result={stage.result} />
+      </ScorecardView>
+    );
+  }
+
   if (stage.kind === 'done') {
-    return <ScorecardView persona={stage.persona} scorecard={stage.scorecard} log={stage.log} xp={stage.xp} onAgain={() => setStage({ kind: 'setup' })} />;
+    return (
+      <ScorecardView persona={stage.persona} scorecard={stage.scorecard} xp={stage.xp} onAgain={() => setStage({ kind: 'setup' })}>
+        <Card>
+          <h2 className="mb-3 font-semibold">Every question</h2>
+          <ul className="divide-y divide-line">
+            {stage.log.map((e, k) => (
+              <ReviewRow key={k} entry={e} />
+            ))}
+          </ul>
+        </Card>
+      </ScorecardView>
+    );
   }
 
   const unlockedCount = SECTIONS.filter((s) => s.id !== 'fit' && unlocked.includes(s.id)).length;
@@ -131,9 +203,28 @@ export function Superday() {
             </div>
           </Card>
           <Card>
-            <div className="grid gap-4 sm:grid-cols-3">
-              <Choice label="Rounds" value={roundCount} options={[3, 4].map((n) => ({ value: n, label: String(n) }))} onChange={setRoundCount} />
-              <Choice label="Round length" value={minutes} options={LENGTHS.map((l) => ({ value: l.minutes, label: l.label }))} onChange={setMinutes} />
+            {aiAvailable && (
+              <div className="mb-4">
+                <Choice
+                  label="Format"
+                  value={aiMode ? 'ai' : 'classic'}
+                  options={[
+                    { value: 'classic', label: 'Question rounds' },
+                    { value: 'ai', label: 'AI interviewer' },
+                  ]}
+                  onChange={(v) => setAiMode(v === 'ai')}
+                />
+                {aiMode && (
+                  <p className="mt-2 flex items-start gap-1.5 text-xs text-muted">
+                    <Sparkles size={13} className="mt-0.5 shrink-0 text-info" /> One conversational interview with Claude in this style. It asks follow-ups based on your answers and probes
+                    your resume, then writes up a scorecard. Uses your API key.
+                  </p>
+                )}
+              </div>
+            )}
+            <div className={cx('grid gap-4', useAi ? 'sm:grid-cols-2' : 'sm:grid-cols-3')}>
+              {!useAi && <Choice label="Rounds" value={roundCount} options={[3, 4].map((n) => ({ value: n, label: String(n) }))} onChange={setRoundCount} />}
+              <Choice label={useAi ? 'Interview length' : 'Round length'} value={minutes} options={LENGTHS.map((l) => ({ value: l.minutes, label: l.label }))} onChange={setMinutes} />
               <Choice
                 label="Technical scope"
                 value={scope}
@@ -145,10 +236,12 @@ export function Superday() {
               />
             </div>
             <p className="mt-4 text-xs text-muted">
-              Lineup: {PERSONA_BY_ID[personaId]!.rounds.slice(0, roundCount).join(' → ')} · about {roundCount * minutes} minutes in total. Rounds can’t be paused.
+              {useAi
+                ? `One mixed interview of about ${minutes} minutes. Technicals lean toward this style’s focus areas.`
+                : `Lineup: ${PERSONA_BY_ID[personaId]!.rounds.slice(0, roundCount).join(' → ')} · about ${roundCount * minutes} minutes in total. Rounds can’t be paused.`}
             </p>
             <Button variant="primary" className="mt-4" onClick={start} disabled={scope === 'unlocked' && unlockedCount === 0}>
-              <Swords size={16} /> Start Superday
+              {useAi ? <Sparkles size={16} /> : <Swords size={16} />} {useAi ? 'Start AI interview' : 'Start Superday'}
             </Button>
           </Card>
         </div>
@@ -163,7 +256,14 @@ export function Superday() {
                 return (
                   <li key={s.id} className="flex items-center justify-between gap-2 py-2">
                     <span>
-                      <span className="block">{PERSONA_BY_ID[String(s.meta?.personaId)]?.title ?? s.title}</span>
+                      <span className="block">
+                        {PERSONA_BY_ID[String(s.meta?.personaId)]?.title ?? s.title}
+                        {s.meta?.ai === true && (
+                          <span className="ml-1.5">
+                            <Badge tone="info">AI</Badge>
+                          </span>
+                        )}
+                      </span>
                       <span className="text-xs text-faint">{new Date(s.startedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
                     </span>
                     <span className="flex items-center gap-2 tabular">
@@ -202,7 +302,7 @@ function Choice<T extends string | number>({ label, value, options, onChange }: 
   );
 }
 
-function ScorecardView({ persona, scorecard, log, xp, onAgain }: { persona: Persona; scorecard: Scorecard; log: SuperdayLogEntry[]; xp: number; onAgain: () => void }) {
+function ScorecardView({ persona, scorecard, xp, onAgain, children }: { persona: Persona; scorecard: Scorecard; xp: number; onAgain: () => void; children: ReactNode }) {
   const cats = Object.entries(scorecard.categories) as [Category, number | null][];
   return (
     <>
@@ -268,15 +368,49 @@ function ScorecardView({ persona, scorecard, log, xp, onAgain }: { persona: Pers
           )}
         </Card>
       </div>
+      {children}
+    </>
+  );
+}
+
+function AiWriteUp({ result }: { result: AiInterviewResult }) {
+  const { ai, turns } = result;
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="grid gap-4 lg:grid-cols-2">
       <Card>
-        <h2 className="mb-3 font-semibold">Every question</h2>
-        <ul className="divide-y divide-line">
-          {log.map((e, k) => (
-            <ReviewRow key={k} entry={e} />
+        <h2 className="mb-3 flex items-center gap-2 font-semibold">
+          <Sparkles size={16} className="text-info" /> Interviewer’s write-up
+        </h2>
+        <h3 className="mb-1 text-sm font-semibold text-ok">Strengths</h3>
+        <ul className="mb-4 space-y-1 text-sm">
+          {ai.strengths.map((x) => (
+            <li key={x}>• {x}</li>
+          ))}
+        </ul>
+        <h3 className="mb-1 text-sm font-semibold text-warn">Fix next</h3>
+        <ul className="space-y-1 text-sm">
+          {ai.improvements.map((x) => (
+            <li key={x}>• {x}</li>
           ))}
         </ul>
       </Card>
-    </>
+      <Card>
+        <h2 className="mb-3 font-semibold">Question by question</h2>
+        <ul className="divide-y divide-line text-sm">
+          {ai.questions.map((q, k) => (
+            <li key={k} className="py-2">
+              <p className="text-ink">{q.question}</p>
+              <p className="mt-0.5 text-muted">{q.note}</p>
+            </li>
+          ))}
+        </ul>
+        <button type="button" onClick={() => setOpen(!open)} className="mt-3 flex items-center gap-1 text-sm text-accent hover:underline" aria-expanded={open}>
+          <ChevronDown size={15} className={cx('transition', open && 'rotate-180')} /> Full transcript
+        </button>
+        {open && <pre className="mt-2 max-h-96 overflow-auto rounded-lg bg-sunk p-3 text-xs whitespace-pre-wrap">{transcriptText(turns)}</pre>}
+      </Card>
+    </div>
   );
 }
 

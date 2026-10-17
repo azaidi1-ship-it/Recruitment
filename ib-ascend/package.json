@@ -12,6 +12,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "0.131.0",
     "dexie": "^4.4.6",
     "dexie-react-hooks": "^4.4.0",
     "framer-motion": "^14.3.0",

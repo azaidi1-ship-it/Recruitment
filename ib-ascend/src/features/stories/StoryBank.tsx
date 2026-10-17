@@ -14,6 +14,7 @@ import { newId } from '../../lib/id';
 import type { BehavioralQuestion, Resume, Story } from '../../types/models';
 import { Badge, Button, Card, PageHeader, cx } from '../../components/ui';
 import { StoriesTab } from './StoriesTab';
+import { AiFeedback, PointNote, useAiGrade } from '../questions/useAiGrade';
 import { CompetencyChip, FillInText, speakSeconds, wordCount } from './shared';
 
 const TABS = [
@@ -233,6 +234,8 @@ function PracticeTab({ stories, initialId }: { stories: Story[]; initialId: stri
   const rubric = useMemo(() => [...behavioralRubric(question), { id: 'length', point: 'Long enough to tell the story (100+ words, about 40 seconds spoken)', keywords: [], weight: 1 }], [question]);
   const matched = question.storyMatches.map((m) => ({ ...m, story: stories.find((s) => s.id === m.storyId) })).filter((m) => m.story);
   const score = scoreRubric(rubric, hits);
+  const longEnough = wordCount(text) >= 100;
+  const ai = useAiGrade((g) => setHits([...g.hits, ...(longEnough ? ['length'] : [])]));
 
   useEffect(() => {
     if (stage !== 'answer') return;
@@ -276,8 +279,17 @@ function PracticeTab({ stories, initialId }: { stories: Story[]; initialId: stri
               className="mt-3"
               disabled={wordCount(text) < 5}
               onClick={() => {
-                setHits([...matchRubric(rubric, text), ...(wordCount(text) >= 100 ? ['length'] : [])]);
+                setHits([...matchRubric(rubric, text), ...(longEnough ? ['length'] : [])]);
                 setStage('grade');
+                const story = matched[0]?.story;
+                void ai.run({
+                  prompt: question.prompt,
+                  rubric: rubric.filter((r) => r.id !== 'length'),
+                  answer: text,
+                  context: story
+                    ? `Behavioral answer. The candidate's prepared story for this question is "${story.title}" (suggested angle: ${matched[0]!.angle}). Bracketed [FILL IN] text in it is unfinished, not a fact:\n${story.spoken}`
+                    : 'Behavioral answer.',
+                });
               }}
             >
               Submit and grade
@@ -287,6 +299,11 @@ function PracticeTab({ stories, initialId }: { stories: Story[]; initialId: stri
         {stage !== 'answer' && (
           <>
             <p className="mb-3 whitespace-pre-line rounded-md bg-sunk p-3 text-sm text-muted">{text}</p>
+            {stage === 'grade' && (
+              <div className="mb-3">
+                <AiFeedback state={ai.state} />
+              </div>
+            )}
             <h3 className="mb-2 text-sm font-semibold">Rubric {stage === 'grade' && <span className="font-normal text-muted">(points found in your answer are ticked; adjust honestly)</span>}</h3>
             <ul className="space-y-1.5">
               {rubric.map((r) => (
@@ -302,6 +319,7 @@ function PracticeTab({ stories, initialId }: { stories: Story[]; initialId: stri
                     <span>
                       {r.point}
                       {r.weight > 1 && <span className="ml-1 text-xs text-faint">(×{r.weight})</span>}
+                      <PointNote state={ai.state} id={r.id} />
                     </span>
                   </label>
                 </li>

@@ -1,7 +1,7 @@
 import type { Settings, UserProfile } from '../types/models';
 import { nowIso } from '../lib/dates';
 
-export const DEFAULT_LLM_MODEL = 'claude-sonnet-5-5';
+export const DEFAULT_LLM_MODEL = 'claude-opus-5-5';
 
 export function defaultProfile(): UserProfile {
   return {
@@ -28,6 +28,7 @@ export function defaultSettings(): Settings {
     llmProvider: 'anthropic',
     llmApiKey: '',
     llmModel: DEFAULT_LLM_MODEL,
+    llmAutoGrade: true,
     reduceMotion: false,
   };
 }
