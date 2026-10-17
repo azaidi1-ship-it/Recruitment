@@ -28,7 +28,7 @@ export const COVERAGE_SUGGESTIONS: Record<CompetencyId, { itemId: string; idea: 
     { itemId: 'lead-door-of-awareness', idea: 'Offering to build the fundraising models' },
   ],
   pressure: [
-    { itemId: 'exp-stratus', idea: 'Investor deadlines during the raise' },
+    { itemId: 'exp-stratus', idea: 'Any deadline pressure during the raise' },
     { itemId: 'proj-tcs', idea: 'Delivering the externship analysis on its timeline' },
   ],
   detail: [
@@ -44,7 +44,7 @@ export const COVERAGE_SUGGESTIONS: Record<CompetencyId, { itemId: string; idea: 
     { itemId: 'lead-mun', idea: 'Winning support for a resolution' },
   ],
   ethics: [
-    { itemId: 'exp-clarus', idea: 'Reporting the corrected backtest result even though it looked worse' },
+    { itemId: 'exp-clarus', idea: 'A time you reported a backtest result that looked worse than expected, if there was one' },
     { itemId: 'exp-improveme', idea: 'Giving an independent view rather than the answer people expected' },
     { itemId: 'exp-ayah', idea: 'Being straight with customers or suppliers when something went wrong' },
   ],
@@ -58,7 +58,7 @@ export const COVERAGE_SUGGESTIONS: Record<CompetencyId, { itemId: string; idea: 
     { itemId: 'exp-clarus', idea: 'Pushback on your stock pitch from the club' },
   ],
   'time-management': [
-    { itemId: 'exp-stratus', idea: 'The raise alongside a full course load' },
+    { itemId: 'exp-stratus', idea: 'The raise alongside your studies at Swarthmore' },
     { itemId: 'lead-door-of-awareness', idea: 'Weekly teaching alongside university' },
   ],
   'client-focus': [

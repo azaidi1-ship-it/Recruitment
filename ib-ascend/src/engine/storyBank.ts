@@ -80,11 +80,17 @@ export function possessive(name: string): string {
   return /s$/i.test(name) ? `${name}’` : `${name}’s`;
 }
 
+/** Where the interest in finance started, and what it showed: only the candidate can say, so the templates ask. */
+const ORIGIN_FILL_IN = '[FILL IN: What first got you interested in finance?]';
+const SHOWED_FILL_IN = '[FILL IN: what that experience showed you about finance]';
+
 /**
  * "Walk me through your resume", generated from the resume so it follows
- * re-imports: background, the spark (first experience), the most
- * finance-relevant later items in order, then the landing on banking.
+ * re-imports: background, the first experience (founded roles first), the
+ * most finance-relevant later items in order, then the landing on banking.
+ * It never asserts where the interest in finance started.
  */
+
 export function resumeWalkthrough(resume: Resume, length: '60s' | '2min'): string {
   const edu = resume.items.filter((i) => i.category === 'education');
   const college = edu.find((e) => /college|university/i.test(e.org) && /B\.?A|B\.?S|degree|major/i.test(e.role)) ?? edu[0];
@@ -97,12 +103,15 @@ export function resumeWalkthrough(resume: Resume, length: '60s' | '2min'): strin
 
   const parts: string[] = [];
   const major = college?.role.match(/in ([^(]+)/)?.[1]?.trim();
-  if (school && length === '2min') parts.push(`I grew up in ${school.location?.split(',')[0] ?? '[FILL IN: where you grew up]'} and went to ${school.org}.`);
+  if (school && length === '2min') {
+    const town = school.location?.split(',')[0]?.trim();
+    parts.push(town ? `I went to school in ${town}, at ${school.org}.` : `I went to school at ${school.org}.`);
+  }
   if (college) parts.push(`I’m now at ${college.org}${major ? ` studying ${major.toLowerCase()}` : ''}.`);
   if (spark) {
-    parts.push(`My interest in finance started with ${spark.org.split(',')[0]}: ${clause(spark.bullets[0] ?? '').replace(/^I /, 'I ')}`);
-    if (spark.bullets[0]?.includes(', building')) parts.push(`I built ${spark.bullets[0].split(', building ')[1]!.replace(/\.$/, '')}, and that got me hooked on the numbers behind decisions.`);
-    else parts.push('That got me hooked on the numbers behind decisions.');
+    parts.push(`${ORIGIN_FILL_IN} At ${shortOrg(spark.org)}, ${clause(spark.bullets[0] ?? '')}`);
+    if (spark.bullets[0]?.includes(', building')) parts.push(`I built ${spark.bullets[0].split(', building ')[1]!.replace(/\.$/, '')}, and ${SHOWED_FILL_IN}.`);
+    else parts.push('[FILL IN: What did that experience show you about finance?]');
   }
   const linkers = ['Building on that,', 'Since then,', 'Most recently,', 'Alongside that,'];
   picked.forEach((item, k) => {
@@ -117,7 +126,7 @@ export function resumeWalkthrough(resume: Resume, length: '60s' | '2min'): strin
     const lead = leads.find((i) => /president|captain|head|chair|founder|lead/i.test(i.role)) ?? [...leads].sort((a, b) => relevance(b) - relevance(a))[0];
     if (lead) parts.push(`Outside work, as ${lead.role.toLowerCase()} of ${shortOrg(lead.org)}, I ${clause(lead.bullets[0] ?? '').replace(/^I /, '').replace(/\.$/, '')}.`);
   }
-  parts.push('That’s what led me to investment banking: I want to do this kind of analysis on live transactions, with a team that will push me much further.');
+  parts.push('Now I want to do this kind of analysis in investment banking, on live transactions, with a team that will push me much further.');
   return parts.join(' ').replace(/\s+/g, ' ').replace(/\.\./g, '.');
 }
 
@@ -132,7 +141,8 @@ export function whyIb(resume: Resume): string {
     return `at ${shortOrg(e.org)} I ${verb}${done ? `, which ${done.split(' ').pop()!.replace(/\.$/, '')}` : ''}`;
   });
   return [
-    spark ? `I first got interested when I ${clause(spark.bullets[0] ?? '').replace(/^I /, '').replace(/\.$/, '')} and realized the numbers were driving every decision.` : '[FILL IN: How did you first get interested in finance?]',
+    ORIGIN_FILL_IN,
+    spark ? `At ${shortOrg(spark.org)} I ${clause(spark.bullets[0] ?? '').replace(/^I /, '').replace(/\.$/, '')}, and ${SHOWED_FILL_IN}.` : '',
     ev.length ? `Since then I’ve tested that interest: ${ev.join(', and ')}.` : '',
     'What draws me to banking rather than consulting is that the analysis sits at the center of a live transaction, where it decides a concrete outcome for a client.',
     'And I want the steepest learning curve I can find early in my career: I want to learn how deals are valued, negotiated and closed.',
@@ -148,7 +158,7 @@ export function whyFirm(firm: Pick<Firm, 'name' | 'tier' | 'focusAreas' | 'conta
   const focus = firm.focusAreas[0];
   const stratus = resume.items.find((i) => i.id === 'exp-stratus');
   const fitLine = stratus
-    ? `I built the model and deck behind ${possessive(shortOrg(stratus.org))} pre-seed raise and want to keep working close to clients on transactions`
+    ? `I built the model and deck behind ${possessive(shortOrg(stratus.org))} pre-seed raise and want to work close to clients on transactions`
     : '[FILL IN: the experience that best fits this firm]';
   const model =
     firm.tier === 'elite-boutique'

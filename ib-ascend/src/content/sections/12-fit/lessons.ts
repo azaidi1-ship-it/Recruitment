@@ -27,7 +27,7 @@ export const lessons: Lesson[] = [
       {
         kind: 'example',
         title: 'Your 60-second version',
-        text: 'I went to school in Dubai, at Dubai College, and I’m now at Swarthmore studying economics and philosophy. My interest in finance started with my own business: I founded Ayah Apparel, a streetwear brand in the UAE, and built a three-statement model from our sales records to set prices and sourcing. Since then my work has become more directly financial. I built the model and investor deck behind Stratus Labs’ $250K pre-seed raise, which closed, and I build DCF and comps models for Clarus Capital at Swarthmore. That’s what led me to banking: I want to do this analysis on live transactions.',
+        text: 'I went to school in Dubai, at Dubai College, and I’m now at Swarthmore studying economics and philosophy. [your detail: where your interest in finance started, e.g. with my own business]. In December 2023 I founded Ayah Apparel, a streetwear brand in the UAE, and built a three-statement model from our sales records to set prices and sourcing. Since then my work has become more directly financial. I built the model and investor deck behind Stratus Labs’ $250K pre-seed raise, which closed, and I build DCF and comps models for Clarus Capital at Swarthmore. Now I want to do this analysis on live transactions, which is why I’m applying to banking.',
       },
       {
         kind: 'p',
@@ -53,7 +53,7 @@ export const lessons: Lesson[] = [
       },
     ],
     sixtySecond:
-      'Walk through your resume as a story: background in a line, the spark (Ayah Apparel’s model), the thread to more financial work (Stratus Labs’ $250K raise, Clarus Capital), then land on why banking. Have a 60-second (≈ 150 words) and 2-minute (≈ 300 words) version, link the steps, and be ready for two levels of follow-up on every bullet.',
+      'Walk through your resume as a story: background in a line, the spark ([your detail: e.g. Ayah Apparel’s model]), the thread to more financial work (Stratus Labs’ $250K raise, Clarus Capital), then land on why banking. Have a 60-second (≈ 150 words) and 2-minute (≈ 300 words) version, link the steps, and be ready for two levels of follow-up on every bullet.',
   },
   {
     id: 'fit-l2',
@@ -137,11 +137,11 @@ export const lessons: Lesson[] = [
         caption: 'Your stories mapped to themes',
         headers: ['Story', 'Themes it can cover'],
         rows: [
-          ['Stratus Labs raise', 'Impact, tight deadline, working with senior people'],
+          ['Stratus Labs raise', 'Impact, a three-month timeline, working with senior people'],
           ['Ayah Apparel model', 'Initiative, analytical skill, learning quickly'],
           ['Improve ME recommendation', 'Variant view, persuasion, analysis'],
           ['Modelcore speaker network', 'Leadership, teamwork'],
-          ['TCS credit risk analysis', 'Messy data, technical judgment, ethics'],
+          ['TCS credit risk analysis', 'Data-quality issues, technical judgment, ethics'],
           ['Door of Awareness', 'Commitment, values, teaching'],
           ['Failure or mistake', '[your detail: pick a real one and own it]'],
         ],

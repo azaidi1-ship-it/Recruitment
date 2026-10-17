@@ -11,7 +11,7 @@ export const examples: WorkedExample[] = [
     steps: [
       { title: 'Find the thread', body: 'Building things and using numbers to make decisions, becoming more financial over time.' },
       { title: 'Open', body: '“I went to school in Dubai, at Dubai College, and I’m now at Swarthmore studying economics and philosophy.”' },
-      { title: 'Spark', body: '“My interest in finance started with Ayah Apparel, where I built a three-statement model from our sales records to set prices and sourcing.”' },
+      { title: 'Spark', body: '“[your detail: the experience that first sparked your interest in finance, e.g. Ayah Apparel, where I built a three-statement model from our sales records to set prices and sourcing].”' },
       { title: 'Link', body: '“Building on that… Since then… That’s what led me to…” connect Improve ME, Stratus Labs and Clarus Capital.' },
       { title: 'Land', body: 'End on why banking, so the next question (“why IB?”) flows naturally.' },
     ],
@@ -26,7 +26,7 @@ export const examples: WorkedExample[] = [
     prompt: 'Weak answer: “I want to do investment banking because it’s challenging, it pays well and it has great exit opportunities.” Fix it.',
     steps: [
       { title: 'Cut', body: 'Remove pay and exit opportunities; they signal the wrong motivation.' },
-      { title: 'Story', body: 'Replace “challenging” with a real moment: building Ayah Apparel’s model and seeing it drive pricing decisions.' },
+      { title: 'Story', body: 'Replace “challenging” with a real moment: [your detail: what first got you interested in finance, e.g. building Ayah Apparel’s model to drive pricing and sourcing decisions].' },
       { title: 'Evidence', body: 'Add proof: the Stratus Labs model and deck behind the $250K raise that closed; DCF and comps at Clarus Capital.' },
       { title: 'Forward', body: 'End with what you want to learn: how deals are valued, negotiated and closed.' },
     ],

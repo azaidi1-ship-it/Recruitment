@@ -38,12 +38,20 @@ describe('generated answers', () => {
     expect(short).toContain('Ayah Apparel');
     expect(short).toContain('Stratus Labs');
     expect(short).toContain('$250K pre-seed raise. That raise closed.');
-    expect(long).toContain('Dubai College');
+    expect(long).toContain('I went to school in Dubai, at Dubai College.');
     expect(short).toMatch(/investment banking/);
+    // Where the interest in finance started is the candidate's to say, never asserted.
+    for (const t of [short, long]) {
+      expect(t).toContain('[FILL IN: What first got you interested in finance?]');
+      expect(t).not.toMatch(/grew up|interest in finance started|hooked/);
+    }
   });
 
   it('writes Why IB and Why [firm] drafts, with FILL INs where data is missing', () => {
-    expect(whyIb(SEED_RESUME)).toMatch(/Since then I’ve tested that interest/);
+    const ib = whyIb(SEED_RESUME);
+    expect(ib).toMatch(/Since then I’ve tested that interest/);
+    expect(ib).toContain('[FILL IN: What first got you interested in finance?]');
+    expect(ib).not.toMatch(/realized|first got interested when/);
     const blank = whyFirm({ name: 'Evercore', tier: 'elite-boutique', focusAreas: ['M&A advisory'], contacts: [], researchedDeals: [] }, [], SEED_RESUME);
     expect(blank).toContain('[FILL IN: a recent deal');
     const full = whyFirm(

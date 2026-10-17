@@ -18,11 +18,11 @@ export const cheatSheet: CheatSheet = {
       kind: 'table',
       headers: ['Story', 'Use it for'],
       rows: [
-        ['Stratus Labs ($250K raise, closed)', 'Impact, deadlines, senior exposure'],
+        ['Stratus Labs ($250K raise, closed)', 'Impact, a three-month timeline, senior exposure'],
         ['Ayah Apparel (3-statement model)', 'Initiative, analysis, learning fast'],
         ['Improve ME (6 submarkets)', 'Variant view, persuasion'],
         ['Modelcore (VP, C-suite speakers)', 'Leadership, teamwork'],
-        ['TCS (500 records, 19 variables)', 'Messy data, judgment, ethics'],
+        ['TCS (500 records, 19 variables)', 'Data-quality issues, judgment, ethics'],
       ],
     },
     {

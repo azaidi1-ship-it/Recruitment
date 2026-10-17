@@ -173,7 +173,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
       ['why', 'Ends with why you’re here: banking', [['bank*|analyst']]],
     ],
     outline:
-      'I went to school in Dubai, at Dubai College, and I’m now at Swarthmore studying economics and philosophy. The thread through everything I’ve done is building things and using numbers to make decisions. In 2023 I started Ayah Apparel, a streetwear brand in the UAE, and built a three-statement model from our sales records to set prices and sourcing; [your detail: how that shaped your interest in finance]. Since then I built the financial model and investor deck behind Stratus Labs’ $250K pre-seed raise, which closed, and I build DCF and comps models for Clarus Capital at Swarthmore. That’s what led me to banking: I want to do that analysis on live transactions, at a much higher level.',
+      'I went to school in Dubai, at Dubai College, and I’m now at Swarthmore studying economics and philosophy. The thread through everything I’ve done is building things and using numbers to make decisions. In 2023 I started Ayah Apparel, a streetwear brand in the UAE, and built a three-statement model from our sales records to set prices and sourcing; [your detail: how that shaped your interest in finance]. Since then I built the financial model and investor deck behind Stratus Labs’ $250K pre-seed raise, which closed, and I build DCF and comps models for Clarus Capital at Swarthmore. Now I want to do that analysis in banking, on live transactions and at a much higher level.',
     tips: ['60–90 seconds, chronological with a thread.', 'End on why banking, so the next question flows.', DELIVERY_TIP],
     explanation: 'A story with a thread, two or three proof points, and a landing on banking.',
     resumeItems: ['edu-dubai-college', 'edu-swarthmore', 'exp-ayah', 'exp-stratus', 'exp-clarus'],
@@ -191,7 +191,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
       ['lesson', 'What it taught you that applies to banking', [['learn*|taught me|bank*']]],
     ],
     outline:
-      'I founded Ayah Apparel in December 2023 as a direct-to-consumer streetwear brand in the UAE, and I own almost everything: product, the e-commerce platform, the TikTok acquisition channel, creative and copywriting. The part I’m proudest of is the three-statement model I built from our primary sales records; I use it to set pricing and decide what and how much to source. As a result [your result: e.g. margin, revenue or order growth with a number]. It taught me that good decisions come from good numbers, which is a big part of why I want to be in banking.',
+      'I founded Ayah Apparel in December 2023 as a direct-to-consumer streetwear brand in the UAE, and as founder and CEO I engineered the e-commerce platform and the TikTok acquisition channel and own the creative, copywriting and monthly reporting. At the core is the three-statement model I built from our primary sales records, which drives our pricing and sourcing decisions. As a result [your result: e.g. margin, revenue or order growth with a number]. It taught me [your detail: what running the business on a model taught you], and [your detail: how that connects to why you want banking].',
     tips: ['Have one hard number ready (revenue, units, margin change).', 'Show the model drove a decision.', DELIVERY_TIP],
     explanation: 'Interviewers will probe: what exactly did you build, and what changed because of it?',
     resumeItems: ['exp-ayah'],
@@ -337,7 +337,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     answerSec: 90,
     rubric: STAR,
     outline:
-      'Since July 2024 I’ve taught English, maths and business weekly at Door of Awareness in Lahore. While teaching there, [what you noticed, and why it went beyond what was expected of you], so I built financial models and budgets for them, and advised leadership on donor engagement. As a result [your outcome, e.g. a campaign target met]. I learned that the most valuable work is often spotting what nobody asked for, which is how analysts earn trust.',
+      'Since July 2024 I’ve taught English, maths and business weekly at Door of Awareness in Lahore. While teaching there, [what you noticed, and why it went beyond what was expected of you], so I built financial models and budgets for them, and advised leadership on donor engagement. As a result [your outcome, e.g. a campaign target met]. I learned [your lesson, e.g. what going beyond the brief taught you], which is how analysts earn trust.',
     tips: STAR_TIPS,
     explanation: 'Initiative beyond the brief, with a result.',
     resumeItems: ['lead-door-of-awareness'],
@@ -436,7 +436,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     answerSec: 90,
     rubric: STAR,
     outline:
-      'In 2025 I moved from Dubai to Swarthmore while keeping Ayah Apparel running in the UAE. [the challenge the move created for the business]. I decided to change how I worked: I [what you changed, e.g. how you used Ayah’s monthly reporting to manage remotely], and I rebuilt the routine around [your detail]. As a result [your outcome]. I learned to adapt by changing the system, not just working harder, which helps when deals change direction overnight.',
+      'In 2025 I moved from Dubai to Swarthmore while keeping Ayah Apparel running in the UAE. [the challenge the move created for the business]. I decided to change how I worked: I [what you changed, e.g. how you used Ayah’s monthly reporting to manage remotely], and [your detail: anything else you changed in your routine, if you did]. As a result [your outcome]. I learned to adapt by changing the system, not just working harder, which helps when deals change direction overnight.',
     tips: STAR_TIPS,
     explanation: 'Adaptability: change the approach, not just the effort.',
     resumeItems: ['exp-ayah', 'edu-swarthmore'],

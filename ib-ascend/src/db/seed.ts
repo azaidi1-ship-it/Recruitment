@@ -23,9 +23,14 @@ export function emptySectionProgress(sectionId: SectionId): SectionProgress {
   };
 }
 
+/** Story fields the app writes; refreshed on stories the user hasn't edited. */
+const SEED_STORY_FIELDS = ['title', 'angle', 'competencies', 'situation', 'task', 'action', 'result', 'spoken', 'short', 'fillIns', 'unverifiedDetails'] as const;
+
 /**
  * Create any missing singleton rows. Idempotent: safe to run on every launch
- * and after an import (it never overwrites existing rows).
+ * and after an import. It never overwrites user data; the one update it makes
+ * is bringing starter stories the user has never edited up to the current
+ * seed text, so content corrections reach existing installs.
  */
 export async function ensureSeeded(database: IbAscendDb = db): Promise<void> {
   await database.transaction(
@@ -42,7 +47,20 @@ export async function ensureSeeded(database: IbAscendDb = db): Promise<void> {
       if ((await database.resumes.count()) === 0) await database.resumes.add(SEED_RESUME);
       // Starter Story Bank and Firm Tracker; never re-added once the user has any.
       if ((await database.stories.count()) === 0) await database.stories.bulkAdd(seedStories(nowIso()));
+      else await refreshSeedStories(database);
       if ((await database.firms.count()) === 0) await database.firms.bulkAdd(seedFirms(nowIso()));
     },
   );
+}
+
+async function refreshSeedStories(database: IbAscendDb): Promise<void> {
+  const at = nowIso();
+  for (const seed of seedStories(at)) {
+    const cur = await database.stories.get(seed.id);
+    if (!cur || cur.userEdited) continue;
+    const changed = SEED_STORY_FIELDS.some((f) => JSON.stringify(cur[f]) !== JSON.stringify(seed[f]));
+    if (!changed) continue;
+    const patch = Object.fromEntries(SEED_STORY_FIELDS.map((f) => [f, seed[f]]));
+    await database.stories.update(seed.id, { ...patch, updatedAt: at });
+  }
 }
