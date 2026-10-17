@@ -35,6 +35,7 @@ Each section lives in `src/content/sections/NN-name/` (`lessons.ts`, `examples.t
 - every free-text model answer hits 100% of its own rubric;
 - follow-ups exist and are in the mock pool; subtopics exist; ids are unique;
 - a section marked `complete` has 40+ questions, 5+ worked examples, 3+ chapters and every difficulty.
+- every question's own answer key earns full marks through the real grader, and a sign flip or a 10% miss on any numeric answer does not (`answerKeys.test.ts`).
 
 Rubric keywords: each point lists keyword groups; a group matches when all its terms appear as whole words. Use `a|b` for alternatives and a trailing `*` for stems (`generat*`).
 
@@ -80,6 +81,15 @@ Rubric keywords: each point lists keyword groups; a group matches when all its t
 
 `/hirevue` simulates a one-way video interview: choose 3/5/7 questions, a focus, prep time, answer time and retakes. Each question gives a prep countdown, then records from your camera (or audio-only) with an answer countdown, playback and limited retakes. A live transcript is used where the browser supports the Web Speech API (in Chrome it is processed by Google). The review screen shows pace (words per minute), filler words, rubric points detected from the transcript and a delivery checklist; the score is 70% content + 30% delivery. Recordings stay in memory and are never uploaded; download any you want to keep. Questions live in `src/content/hirevue/questions.ts`; resume-based outlines use only facts from your resume and mark personal details as `[your detail]`.
 
+## Optional AI (Claude)
+
+Everything works without a key. To turn on the AI features, add an Anthropic API key in **Settings → AI grading & interviewer** and press **Test key**. Opus 5.5 is the default model; Sonnet 5.5 and Haiku 5.5 are faster and cheaper. Requests go straight from your browser to the Anthropic API with your own key, and the SDK is only downloaded once you use an AI feature.
+
+- **Grading**: free-text quiz answers, Story Bank practice, deal pitches and HireVue transcripts (button: *Grade with Claude*) are graded against each rubric point, with a one-line note per point and short coaching feedback. You still confirm every score. Turn off *Grade automatically* to keep keyword grading unless you ask. If a call fails (no key, rejected key, rate limit, network), the app falls back to keyword grading and says why.
+- **AI interviewer**: in the Superday Simulator, choose *Format → AI interviewer*. Claude runs one conversational interview in the chosen interviewer style. It asks follow-ups based on your actual answers, adds curveballs and probes your resume and your prepared stories, then writes up strengths, fixes and a note per question. The scorecard uses Claude's technical, structure and story scores, your measured answer speed and the style's weights and bar. A "would advance" needs the numbers to clear the bar, no single weak spot, and the interviewer's own call.
+
+Prompts and the score mapping live in `src/engine/ai.ts`; API calls (structured outputs for grades and scorecards, streaming for the interviewer) are in `src/services/llm.ts`.
+
 ## Your data
 
 Progress, stories, notes and settings are stored only in this browser (IndexedDB). Use **Settings → Export backup** regularly; **Import backup** replaces everything with the file's contents. The optional LLM API key is left out of backups unless you tick "Include API key".
@@ -96,4 +106,4 @@ Progress, stories, notes and settings are stored only in this browser (IndexedDB
 - [x] 7. Spaced repetition, dashboard, analytics
 - [x] 8. Superday Simulator, Paper LBO, model builders, Mental Math Arcade
 - [x] 9. Story Bank, Firm Tracker, Deal Journal, Recruiting Calendar
-- [ ] 10. Optional LLM integration, polish, QA pass
+- [x] 10. Optional LLM integration (grading, AI interviewer), polish, QA pass

@@ -4,8 +4,7 @@
  * the key stored in Settings; nothing else leaves the device. Every caller
  * must keep working without a key (keyword grading, offline Superday).
  */
-import Anthropic from '@anthropic-ai/sdk';
-import { betaZodOutputFormat } from '@anthropic-ai/sdk/helpers/beta/zod';
+import type Anthropic from '@anthropic-ai/sdk';
 import { z } from 'zod';
 import { DEFAULT_MODEL, GRADER_SYSTEM, SCORER_SYSTEM, gradeRequestText, scoreRequestText, type GradeInput, type GradeResult } from '../engine/ai';
 import { useSettingsStore, hasLlmKey } from '../store/useSettingsStore';
@@ -28,8 +27,18 @@ export function llmEnabled(s: Settings = settings()): boolean {
   return s.llmProvider === 'anthropic' && hasLlmKey(s);
 }
 
-function client(s: Settings): Anthropic {
+type Sdk = typeof import('@anthropic-ai/sdk').default;
+let sdkPromise: Promise<{ Anthropic: Sdk; zodFormat: typeof import('@anthropic-ai/sdk/helpers/beta/zod').betaZodOutputFormat }> | null = null;
+
+/** The SDK is loaded on first use, so the app without a key never downloads it. */
+function sdk() {
+  sdkPromise ??= Promise.all([import('@anthropic-ai/sdk'), import('@anthropic-ai/sdk/helpers/beta/zod')]).then(([m, z]) => ({ Anthropic: m.default, zodFormat: z.betaZodOutputFormat }));
+  return sdkPromise;
+}
+
+async function client(s: Settings): Promise<Anthropic> {
   if (!llmEnabled(s)) throw new LlmError('Add an Anthropic API key in Settings to use AI features.', 'no-key');
+  const { Anthropic } = await sdk();
   // The key is the user's own, entered on this device; requests go only to the Anthropic API.
   return new Anthropic({ apiKey: s.llmApiKey, dangerouslyAllowBrowser: true, maxRetries: 2 });
 }
@@ -46,8 +55,9 @@ function fallback(m: string): { betas?: Anthropic.Beta.AnthropicBeta[]; fallback
   return /haiku/.test(m) ? {} : { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' };
 }
 
-function toLlmError(e: unknown): LlmError {
+async function toLlmError(e: unknown): Promise<LlmError> {
   if (e instanceof LlmError) return e;
+  const { Anthropic } = await sdk();
   if (e instanceof Anthropic.AuthenticationError || e instanceof Anthropic.PermissionDeniedError) return new LlmError('Your API key was rejected. Check it in Settings.', 'auth');
   if (e instanceof Anthropic.RateLimitError) return new LlmError('Rate limited by the API. Wait a moment and try again.', 'rate-limit');
   if (e instanceof Anthropic.APIConnectionError) return new LlmError('Couldn’t reach the Anthropic API. Check your connection.', 'network');
@@ -67,19 +77,19 @@ export async function gradeAnswer(input: GradeInput): Promise<GradeResult> {
   const s = settings();
   const m = model(s);
   try {
-    const res = await client(s).beta.messages.parse({
+    const res = await (await client(s)).beta.messages.parse({
       model: m,
       max_tokens: 16000,
       system: GRADER_SYSTEM,
       messages: [{ role: 'user', content: gradeRequestText(input) }],
-      output_config: { effort: 'medium', format: betaZodOutputFormat(GradeSchema) },
+      output_config: { effort: 'medium', format: (await sdk()).zodFormat(GradeSchema) },
       ...fallback(m),
     });
     if (res.stop_reason === 'refusal') throw new LlmError('Claude declined to grade this answer.', 'refused');
     if (!res.parsed_output) throw new LlmError('Claude’s grade couldn’t be read. Grade it yourself this time.', 'other');
     return res.parsed_output;
   } catch (e) {
-    throw toLlmError(e);
+    throw await toLlmError(e);
   }
 }
 
@@ -88,7 +98,7 @@ export async function testConnection(): Promise<string> {
   const s = settings();
   const m = model(s);
   try {
-    const res = await client(s).beta.messages.create({
+    const res = await (await client(s)).beta.messages.create({
       model: m,
       max_tokens: 2000,
       output_config: { effort: 'low' },
@@ -98,7 +108,7 @@ export async function testConnection(): Promise<string> {
     const text = res.content.flatMap((b) => (b.type === 'text' ? [b.text] : [])).join('').trim();
     return `${res.model} replied “${text.slice(0, 40)}”.`;
   } catch (e) {
-    throw toLlmError(e);
+    throw await toLlmError(e);
   }
 }
 
@@ -115,7 +125,7 @@ export async function interviewerTurn(system: string, history: InterviewHistory,
   const s = settings();
   const m = model(s);
   try {
-    const stream = client(s).beta.messages.stream(
+    const stream = (await client(s)).beta.messages.stream(
       {
         model: m,
         max_tokens: 8000,
@@ -137,7 +147,7 @@ export async function interviewerTurn(system: string, history: InterviewHistory,
     if (final.stop_reason === 'refusal') throw new LlmError('The interviewer declined to continue this conversation.', 'refused');
     return { text, content: final.content };
   } catch (e) {
-    throw toLlmError(e);
+    throw await toLlmError(e);
   }
 }
 
@@ -157,18 +167,18 @@ export async function scoreInterview(personaTitle: string, transcript: string): 
   const s = settings();
   const m = model(s);
   try {
-    const res = await client(s).beta.messages.parse({
+    const res = await (await client(s)).beta.messages.parse({
       model: m,
       max_tokens: 16000,
       system: SCORER_SYSTEM,
       messages: [{ role: 'user', content: scoreRequestText(personaTitle, transcript) }],
-      output_config: { effort: 'high', format: betaZodOutputFormat(ScoreSchema) },
+      output_config: { effort: 'high', format: (await sdk()).zodFormat(ScoreSchema) },
       ...fallback(m),
     });
     if (res.stop_reason === 'refusal') throw new LlmError('Claude declined to score this interview.', 'refused');
     if (!res.parsed_output) throw new LlmError('The scorecard couldn’t be read. Try again.', 'other');
     return res.parsed_output;
   } catch (e) {
-    throw toLlmError(e);
+    throw await toLlmError(e);
   }
 }
