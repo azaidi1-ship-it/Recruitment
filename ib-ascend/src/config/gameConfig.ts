@@ -66,6 +66,9 @@ export const XP = {
   /** Behavioral practice: scaled from half to full by the answer's score. */
   storyPractice: 20,
   arcadeRunPerCorrect: 1,
+  /** Paper LBO: per correct step, plus a bonus for a clean sheet. */
+  paperLboPerStep: 5,
+  paperLboPerfect: 25,
   dealLogged: 10,
 
   session: {

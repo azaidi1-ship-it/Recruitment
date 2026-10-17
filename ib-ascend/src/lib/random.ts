@@ -33,3 +33,15 @@ export function shuffle<T>(items: readonly T[], rng: () => number): T[] {
   }
   return a;
 }
+
+/** Like pick, for lists known to be non-empty. */
+export function pickOne<T>(items: readonly T[], rng: () => number): T {
+  const v = pick(items, rng);
+  if (v === undefined) throw new Error('pickOne: empty list');
+  return v;
+}
+
+/** Integer in [min, max]. */
+export function randInt(min: number, max: number, rng: () => number): number {
+  return min + Math.floor(rng() * (max - min + 1));
+}

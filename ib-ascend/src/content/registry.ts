@@ -13,6 +13,7 @@ import { restructuring } from './sections/09-restructuring';
 import { mentalMath } from './sections/10-mental-math';
 import { markets } from './sections/11-markets';
 import { fit } from './sections/12-fit';
+import { CURVEBALLS } from './superday/curveballs';
 
 export interface SectionContent {
   /**
@@ -47,6 +48,12 @@ const REGISTRY: Partial<Record<SectionId, SectionContent>> = {
   markets,
   fit,
 };
+
+// Curveballs live in one file but belong to their sections' Boss Fight pools.
+for (const [id, extra] of Object.entries(CURVEBALLS) as [SectionId, Question[]][]) {
+  const c = REGISTRY[id];
+  if (c) REGISTRY[id] = { ...c, questions: [...c.questions, ...extra] };
+}
 
 /** Every registered section's content (for tests and global search). */
 export function allSectionContent(): [SectionId, SectionContent][] {
@@ -102,4 +109,14 @@ export function getFlashcard(id: string): Flashcard | undefined {
     for (const [sectionId] of allSectionContent()) for (const f of getFlashcardDeck(sectionId)) flashcardIndex.set(f.id, f);
   }
   return flashcardIndex.get(id);
+}
+
+let sectionQuestionIds: Map<SectionId, Set<string>> | null = null;
+
+/** True if the question belongs to the section's own bank (so it can be redone and reviewed there). */
+export function isSectionQuestion(sectionId: SectionId, questionId: string): boolean {
+  if (!sectionQuestionIds) {
+    sectionQuestionIds = new Map(allSectionContent().map(([id, c]) => [id, new Set(c.questions.map((q) => q.id))]));
+  }
+  return sectionQuestionIds.get(sectionId)?.has(questionId) ?? false;
 }

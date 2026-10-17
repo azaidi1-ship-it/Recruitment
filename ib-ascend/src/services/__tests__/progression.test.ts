@@ -190,6 +190,13 @@ describe('spaced repetition', () => {
     expect(await db.cards.count()).toBe(0);
   });
 
+  it('does not log mistakes or cards for questions outside the section banks (resume probes)', async () => {
+    await answerQuestion({ ...q, questionId: 'probe-exp-ayah-1', sectionId: 'fit', subtopic: 'resume-walkthrough', mode: 'superday', correct: false, score: 0.3 }, now);
+    expect(await db.mistakes.count()).toBe(0);
+    expect(await db.cards.count()).toBe(0);
+    expect(await db.attempts.count()).toBe(1);
+  });
+
   it('pays no extra XP for reviewing a question card (the answer already earned it)', async () => {
     await answerQuestion({ ...q, correct: false, score: 0 }, now);
     const before = xp();

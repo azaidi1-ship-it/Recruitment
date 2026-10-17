@@ -56,6 +56,14 @@ Rubric keywords: each point lists keyword groups; a group matches when all its t
 - **Next best action** picks one step in priority order: a review backlog (15+ due), finishing the section in progress (next chapter, then post-quiz), its Boss Fight, today's reviews, a pile of 5+ mistakes, your weakest subtopic, the next section, then mock retakes.
 - **Weakest subtopics** come with one-click drills (`/section/:id/quiz/drill?subtopic=…`: up to 8 questions from that subtopic, unanswered ones first). The dashboard also shows the stats radar, a year-long activity heatmap (answers + reviews per day) and a Boss Fight trend per section. All tunables are in `SRS` and `DASHBOARD` in `src/config/gameConfig.ts`.
 
+## Superday Simulator and tools
+
+- **Superday** (`/superday`): 3 or 4 back-to-back rounds (technical, behavioral, mixed) of 10–30 minutes each, with a hard timer per round, no feedback and no going back. Pick an interviewer style: Deep technicals (Centerview-style), Restructuring angle (PJT / Houlihan Lokey-style), M&A-heavy (Evercore / Lazard-style), Tech-focused (Qatalyst-style) or Generalist (bulge bracket-style). These are practice archetypes, not real interviewers. Each style sets the section mix, how often follow-ups and curveballs come, how hard the questions are, the scorecard weights and the bar to advance (`src/content/superday/personas.ts`).
+- Behavioral rounds open with "Walk me through your resume", then mix Fit questions with **resume probes** generated from every bullet on your resume ("Your resume says … What exactly was your role?"). Probe model answers use only resume facts and confirmed notes; everything else is `[your detail]`.
+- **Curveballs** (`src/content/superday/curveballs.ts`, 22 questions such as "What changes if the company has NOLs?" and "Why might a DCF be wrong here?") join their sections' Boss Fight pools and follow technical leads in a Superday.
+- The scorecard rates technical accuracy, structure (verbal-answer rubric coverage), speed (completion × pace against each question's time budget) and story quality, weighted by the interviewer style. The verdict is "Would advance" only if the overall clears the bar and no category or round is below 50%.
+- **Tools** (`/tools`): the Paper LBO Trainer (random hand-solvable scenarios, 8 timed steps with worked solutions; feeds the Paper LBO achievements), the Mental Math Arcade (six 60–90 second drills with a leaderboard against your own scores), and the DCF, accretion/dilution and LBO Model Builders with live two-way sensitivity tables. Engines live in `src/engine/models`, `src/engine/paperLbo.ts` and `src/engine/arcade.ts`, all unit-tested against hand-calculated values.
+
 ## HireVue practice
 
 `/hirevue` simulates a one-way video interview: choose 3/5/7 questions, a focus, prep time, answer time and retakes. Each question gives a prep countdown, then records from your camera (or audio-only) with an answer countdown, playback and limited retakes. A live transcript is used where the browser supports the Web Speech API (in Chrome it is processed by Google). The review screen shows pace (words per minute), filler words, rubric points detected from the transcript and a delivery checklist; the score is 70% content + 30% delivery. Recordings stay in memory and are never uploaded; download any you want to keep. Questions live in `src/content/hirevue/questions.ts`; resume-based outlines use only facts from your resume and mark personal details as `[your detail]`.
@@ -74,6 +82,6 @@ Progress, stories, notes and settings are stored only in this browser (IndexedDB
 - [x] 5. Content for sections 5–8 (177 questions, 24 worked examples, 16 chapters)
 - [x] 6. Content for sections 9–12 (171 questions, 24 worked examples, 16 chapters)
 - [x] 7. Spaced repetition, dashboard, analytics
-- [ ] 8. Superday Simulator, Paper LBO, model builders, Mental Math Arcade
+- [x] 8. Superday Simulator, Paper LBO, model builders, Mental Math Arcade
 - [ ] 9. Story Bank, Firm Tracker, Deal Journal, Recruiting Calendar
 - [ ] 10. Optional LLM integration, polish, QA pass

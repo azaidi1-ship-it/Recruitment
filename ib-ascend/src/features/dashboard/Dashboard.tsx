@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { CheckCircle2, Circle, Flame, Lock, Snowflake, Video } from 'lucide-react';
+import { CheckCircle2, Circle, Flame, Lock, Snowflake, Swords, Video, Wrench } from 'lucide-react';
 import { SECTIONS } from '../../content/sections';
 import { getSectionContent } from '../../content/registry';
 import { db } from '../../db/db';
@@ -21,6 +21,12 @@ import { GradeBadge } from '../../components/GradeBadge';
 import { ProgressBar, masteryTone } from '../../components/Progress';
 import { DueTodayCard, NextActionCard, ReadinessCard, WeakSubtopicsCard } from './widgets';
 import { ActivityHeatmap, MockTrends, StatsRadar } from './DashboardCharts';
+
+const PRACTICE = [
+  { to: '/superday', title: 'Superday Simulator', text: 'Back-to-back timed rounds with follow-ups, curveballs and a would-advance verdict.', icon: Swords },
+  { to: '/hirevue', title: 'HireVue practice', text: 'Timed one-way video answers with prep countdowns, retakes and a scored review.', icon: Video },
+  { to: '/tools', title: 'Tools', text: 'Paper LBO Trainer, Mental Math Arcade and live DCF, accretion and LBO models.', icon: Wrench },
+];
 
 /** Static content facts the recommendations need (computed once). */
 const CONTENT = (() => {
@@ -161,18 +167,21 @@ export function Dashboard() {
         <ActivityHeatmap />
       </div>
 
-      <Link to="/hirevue" className="mb-4 block">
-        <Card className="flex items-center gap-4 transition hover:border-faint">
-          <span className="grid size-10 place-items-center rounded-lg border border-line bg-sunk text-accent">
-            <Video size={18} />
-          </span>
-          <div className="flex-1">
-            <h2 className="font-semibold">HireVue practice</h2>
-            <p className="text-sm text-muted">Timed one-way video answers with prep countdowns, retakes and a scored review.</p>
-          </div>
-          <span className="text-sm text-accent">Start →</span>
-        </Card>
-      </Link>
+      <div className="mb-4 grid gap-4 md:grid-cols-3">
+        {PRACTICE.map(({ to, title, text, icon: Icon }) => (
+          <Link key={to} to={to} className="block">
+            <Card className="flex h-full items-start gap-4 transition hover:border-faint">
+              <span className="grid size-10 shrink-0 place-items-center rounded-lg border border-line bg-sunk text-accent">
+                <Icon size={18} />
+              </span>
+              <div className="flex-1">
+                <h2 className="font-semibold">{title}</h2>
+                <p className="text-sm text-muted">{text}</p>
+              </div>
+            </Card>
+          </Link>
+        ))}
+      </div>
 
       <Card>
         <div className="mb-2 flex items-center justify-between">

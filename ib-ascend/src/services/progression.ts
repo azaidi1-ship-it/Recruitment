@@ -9,7 +9,7 @@
 import { db } from '../db/db';
 import { COMPETENCIES } from '../content/behavioral/competencies';
 import { ACHIEVEMENT_BY_ID, TECHNICAL_SECTION_IDS } from '../content/achievements';
-import { getSectionContent } from '../content/registry';
+import { getSectionContent, isSectionQuestion } from '../content/registry';
 import { SECTIONS } from '../content/sections';
 import { newlyEarned, type AchievementContext } from '../engine/achievements';
 import { sectionGrade } from '../engine/grades';
@@ -351,11 +351,14 @@ export async function answerQuestion(input: AnswerInput, now: Date = new Date())
     createdAt: at,
   };
 
+  // Only questions from the section's own bank can be redone and reviewed
+  // there; HireVue prompts and generated resume probes are reviewed in their
+  // own flows.
+  const trackable = attempt.mode !== 'hirevue' && isSectionQuestion(attempt.sectionId, attempt.questionId);
   let resolvedMistakes = 0;
   await db.transaction('rw', db.attempts, db.mistakes, async () => {
     await db.attempts.add(attempt);
-    // HireVue answers are reviewed in their own flow, not the Mistake Log.
-    if (!attempt.correct && attempt.mode !== 'hirevue') {
+    if (!attempt.correct && trackable) {
       const mistake: Mistake = {
         id: newId('mis'),
         questionId: attempt.questionId,
@@ -375,7 +378,7 @@ export async function answerQuestion(input: AnswerInput, now: Date = new Date())
     }
   });
   // Missed questions join the review queue; the review queue schedules its own.
-  if (!attempt.correct && attempt.mode !== 'hirevue' && attempt.mode !== 'review') {
+  if (!attempt.correct && trackable && attempt.mode !== 'review') {
     await upsertMissedQuestionCard(attempt.questionId, attempt.sectionId, now);
   }
   await useProgressStore.getState().updateSection(input.sectionId, { lastActivityAt: at });

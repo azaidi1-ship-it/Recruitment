@@ -133,3 +133,7 @@ export function storyPracticeXp(score: number): number {
 export function arcadeXp(correct: number): number {
   return Math.max(0, Math.round(correct * XP.arcadeRunPerCorrect));
 }
+
+export function paperLboXp(correct: number, total: number): number {
+  return correct * XP.paperLboPerStep + (total > 0 && correct === total ? XP.paperLboPerfect : 0);
+}
