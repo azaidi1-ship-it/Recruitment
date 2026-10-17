@@ -167,8 +167,7 @@ export const questions: Question[] = [
       'Start with the share price',
       'Calculate the diluted share count (treasury stock method)',
       'Multiply to get equity value',
-      'Add debt, preferred stock and noncontrolling interest',
-      'Subtract cash and non-operating assets such as equity investments',
+      'Add debt, preferred stock and noncontrolling interest; subtract cash and non-operating assets such as equity investments (either order)',
       'The result is enterprise value',
     ],
     'Price × diluted shares = equity value; + claims − non-operating assets = EV.',
@@ -323,7 +322,7 @@ export const questions: Question[] = [
     5,
     ['Conversion is in the money (50 > 40)', 'Shares on conversion = 200 / 40 = 5m'],
     'In-the-money convertibles are treated as converted (if-converted method).',
-    { unit: 'm shares' },
+    { unit: 'm shares', tolerance: { kind: 'abs', value: 0.05 } },
   ),
   mcq(
     { id: 'ev-q-020', subtopic: 'convertibles', difficulty: 'advanced', pools: ['mock'] },
@@ -349,6 +348,18 @@ export const questions: Question[] = [
     ],
     'Handle each security separately, then add them up. Remember the convertible is then excluded from debt.',
     { unit: '$m', tolerance: { kind: 'pct', value: 0.5 } },
+  ),
+  num(
+    { id: 'ev-q-044', subtopic: 'convertibles', difficulty: 'intermediate', pools: ['post', 'mock'] },
+    'Share price $40; 50 million diluted shares before any convertible; $200 million of debt; $50 million of cash; and $100 million of convertible bonds with a $50 conversion price. What is enterprise value (in $ millions)?',
+    2250,
+    [
+      'Convertible is out of the money (40 < 50): treat it as debt, not shares',
+      'Equity value = 50 × 40 = 2,000',
+      'EV = 2,000 + 200 debt + 100 convertible − 50 cash = 2,250',
+    ],
+    'An out-of-the-money convertible won’t convert, so it stays a debt-like claim in the bridge.',
+    { unit: '$m', tolerance: { kind: 'abs', value: 0.5 } },
   ),
 
   // ── Multiples ──

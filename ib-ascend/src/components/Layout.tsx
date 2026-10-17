@@ -1,8 +1,8 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { BookOpen, CalendarDays, FileText, Gauge, GitBranch, Landmark, Newspaper, Repeat, Settings, Swords, Trophy, Video, Wrench } from 'lucide-react';
 import { CelebrationLayer } from '../features/gamification/CelebrationLayer';
 import { useGameStore } from '../store/useGameStore';
-import type { ComponentType } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import { cx } from './ui';
 
 interface NavItem {
@@ -71,7 +71,9 @@ export function Layout() {
       </aside>
 
       <main className="mx-auto w-full max-w-6xl px-4 pb-24 pt-5 sm:px-6 md:pb-10 md:pt-8 print:p-0">
-        <Outlet />
+        <PageFade>
+          <Outlet />
+        </PageFade>
       </main>
       <CelebrationLayer />
 
@@ -90,6 +92,16 @@ export function Layout() {
           </NavLink>
         ))}
       </nav>
+    </div>
+  );
+}
+
+/** A short fade on each page change; keyed by path so query changes within a page don't replay it. */
+function PageFade({ children }: { children: ReactNode }) {
+  const { pathname } = useLocation();
+  return (
+    <div key={pathname} className="anim-page">
+      {children}
     </div>
   );
 }

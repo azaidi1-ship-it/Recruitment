@@ -27,7 +27,7 @@ export const lessons: Lesson[] = [
       {
         kind: 'example',
         title: 'Your 60-second version',
-        text: 'I grew up in Dubai and I’m now at Swarthmore studying economics and philosophy. My interest in finance started with my own business: I founded Ayah Apparel, a streetwear brand in the UAE, and built a three-statement model from our sales records to set prices and sourcing. Since then my work has become more directly financial. I built the model and investor deck behind Stratus Labs’ $250K pre-seed raise, which closed, and I build DCF and comps models for Clarus Capital at Swarthmore. That’s what led me to banking: I want to do this analysis on live transactions.',
+        text: 'I went to school in Dubai, at Dubai College, and I’m now at Swarthmore studying economics and philosophy. My interest in finance started with my own business: I founded Ayah Apparel, a streetwear brand in the UAE, and built a three-statement model from our sales records to set prices and sourcing. Since then my work has become more directly financial. I built the model and investor deck behind Stratus Labs’ $250K pre-seed raise, which closed, and I build DCF and comps models for Clarus Capital at Swarthmore. That’s what led me to banking: I want to do this analysis on live transactions.',
       },
       {
         kind: 'p',

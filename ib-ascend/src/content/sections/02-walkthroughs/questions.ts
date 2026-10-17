@@ -327,9 +327,10 @@ export const questions: Question[] = [
     {
       IS: [['is.ni', 'Net income', 0]],
       CFS: [['cfs.ni', 'Net income', 0], ['cfs.buyback', 'Share repurchases', -50], ['cfs.net', 'Net change in cash', -50]],
-      BS: [['bs.cash', 'Cash', -50, 'A'], ['bs.treasury', 'Treasury stock (contra-equity)', -50, 'LE'], ['bs.re', 'Retained earnings', 0, 'LE']],
+      BS: [['bs.cash', 'Cash', -50, 'A'], ['bs.treasury', 'Treasury stock: effect on equity', -50, 'LE'], ['bs.re', 'Retained earnings', 0, 'LE']],
     },
-    'A buyback is a financing outflow. Equity falls through treasury stock, not retained earnings. Share count falls too, which matters for EPS.',
+    'A buyback is a financing outflow. The treasury stock account (contra-equity) grows by 50, which reduces equity by 50; retained earnings don’t change. Share count falls too, which matters for EPS.',
+    { assumptions: ['Enter treasury stock as its effect on total equity (a buyback is negative).'] },
   ),
   mcq(
     { id: 'wt-q-033', subtopic: 'dividends-buybacks', difficulty: 'basic', pools: ['pre', 'post'] },

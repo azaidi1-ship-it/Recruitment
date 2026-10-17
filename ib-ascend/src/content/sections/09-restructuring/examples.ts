@@ -21,7 +21,7 @@ export const examples: WorkedExample[] = [
     subtopic: 'priority-claims',
     difficulty: 'intermediate',
     title: 'A full waterfall with a fulcrum',
-    prompt: 'Value $600. DIP $50; administrative $20; secured term loan $300; senior notes $200 and trade $50 (pari passu); subordinated notes $100. Recoveries, and which class is the fulcrum?',
+    prompt: 'Value $600. DIP $50; administrative $20; secured term loan $300; senior notes $200 and trade $50 (pari passu); subordinated notes $100 (junior to all unsecured claims, trade included). Recoveries, and which class is the fulcrum?',
     steps: [
       { title: 'Top of the waterfall', body: 'DIP 50, admin 20, secured 300: 370 paid in full. Remaining 230.' },
       { title: 'Unsecured pool', body: '250 of claims share 230 pro rata: 92% each (notes 184, trade 46).' },

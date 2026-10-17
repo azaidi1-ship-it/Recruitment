@@ -8,6 +8,7 @@ export function App() {
   const [ready, setReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const theme = useSettingsStore((s) => s.settings.theme);
+  const reduceMotion = useSettingsStore((s) => s.settings.reduceMotion);
 
   useEffect(() => {
     hydrateAll()
@@ -19,6 +20,10 @@ export function App() {
     document.documentElement.classList.toggle('light', theme === 'light');
     document.documentElement.classList.toggle('dark', theme === 'dark');
   }, [theme]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('reduce-motion', reduceMotion);
+  }, [reduceMotion]);
 
   if (error) {
     return (

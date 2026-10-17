@@ -41,6 +41,7 @@ export const questions: Question[] = [
     2.05,
     ['Foregone interest after tax = 400 × 5% × (1 − 25%) = 15', 'Pro forma net income = 200 + 20 − 15 = 205', 'Shares unchanged at 100: EPS = 2.05 (2.5% accretive)'],
     'Cash isn’t free: you lose the interest it was earning.',
+    { unit: '$', tolerance: { kind: 'abs', value: 0.005 } },
   ),
   num(
     { id: 'ma-q-005', subtopic: 'accretion-dilution', difficulty: 'advanced', pools: ['mock'] },

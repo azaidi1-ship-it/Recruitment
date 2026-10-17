@@ -45,7 +45,7 @@ const STAR: Rubric = [
   [
     'action',
     'Focuses on what you did (“I”, not “we”), step by step',
-    [['i built|i led|i created|i decided|i organized|i proposed|i set up|i reached out|i spoke|i made|i focused|i designed|i wrote|i started|i took|i asked|i suggested|i changed|i ran|i pitched|i analyzed|i launched|i rebuilt|i split|i owned']],
+    [['i built|i led|i created|i decided|i organized|i organised|i proposed|i set up|i reached out|i spoke|i made|i focused|i designed|i wrote|i started|i took|i asked|i suggested|i changed|i ran|i pitched|i analyzed|i analysed|i launched|i rebuilt|i split|i owned|i prioritized|i prioritised|i coordinated|i negotiated|i managed|i contacted|i tested|i listened|i explained|i presented|i delegated|i worked|i broke|i structured|i modeled|i modelled']],
     2,
   ],
   ['result', 'A concrete result, ideally with a number', [['result*|outcome|led to|ended up|which meant']]],
@@ -75,7 +75,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
       ['fit', 'Why banking specifically, rather than consulting or investing', [['rather than|instead of|unlike|compared to|over consulting|consulting']]],
     ],
     outline:
-      'I first got interested when I started building financial models for my own business, Ayah Apparel, and realized the numbers were what drove every pricing and sourcing decision. Since then I’ve tested that interest: I built the model and investor deck behind Stratus Labs’ $250K pre-seed raise, which closed, and I build DCF and comps models for Clarus Capital. What draws me to banking rather than consulting is the combination of rigorous financial analysis with live transactions where the work directly decides an outcome for a client. And I want the steepest learning curve I can find early in my career: I want to learn how deals actually get done.',
+      'I first got interested [your origin: when and how, e.g. while building the three-statement model for Ayah Apparel, if that is true]. Since then I’ve tested that interest: I built the model and investor deck behind Stratus Labs’ $250K pre-seed raise, which closed, and I build DCF and comps models for Clarus Capital. What draws me to banking rather than consulting is the combination of rigorous financial analysis with live transactions where the work directly decides an outcome for a client. And I want the steepest learning curve I can find early in my career: I want to learn how deals actually get done.',
     tips: ['Lead with a real story, not “I like finance”.', 'Prove it with two things you’ve already done.', 'End with what you want to learn as an analyst.', DELIVERY_TIP],
     explanation: 'Strong answers are personal, backed by evidence, and show you know what analysts actually do.',
     resumeItems: ['exp-ayah', 'exp-stratus', 'exp-clarus'],
@@ -119,7 +119,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     answerSec: 60,
     rubric: [
       ['strengths', 'Two or three specific strengths', [['strength*|skill*|able to|good at']]],
-      ['proof', 'Proof for each from your experience', [['ayah|stratus|clarus|improve me|180|modelcore|tata|tcs']]],
+      ['proof', 'Proof for each from your experience', [['ayah|stratus|clarus|improve me|180|modelcore|tata|tcs|door of awareness|lumiere|fitness|coaching|model united nations|mun']]],
       ['value', 'Ties them to what an analyst needs to deliver', [['analyst|team|deal*|client*']]],
     ],
     outline:
@@ -168,12 +168,12 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     answerSec: 90,
     rubric: [
       ['background', 'Background in one or two lines (where you grew up, school, major)', [['dubai|swarthmore|econom*']]],
-      ['thread', 'A clear thread through your experiences, not a list', [['which led|that led|that s when|that is when|since then|that got me']]],
+      ['thread', 'A clear thread through your experiences, not a list', [['which led|that led|thats when|that is when|since then|that got me|led me']]],
       ['highlights', 'Two or three highlights with specifics', [['ayah|stratus|clarus|250']]],
       ['why', 'Ends with why you’re here: banking', [['bank*|analyst']]],
     ],
     outline:
-      'I grew up in Dubai, went to Dubai College and I’m now at Swarthmore studying economics and philosophy. The thread through everything I’ve done is building things and using numbers to make decisions. In 2023 I started Ayah Apparel, a streetwear brand in the UAE, and built a three-statement model from our sales records to set prices and sourcing; that got me hooked on the financial side. Since then I built the financial model and investor deck behind Stratus Labs’ $250K pre-seed raise, which closed, and I build DCF and comps models for Clarus Capital at Swarthmore. That’s what led me to banking: I want to do that analysis on live transactions, at a much higher level.',
+      'I went to school in Dubai, at Dubai College, and I’m now at Swarthmore studying economics and philosophy. The thread through everything I’ve done is building things and using numbers to make decisions. In 2023 I started Ayah Apparel, a streetwear brand in the UAE, and built a three-statement model from our sales records to set prices and sourcing; [your detail: how that shaped your interest in finance]. Since then I built the financial model and investor deck behind Stratus Labs’ $250K pre-seed raise, which closed, and I build DCF and comps models for Clarus Capital at Swarthmore. That’s what led me to banking: I want to do that analysis on live transactions, at a much higher level.',
     tips: ['60–90 seconds, chronological with a thread.', 'End on why banking, so the next question flows.', DELIVERY_TIP],
     explanation: 'A story with a thread, two or three proof points, and a landing on banking.',
     resumeItems: ['edu-dubai-college', 'edu-swarthmore', 'exp-ayah', 'exp-stratus', 'exp-clarus'],
@@ -258,7 +258,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     answerSec: 90,
     rubric: STAR,
     outline:
-      'At Modelcore, Dubai College’s business society, during 2024 our goal was to bring senior executives in to speak. As vice president I led a cross-functional team, and I decided to split the work by role: outreach, logistics and promotion. I set up a weekly check-in and I owned the outreach to executives myself. As a result we hosted C-suite speakers including from Careem and Property Finder, and built a speaker network [your number of events or attendees]. I learned that clear roles make a team fast, which is how a deal team works with an analyst, associate and VP.',
+      'At Modelcore, Dubai College’s business society, [when], our goal was to bring senior executives in to speak. As vice president I led a cross-functional team, and I [how you organized the team, e.g. split the work by role]. I [the specific things you did yourself]. As a result we hosted C-suite speakers including from Careem and Property Finder, and built a speaker network [your number of events or attendees]. I learned [your lesson], which is how a deal team works with an analyst, associate and VP.',
     tips: STAR_TIPS,
     explanation: 'Teamwork questions still want YOUR role inside the team.',
     resumeItems: ['lead-modelcore', 'exp-180dc'],
@@ -270,7 +270,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     answerSec: 90,
     rubric: STAR,
     outline:
-      'When I was vice president of Modelcore in 2024, the speaker programme had stalled because nobody owned it. I took responsibility: I set a target list of executives, I organized the team into outreach and event roles, and I reached out personally to the most senior contacts. The result was a speaker network that included C-suite executives from Careem and Property Finder [your number of events]. I learned that leadership is mostly about making ownership clear, and on a deal team that clarity is what keeps a process on schedule.',
+      'When I was vice president of Modelcore, Dubai College’s business society, [when, and the leadership challenge, e.g. what was stuck or at stake]. I took responsibility: I [your actions, step by step]. The result was a speaker network that included C-suite executives from Careem and Property Finder [your number of events]. I learned [your lesson], and on a deal team that is what keeps a process on schedule.',
     tips: STAR_TIPS,
     explanation: 'Show initiative and how you got others to follow.',
     resumeItems: ['lead-modelcore', 'lead-mun'],
@@ -282,11 +282,11 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     answerSec: 90,
     rubric: [
       ...STAR.filter(([id]) => id !== 'result'),
-      ['own', 'Owns the mistake without excuses', [['my mistake|i was wrong|i got it wrong|my fault|i should have|i failed']], 2],
+      ['own', 'Owns the mistake without excuses', [['my mistake|i made a mistake|i was wrong|i got it wrong|my fault|i should have|i failed|i misjudged|i take responsibility|i took responsibility|my responsibility']], 2],
       ['fix', 'What you changed afterwards', [['since then|now i|changed|so now|ever since']]],
     ],
     outline:
-      'At Ayah Apparel in 2024, [your mistake, e.g. an early inventory or pricing decision made without enough data]. That was my mistake: I should have tested demand before committing. I decided to fix it by going back to our sales records and I built the three-statement model to track unit economics properly. Since then every pricing and sourcing decision goes through the model first. I learned to check the numbers before acting, which is exactly the discipline an analyst needs.',
+      'At [where, e.g. Ayah Apparel] in [when], [your mistake]. That was my mistake: I should have [what you should have done]. I decided to fix it by [what you did, e.g. going back to the sales records]. Since then [what you do differently now]. I learned [your lesson], which is exactly the discipline an analyst needs.',
     tips: ['Pick a real mistake with real consequences (not a disguised strength).', 'Spend most of the time on what you changed.', DELIVERY_TIP],
     explanation: 'Ownership + fix + lesson. The mistake itself should be short.',
     resumeItems: ['exp-ayah'],
@@ -301,7 +301,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
       ['listen', 'Listened to understand the other view before pushing yours', [['listen*|understand their|their view|their point|perspective']]],
     ],
     outline:
-      'At 180 Degrees Consulting this year, while we were working on a nonprofit client’s outreach plan, a teammate and I disagreed about [the issue]. I asked to understand their view first, and I listened: their concern was [their point]. I proposed we test both options against the client’s data, and I set up a quick comparison. As a result we agreed on [the outcome], and the client got a stronger recommendation. I learned that disagreements end faster when you move them onto evidence, which matters on a deal team under time pressure.',
+      'At 180 Degrees Consulting this year, while we were working on [the engagement], a teammate and I disagreed about [the issue]. I asked to understand their view first, and I listened: their concern was [their point]. I [how you resolved it, e.g. proposed we test both options against the data]. As a result [the outcome]. I learned [your lesson], which matters on a deal team under time pressure.',
     tips: ['Never make the teammate the villain.', 'Show you moved it to evidence and a shared goal.', DELIVERY_TIP],
     explanation: 'Interviewers want maturity: listen, use evidence, keep the relationship.',
     resumeItems: ['exp-180dc', 'lead-modelcore'],
@@ -313,7 +313,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     answerSec: 90,
     rubric: STAR,
     outline:
-      'At Stratus Labs in late 2025, while the company was preparing its pre-seed round, the investor deck and model had to be ready [your timeframe] before investor meetings. I broke the work into pieces, I built the model first so the deck could pull from it, and I focused on the numbers investors would test hardest. As a result the materials went out on time, and the $250K raise closed. I learned to prioritize the parts with the most impact, which is how analysts survive live deals.',
+      'At Stratus Labs in late 2025, while the company was preparing its pre-seed round, [the deadline: what had to be ready and by when]. I focused on [how you prioritized and sequenced the model and deck work]. As a result [what happened on the deadline], and the $250K raise closed. I learned [your lesson], which is how analysts survive live deals.',
     tips: STAR_TIPS,
     explanation: 'Show how you prioritized, not just that you worked hard.',
     resumeItems: ['exp-stratus', 'proj-tcs'],
@@ -337,7 +337,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     answerSec: 90,
     rubric: STAR,
     outline:
-      'Since July 2024 I’ve taught English, maths and business weekly at Door of Awareness in Lahore. While teaching there, I noticed the organization’s fundraising campaigns had no real budgets, so I offered to help and I built financial models and budgets for them, and advised leadership on donor engagement. As a result [your outcome, e.g. a campaign target met]. I learned that the most valuable work is often spotting what nobody asked for, which is how analysts earn trust.',
+      'Since July 2024 I’ve taught English, maths and business weekly at Door of Awareness in Lahore. While teaching there, [what you noticed, and why it went beyond what was expected of you], so I built financial models and budgets for them, and advised leadership on donor engagement. As a result [your outcome, e.g. a campaign target met]. I learned that the most valuable work is often spotting what nobody asked for, which is how analysts earn trust.',
     tips: STAR_TIPS,
     explanation: 'Initiative beyond the brief, with a result.',
     resumeItems: ['lead-door-of-awareness'],
@@ -352,7 +352,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
       ['receive', 'Received it openly, without defensiveness', [['feedback'], ['fair|right|appreciated|took it on board']]],
     ],
     outline:
-      'During my Lumiere research project in 2023, my mentor gave me feedback that my first draft [the feedback, e.g. had analysis without a clear conclusion]. It was fair, and I took it on board. I decided to restructure the paper as a commercial-viability diligence memo: market size first, then the waste-reduction impact, then a clear conclusion. As a result the final 30-page paper was much sharper. I learned to lead with the answer, which is how bankers write for clients.',
+      'During my Lumiere research project in 2023, [who] gave me feedback that [the feedback]. It was fair, and I took it on board. I decided to [what you changed]. As a result [the result, e.g. how the final 30-page paper improved]. I learned [your lesson], which is how bankers write for clients.',
     tips: ['Show you acted on it, and the improvement.', DELIVERY_TIP],
     explanation: 'Coachability is a core analyst trait.',
     resumeItems: ['proj-lumiere'],
@@ -364,7 +364,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     answerSec: 90,
     rubric: STAR,
     outline:
-      'In September 2026, during my Tata Consultancy Services externship, I had to run a credit-risk analysis on a 500-record, 19-variable dataset, using models I hadn’t used before. I started with the data-quality issues, I learned how decision trees and logistic regression differ, and I tested both on precision, recall and AUC-ROC, including for bias. As a result I justified using a decision tree and turned it into a collections-strategy recommendation and a governance framework mapped to ECOA, FCRA and GDPR. I learned how to get up to speed fast by focusing on what the decision needs, which is the analyst job in a new sector.',
+      'In September 2026, during my Tata Consultancy Services externship, I had to run a credit-risk analysis on a 500-record, 19-variable dataset, and [what was new to you, e.g. credit-risk modeling or the regulatory side]. I started with the data-quality issues, I [how you got up to speed], and I compared a decision tree with logistic regression on precision, recall and AUC-ROC, including for bias. As a result I justified using a decision tree and turned it into a collections-strategy recommendation and a governance framework mapped to ECOA, FCRA and GDPR. I learned how to get up to speed fast by focusing on what the decision needs, which is the analyst job in a new sector.',
     tips: STAR_TIPS,
     explanation: 'Speed of learning matters more than prior knowledge for analysts.',
     resumeItems: ['proj-tcs'],
@@ -376,7 +376,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     answerSec: 90,
     rubric: STAR,
     outline:
-      'In fall 2025 I was starting at Swarthmore while working for Stratus Labs, running Ayah Apparel and coaching fitness clients. I listed every commitment by deadline and impact, I decided to protect fixed blocks for Stratus work, and I set up Ayah’s monthly reporting so it took less time. I also told people early when something would slip. As a result [your outcome, e.g. grades and the Stratus raise both on track]. I learned to prioritize by impact and communicate early, which is how analysts handle several deals at once.',
+      'In fall 2025 I was starting at Swarthmore while working for Stratus Labs, running Ayah Apparel and coaching fitness clients. I decided to [your system: how you ranked and scheduled the commitments, step by step]. As a result [your outcome, e.g. grades and the Stratus raise both on track]. I learned [your lesson, e.g. about prioritizing], which is how analysts handle several deals at once.',
     tips: STAR_TIPS,
     explanation: 'Show a system, not just effort.',
     resumeItems: ['exp-stratus', 'exp-ayah', 'exp-fitness'],
@@ -436,7 +436,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     answerSec: 90,
     rubric: STAR,
     outline:
-      'In 2025 I moved from Dubai to Swarthmore while keeping Ayah Apparel running in the UAE. During the first semester the time difference and distance meant I couldn’t run the business the way I had. I decided to change how I worked: I set up monthly reporting so I could manage by the numbers remotely, and I rebuilt the routine around [your detail]. As a result [your outcome]. I learned to adapt by changing the system, not just working harder, which helps when deals change direction overnight.',
+      'In 2025 I moved from Dubai to Swarthmore while keeping Ayah Apparel running in the UAE. [the challenge the move created for the business]. I decided to change how I worked: I [what you changed, e.g. how you used Ayah’s monthly reporting to manage remotely], and I rebuilt the routine around [your detail]. As a result [your outcome]. I learned to adapt by changing the system, not just working harder, which helps when deals change direction overnight.',
     tips: STAR_TIPS,
     explanation: 'Adaptability: change the approach, not just the effort.',
     resumeItems: ['exp-ayah', 'edu-swarthmore'],
@@ -448,7 +448,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     answerSec: 90,
     rubric: STAR,
     outline:
-      'In my online fitness coaching practice in 2024, one client [the difficulty, e.g. was frustrated with progress and close to quitting]. I asked what they actually wanted, I changed the plan to [your change], and I set up a weekly check-in so they could see progress. As a result [outcome, e.g. they stayed]; that kind of retention is how I kept five recurring clients over two years. I learned that difficult clients usually need clarity and attention, which is the same in banking.',
+      'In my online fitness coaching practice in [when], one client [the difficulty]. I [what you did to understand them], I changed the plan to [your change], and I [how you kept them informed]. As a result [outcome]; that kind of retention is how I kept five recurring clients over two years. I learned [your lesson], which is the same in banking.',
     tips: STAR_TIPS,
     explanation: 'Client focus: listen, adjust, communicate.',
     resumeItems: ['exp-fitness', 'exp-ayah'],
@@ -612,11 +612,11 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     answerSec: 60,
     rubric: [
       ['new', 'Something genuinely new and personal', [['outside|not on my resume|something you won t|something you wont|personally']]],
-      ['trait', 'Reveals a trait relevant to the job', [['discipline|curious|curiosity|resilien*|persist*|languages']]],
+      ['trait', 'Reveals a trait relevant to the job', [['discipline|curious|curiosity|resilien*|persist*|patien*|adapt*']]],
       ['link', 'Brief link back to who you’d be as an analyst', [['analyst|team|work']]],
     ],
     outline:
-      'Something not on my resume is [a personal interest or experience, e.g. how I approach training, or growing up between cultures and speaking five languages]. What it says about me is [trait: discipline, curiosity or resilience], and it shows up in how I work: [one-line link to how you’d be as an analyst or teammate].',
+      'Something not on my resume is [a personal interest or experience that is NOT on the resume, e.g. a sport, how you approach training, or a family responsibility]. What it says about me is [trait: discipline, curiosity or resilience], and it shows up in how I work: [one-line link to how you’d be as an analyst or teammate].',
     tips: ['Pick something memorable and true.', DELIVERY_TIP],
     explanation: 'This is a likeability question: be human, keep it short.',
   }),
@@ -626,7 +626,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     prompt: 'Teach us something in 60 seconds.',
     answerSec: 60,
     rubric: [
-      ['topic', 'Picks a clear, contained topic', [['today|i ll explain|i will explain|let me explain|i m going to|im going to']]],
+      ['topic', 'Picks a clear, contained topic', [['today|ill explain|i will explain|let me explain|im going to|i am going to']]],
       ['structure', 'Explains it in simple steps', [['first', 'second|then|finally']]],
       ['example', 'Uses an example', [['example|for instance|imagine']]],
       ['close', 'Closes with the takeaway', [['so|takeaway|that s why|thats why|in short']]],

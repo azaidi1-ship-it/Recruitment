@@ -10,7 +10,7 @@ export const examples: WorkedExample[] = [
     prompt: 'A draft walkthrough reads: “I went to Dubai College. Then I founded Ayah Apparel. Then I interned at Improve ME. Then I worked at Stratus Labs. Now I’m at Clarus Capital.” Rewrite it with a thread.',
     steps: [
       { title: 'Find the thread', body: 'Building things and using numbers to make decisions, becoming more financial over time.' },
-      { title: 'Open', body: '“I grew up in Dubai and I’m now at Swarthmore studying economics and philosophy.”' },
+      { title: 'Open', body: '“I went to school in Dubai, at Dubai College, and I’m now at Swarthmore studying economics and philosophy.”' },
       { title: 'Spark', body: '“My interest in finance started with Ayah Apparel, where I built a three-statement model from our sales records to set prices and sourcing.”' },
       { title: 'Link', body: '“Building on that… Since then… That’s what led me to…” connect Improve ME, Stratus Labs and Clarus Capital.' },
       { title: 'Land', body: 'End on why banking, so the next question (“why IB?”) flows naturally.' },
@@ -43,7 +43,7 @@ export const examples: WorkedExample[] = [
       { title: 'Why restructuring', body: 'It combines the full range of technical skills (valuation, capital structure, credit) with complex negotiations between stakeholders.' },
       { title: 'Firm specifics', body: '[A restructuring case the firm advised on] and what you found interesting about it.' },
       { title: 'People', body: '[Name] in the group told you [specific point about the analyst experience].' },
-      { title: 'Fit', body: 'Your interest in capital structure from building models at Stratus Labs and Clarus Capital, and from studying the restructuring section in this app.' },
+      { title: 'Fit', body: '[your detail: what first drew you to restructuring and capital structure, e.g. a case you followed or a course], connected to the valuation work you’ve done in DCF and comps models at Clarus Capital.' },
     ],
     answer: 'Why restructuring → a specific case → a person → why it fits you.',
   },
@@ -85,7 +85,7 @@ export const examples: WorkedExample[] = [
     prompt: 'In a superday, a banker says: “Lots of students say they built a model for a raise. What would have happened if your revenue assumption was 30% too high?” Structure your answer.',
     steps: [
       { title: 'Stay calm and engage', body: 'Treat it as a technical question about your own model, not an attack.' },
-      { title: 'Trace the impact', body: 'Lower revenue → lower projected cash flows and a longer runway need → [your detail: how the raise size or milestones would have changed].' },
+      { title: 'Trace the impact', body: 'Lower revenue → higher cash burn, so the same raise funds a shorter runway → [your detail: how the raise size or milestones would have changed].' },
       { title: 'Show judgment', body: 'Explain how you set or tested the assumption: [your detail: e.g. comparable companies, pipeline data or scenarios].' },
       { title: 'Close', body: 'Say what you’d do differently now, e.g. show investors a downside case explicitly.' },
     ],

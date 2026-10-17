@@ -301,7 +301,7 @@ export const questions: Question[] = [
   ),
   num(
     { id: 'dcf-q-030', subtopic: 'terminal-value', difficulty: 'advanced', pools: ['mock'] },
-    'Your exit-multiple terminal value is $2,000. Final-year FCF is $120 and WACC is 9%. What perpetual growth rate does that terminal value imply (in %, to 1 decimal)?',
+    'Your exit-multiple terminal value is $2,000. Final-year FCF is $120 and WACC is 9%. What perpetual growth rate does that terminal value imply, using the perpetuity growth formula on next year’s cash flow (in %, to 1 decimal)?',
     2.8,
     ['TV = FCF × (1 + g) / (WACC − g) → g = (TV × WACC − FCF) / (TV + FCF)', '= (2,000 × 0.09 − 120) / (2,000 + 120) = 60 / 2,120 = 2.83%'],
     'Cross-check: an exit multiple implying 6% perpetual growth would be unrealistic.',

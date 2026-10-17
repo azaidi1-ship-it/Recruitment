@@ -272,14 +272,14 @@ export const questions: Question[] = [
     [
       ['The acquirer’s share price reaction (relative to the market) and whether the target trades below the offer price (the arbitrage spread, which reflects completion risk)', 'A falling acquirer stock suggests investors think it overpaid; a wide spread suggests doubts about closing.', true],
       ['The size of the press release', 'Not a signal.'],
-      ['Whether the bankers were paid', 'Fees are always paid on completion.'],
+      ['Whether the bankers were paid', 'Not a signal of how investors view the deal; most advisory fees depend on the deal closing anyway.'],
       ['The target’s stock rising above the offer always means the deal will fail', 'It can signal expectations of a higher bid.'],
     ],
     'Watch acquirer reaction and the arb spread.',
   ),
   num(
     { id: 'mk-q-027', subtopic: 'pitch-deal', difficulty: 'advanced', pools: ['mock'] },
-    'A cash offer is $50 per share. After announcement the target trades at $48. What is the merger arbitrage spread (in %, to 1 decimal)?',
+    'A cash offer is $50 per share. After announcement the target trades at $48. What is the merger arbitrage spread, measured as the gross return to an arbitrageur who buys at $48 (in %, to 1 decimal)?',
     4.2,
     ['Spread = 50 / 48 − 1 = 4.17%'],
     'The spread reflects time to close and the risk the deal fails.',

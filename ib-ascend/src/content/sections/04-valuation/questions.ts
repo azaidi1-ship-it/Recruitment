@@ -162,7 +162,7 @@ export const questions: Question[] = [
     { id: 'val-q-031', subtopic: 'football-field', difficulty: 'intermediate', pools: ['post'] },
     'A football field shows comps at $18–24, precedents at $22–30 and a DCF at $20–28. The offer is $26. What is the most reasonable takeaway?',
     [
-      ['The offer is within the precedent and DCF ranges and above most of the comps range, so it looks supportable', 'An offer that sits in the precedent and intrinsic ranges is the classic basis for a fairness view.', true],
+      ['The offer is within the precedent and DCF ranges and above the entire comps range, so it looks supportable', 'An offer that sits in the precedent and intrinsic ranges is the classic basis for a fairness view.', true],
       ['The offer is too low because it is below the top of precedents', 'Being below the top of a range doesn’t make an offer inadequate.'],
       ['The offer is too high because it is above the comps midpoint', 'A premium to trading value is expected in a change of control.'],
       ['No conclusion is possible without an LBO', 'An LBO adds a view, but the field already supports a conclusion.'],

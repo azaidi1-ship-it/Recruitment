@@ -400,7 +400,7 @@ export const questions: Question[] = [
     'Walk me through how you would build a trading comps analysis.',
     [
       ['peers', 'Select peers by industry, business model, size, growth and margins', [['peer*|comparable*', 'industry|sector|size|business model']]],
-      ['data', 'Gather financials and consensus estimates; normalize for one-offs and calendarize', [['filings|estimates|consensus|10 k|10k'], ['normaliz*|non recurring|one off|calendariz*']]],
+      ['data', 'Gather financials and consensus estimates; normalize for one-offs and calendarize', [['filings|estimates|consensus|10 k|10k|financials', 'normaliz*|non recurring|one off|calendariz*']]],
       ['multiples', 'Calculate EV and equity value and multiples like EV/EBITDA and P/E, LTM and forward', [['ev ebitda|ev/ebitda|p e|p/e|multiples']]],
       ['apply', 'Apply the median and quartile range to the target’s metrics to get an implied value range', [['median|quartile|range', 'target|implied']]],
     ],

@@ -27,8 +27,8 @@ export const CURVEBALLS: Partial<Record<SectionId, Question[]>> = {
       { id: 'cb-dcf-01', subtopic: 'ufcf', difficulty: 'advanced', pools: ['mock'], tags: [...tags, 'nol'] },
       'What would change in your DCF if the company had large net operating losses (NOLs)?',
       [
-        ['taxes', 'Cash taxes fall while the NOLs are used, so free cash flow rises in those years', [['tax*'], ['lower|fall*|reduc*|less']]],
-        ['separate', 'Either model cash taxes with the NOL or value the NOL separately as the PV of tax savings, but not both', [['separately|present value|pv'], ['double count*|not both|either']]],
+        ['taxes', 'Cash taxes fall while the NOLs are used, so free cash flow rises in those years', [['tax*', 'lower|fall*|reduc*|less|sav*|shield*']]],
+        ['separate', 'Either model cash taxes with the NOL or value the NOL separately as the PV of tax savings, but not both', [['separate*|present value|pv', 'double count*|not both|either|instead']]],
         ['limits', 'Usage can be limited (e.g. Section 382 after an ownership change) and NOLs can expire', [['382|limit*|expire*']]],
         ['size', 'The effect is a modest value boost, larger the bigger the NOL relative to taxable income', [['modest|boost|increase*|higher']]],
       ],
@@ -41,7 +41,7 @@ export const CURVEBALLS: Partial<Record<SectionId, Question[]>> = {
       'Why might a DCF be wrong here?',
       [
         ['tv', 'Terminal value is often most of the value, so small changes in growth or exit multiple swing it', [['terminal value|terminal']]],
-        ['inputs', 'It is very sensitive to WACC and growth assumptions', [['wacc|discount rate'], ['growth|sensitiv*']]],
+        ['inputs', 'It is very sensitive to WACC and growth assumptions', [['wacc|discount rate', 'growth|sensitiv*']]],
         ['projections', 'Projections may be optimistic or the company may not be in a steady state', [['projection*|forecast*|optimistic|management case|steady state']]],
         ['crosscheck', 'Cross-check against trading comps and precedents', [['comps|precedent*|cross check|cross checked|multiples']]],
       ],
@@ -105,9 +105,13 @@ export const CURVEBALLS: Partial<Record<SectionId, Question[]>> = {
       [
         ['no', 'Not necessarily: accretion is an accounting EPS measure', [['not necessarily|no'], ['eps|earnings per share|accounting']]],
         ['value', 'Value is created if the price paid is below the target’s value plus synergies, or returns beat the cost of capital', [['synerg*|cost of capital|return*']]],
-        ['pe', 'A low-P/E acquirer buying a higher-yield target looks accretive regardless of value', [['p e|pe|cheaper|cost of']]],
+        [
+          'pe',
+          'A high-P/E acquirer paying in stock (or using cheap debt) to buy a lower-P/E, higher-yield target looks accretive regardless of value',
+          [['p e|pe|price to earnings', 'high*|lower'], ['earnings yield', 'cheap*'], ['cheap debt|cost of debt|cost of financing']],
+        ],
       ],
-      'Not necessarily. Accretion is an accounting measure of earnings per share. A deal can be accretive just because the acquirer’s cost of financing is cheaper than the target’s earnings yield, for example a low P/E acquirer paying in stock, or cheap debt. Value is created only if the price paid is less than what the target is worth plus the synergies the acquirer can realistically capture, or put another way, if the return on the investment beats the acquirer’s cost of capital.',
+      'Not necessarily. Accretion is an accounting measure of earnings per share. A deal can be accretive just because the acquirer’s cost of financing is cheaper than the target’s earnings yield, for example a high P/E acquirer paying in stock for a lower P/E target, or cheap debt. Value is created only if the price paid is less than what the target is worth plus the synergies the acquirer can realistically capture, or put another way, if the return on the investment beats the acquirer’s cost of capital.',
       'Accretion ≠ value creation.',
       60,
     ),
@@ -179,7 +183,7 @@ export const CURVEBALLS: Partial<Record<SectionId, Question[]>> = {
       'There are no good public comparables for this company. What do you do?',
       [
         ['widen', 'Widen the criteria: adjacent sectors, similar business models or other regions', [['widen|broaden|adjacent|similar|other regions|international']]],
-        ['adjust', 'Adjust for differences in growth and margins', [['adjust*'], ['growth|margin*']]],
+        ['adjust', 'Adjust for differences in growth and margins', [['adjust*', 'growth|margin*']]],
         ['other', 'Lean more on a DCF and precedent transactions, including private deals', [['dcf|precedent*|private']]],
       ],
       'I’d widen the criteria to companies with a similar business model, end market or growth profile, including adjacent sectors and other regions, and then adjust for differences in growth and margins rather than taking the median blindly. I’d also lean more on a DCF and on precedent transactions, including acquisitions of private companies, and be clear with the client that the comps carry less weight.',
@@ -280,11 +284,11 @@ export const CURVEBALLS: Partial<Record<SectionId, Question[]>> = {
       { id: 'cb-fit-01', subtopic: 'behavioral-stories', difficulty: 'advanced', pools: ['mock'], tags },
       'If you could redo one experience on your resume, what would you do differently?',
       [
-        ['choice', 'Names a specific experience', [['ayah|stratus|clarus|improve me|modelcore|180|tcs|lumiere']]],
+        ['choice', 'Names a specific experience', [['ayah|stratus|clarus|improve me|modelcore|180|tcs|tata|lumiere|door of awareness|fitness|coaching|model united nations|mun']]],
         ['differently', 'Says concretely what you’d change', [['differently|would have|i d have|id have|change']]],
         ['learning', 'What you learned and how you apply it now', [['learn*|now i|apply']]],
       ],
-      'At Ayah Apparel, I’d have built the three-statement model earlier. [your detail: what you did before you had the model, and the decision it would have improved.] Doing it differently would have meant [your detail]. What I learned is to put numbers behind decisions from the start, and now I apply that by building a simple model before I commit to a plan.',
+      '[your detail: one specific experience, e.g. Ayah Apparel or Stratus Labs, and the one thing you would genuinely do differently; only if true.] Doing it differently would have meant [your detail: the concrete change and what it would have improved]. What I learned is [your detail], and now I apply that by [your detail: something you actually do now].',
       'Specific, honest, and what you do differently now.',
       60,
     ),

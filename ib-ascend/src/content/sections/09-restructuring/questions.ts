@@ -145,7 +145,7 @@ export const questions: Question[] = [
   ),
   num(
     { id: 'rx-q-014', subtopic: 'priority-claims', difficulty: 'advanced', pools: ['mock'] },
-    'Distributable value is $600. Claims: DIP $50, administrative $20, secured term loan $300, senior unsecured notes $200 and trade claims $50 (pari passu with the notes), subordinated notes $100. What recovery (in %) do the senior unsecured notes get?',
+    'Distributable value is $600. Claims: DIP $50, administrative $20, secured term loan $300, senior unsecured notes $200 and trade claims $50 (pari passu with the notes), and subordinated notes $100 that rank behind all unsecured claims, trade included. What recovery (in %) do the senior unsecured notes get?',
     92,
     ['DIP 50 + admin 20 + secured 300 = 370 paid in full; 600 − 370 = 230 left', 'Unsecured pool = notes 200 + trade 50 = 250', 'Recovery = 230 / 250 = 92%', 'Subordinated notes and equity get nothing; the senior notes are the fulcrum'],
     'Pari passu claims share pro rata.',

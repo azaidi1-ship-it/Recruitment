@@ -152,8 +152,26 @@ body {
 .anim-fade-in {
   animation: ib-fade-in 220ms ease-out both;
 }
+/* Opacity only: a transform would re-anchor position: fixed children while it runs. */
+@keyframes ib-page-in {
+  from {
+    opacity: 0;
+  }
+}
+.anim-page {
+  animation: ib-page-in 180ms ease-out;
+}
 .anim-pop {
   animation: ib-pop 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+/* Both the system setting and the in-app "Reduce motion" toggle. */
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 1ms !important;
+  scroll-behavior: auto !important;
 }
 @media (prefers-reduced-motion: reduce) {
   *,
