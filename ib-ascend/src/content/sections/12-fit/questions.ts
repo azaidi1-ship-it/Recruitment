@@ -6,7 +6,7 @@ const { mcq, rapid, order, free } = builders('fit');
 /**
  * Fit & Behavioral. Model answers use only facts from the resume (and the
  * confirmed notes); anything else is a [your detail] placeholder to fill in
- * from the Story Bank (Phase 9).
+ * from the Story Bank.
  */
 export const questions: Question[] = [
   // ── Resume walkthrough ──
@@ -284,7 +284,7 @@ export const questions: Question[] = [
       ['fit', 'How that connects to you', [['fit*|my experience|interest*']]],
     ],
     '[Firm] is [one-line description: e.g. an independent advisory firm founded in X, known for Y]. One recent deal I followed is [deal], where the firm advised [client] on [transaction]; it was interesting because [reason]. I also spoke with [name] in [group], who told me [specific point about the analyst experience]. That fits my interest in [sector or product] and my experience building models at Stratus Labs and Clarus Capital.',
-    'Fill this per firm from the Firm Tracker (Phase 9).',
+    'Fill this per firm from the Firm Tracker.',
     60,
   ),
 

@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { BookOpen, FileText, Gauge, GitBranch, Repeat, Settings, Swords, Trophy, Video, Wrench } from 'lucide-react';
+import { BookOpen, CalendarDays, FileText, Gauge, GitBranch, Landmark, Newspaper, Repeat, Settings, Swords, Trophy, Video, Wrench } from 'lucide-react';
 import { CelebrationLayer } from '../features/gamification/CelebrationLayer';
 import { useGameStore } from '../store/useGameStore';
 import type { ComponentType } from 'react';
@@ -20,6 +20,9 @@ const NAV: NavItem[] = [
   { to: '/hirevue', label: 'HireVue', icon: Video },
   { to: '/superday', label: 'Superday', icon: Swords },
   { to: '/tools', label: 'Tools', icon: Wrench },
+  { to: '/tools/firms', label: 'Firms', icon: Landmark },
+  { to: '/tools/journal', label: 'Journal', icon: Newspaper },
+  { to: '/tools/calendar', label: 'Calendar', icon: CalendarDays },
   { to: '/achievements', label: 'Achievements', icon: Trophy },
   { to: '/resume', label: 'Resume', icon: FileText },
   { to: '/settings', label: 'Settings', icon: Settings, mobile: true },
@@ -54,7 +57,7 @@ export function Layout() {
         )}
         <nav className="flex flex-col gap-1">
           {NAV.map(({ to, label, icon: Icon }) => (
-            <NavLink key={to} to={to} end={to === '/'} className={linkClass}>
+            <NavLink key={to} to={to} end={to === '/' || to === '/tools'} className={linkClass}>
               <Icon size={17} />
               {label}
               {to === '/review' && snap && snap.cardsDue > 0 && (

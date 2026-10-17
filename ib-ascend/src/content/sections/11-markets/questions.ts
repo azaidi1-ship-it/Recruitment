@@ -6,7 +6,7 @@ const { mcq, num, rapid, order, free } = builders('markets');
 /**
  * Markets & Deal Awareness. Questions test mechanics and frameworks, not
  * point-in-time market levels; keep current numbers in the Deal & Market
- * Journal (Phase 9).
+ * Journal.
  */
 export const questions: Question[] = [
   // ── Rates and macro ──

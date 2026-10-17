@@ -21,6 +21,7 @@ import { GradeBadge } from '../../components/GradeBadge';
 import { ProgressBar, masteryTone } from '../../components/Progress';
 import { DueTodayCard, NextActionCard, ReadinessCard, WeakSubtopicsCard } from './widgets';
 import { ActivityHeatmap, MockTrends, StatsRadar } from './DashboardCharts';
+import { PlanCard, useStudyPlan } from '../tracker/Calendar';
 
 const PRACTICE = [
   { to: '/superday', title: 'Superday Simulator', text: 'Back-to-back timed rounds with follow-ups, curveballs and a would-advance verdict.', icon: Swords },
@@ -47,6 +48,7 @@ export function Dashboard() {
   const progress = useProgressStore((s) => s.sections);
   const snap = useGameStore((s) => s.snapshot);
   const cards = useLiveQuery(() => db.cards.toArray(), []);
+  const plan = useStudyPlan();
 
   const derived = useMemo(() => {
     if (!snap) return null;
@@ -119,6 +121,12 @@ export function Dashboard() {
           </div>
         </Card>
       </div>
+
+      {plan && (plan.next || plan.deadlines.length > 0) && (
+        <div className="mb-4">
+          <PlanCard plan={plan} compact />
+        </div>
+      )}
 
       <div className="mb-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <ReadinessCard readiness={derived.readiness} />

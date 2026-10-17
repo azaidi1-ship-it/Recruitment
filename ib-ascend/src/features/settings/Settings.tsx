@@ -42,7 +42,7 @@ export function Settings() {
                 <span className="text-muted">%</span>
               </div>
             </Row>
-            <Row label="Daily study goal" hint="Adjusted automatically by the Recruiting Calendar in Phase 9.">
+            <Row label="Daily study goal" hint="Your normal daily load. The Recruiting Calendar raises it as interviews approach.">
               <div className="flex items-center gap-2">
                 <input
                   type="number"

@@ -7,11 +7,10 @@ import { Badge, Card, PageHeader } from '../../components/ui';
 import { formatTime } from './PaperLbo';
 
 interface Tool {
-  to: string | null;
+  to: string;
   title: string;
   description: string;
   icon: ComponentType<{ size?: number; className?: string }>;
-  phase?: number;
 }
 
 const TOOLS: Tool[] = [
@@ -20,9 +19,9 @@ const TOOLS: Tool[] = [
   { to: '/tools/models/dcf', title: 'DCF builder', description: 'Five-year projection, Gordon or exit-multiple terminal value, and a WACC × growth sensitivity table.', icon: TrendingUp },
   { to: '/tools/models/accretion', title: 'Accretion / dilution', description: 'Pro forma EPS for any cash / debt / stock mix, breakeven synergies and a sensitivity table.', icon: GitMerge },
   { to: '/tools/models/lbo', title: 'LBO builder', description: 'Debt schedule with a cash sweep, MOIC and IRR, and entry / exit / leverage sensitivities.', icon: Calculator },
-  { to: null, title: 'Firm Tracker', description: 'Target firms, people you’ve met, deals you’ve researched and interview notes.', icon: Landmark, phase: 9 },
-  { to: null, title: 'Deal & Market Journal', description: 'Log deals and weekly market notes; practice “pitch me a deal” from your own journal.', icon: Newspaper, phase: 9 },
-  { to: null, title: 'Recruiting Calendar', description: 'Deadlines and interview dates, with a countdown that adjusts your daily study load.', icon: Calendar, phase: 9 },
+  { to: '/tools/firms', title: 'Firm Tracker', description: 'Target firms, people you’ve met, deals you’ve researched, interview notes and a Why-[firm] draft.', icon: Landmark },
+  { to: '/tools/journal', title: 'Deal & Market Journal', description: 'Log deals and weekly market notes; practice “pitch me a deal” from your own journal.', icon: Newspaper },
+  { to: '/tools/calendar', title: 'Recruiting Calendar', description: 'Deadlines and interview dates, with a countdown that adjusts your daily study load.', icon: Calendar },
 ];
 
 export function ToolsHub() {
@@ -30,34 +29,26 @@ export function ToolsHub() {
   const paper = (scores ?? []).filter((s) => s.drillId === 'paper-lbo');
   const bestPaper = paper.filter((s) => s.correct === s.total).sort((a, b) => a.durationSec - b.durationSec)[0];
   const arcadeRuns = (scores ?? []).filter((s) => s.drillId !== 'paper-lbo').length;
-  const stat: Record<string, string | null> = {
+  const stat: Partial<Record<string, string | null>> = {
     '/tools/paper-lbo': bestPaper ? `Best clean run ${formatTime(bestPaper.durationSec)}` : paper.length ? `${paper.length} runs` : null,
     '/tools/arcade': arcadeRuns ? `${arcadeRuns} runs` : null,
   };
   return (
     <>
-      <PageHeader title="Tools" subtitle="Practice the mechanics outside the quizzes: by hand, at speed, and in live models." />
+      <PageHeader title="Tools" subtitle="Practice the mechanics outside the quizzes, and run your recruiting: firms, deals and dates." />
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {TOOLS.map((t) => {
-          const body = (
-            <Card className={t.to ? 'h-full transition hover:border-faint' : 'h-full opacity-70'}>
+        {TOOLS.map((t) => (
+          <Link key={t.title} to={t.to}>
+            <Card className="h-full transition hover:border-faint">
               <div className="mb-2 flex items-center justify-between gap-2">
-                <t.icon size={20} className={t.to ? 'text-accent' : 'text-faint'} />
-                {t.phase && <Badge>Phase {t.phase}</Badge>}
-                {t.to && stat[t.to] && <Badge tone="accent">{stat[t.to]}</Badge>}
+                <t.icon size={20} className="text-accent" />
+                {stat[t.to] && <Badge tone="accent">{stat[t.to]}</Badge>}
               </div>
               <h2 className="font-semibold">{t.title}</h2>
               <p className="mt-1 text-sm text-muted">{t.description}</p>
             </Card>
-          );
-          return t.to ? (
-            <Link key={t.title} to={t.to}>
-              {body}
-            </Link>
-          ) : (
-            <div key={t.title}>{body}</div>
-          );
-        })}
+          </Link>
+        ))}
       </div>
     </>
   );

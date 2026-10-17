@@ -413,12 +413,16 @@ export interface FirmContact {
   notes: string;
 }
 
+export type FirmStatus = 'researching' | 'networking' | 'applied' | 'interviewing' | 'offer' | 'rejected' | 'not-applying';
+
 export interface Firm {
   id: string;
   name: string;
+  /** Recruiting status. Optional for pre-Phase 9 backups (treated as "researching"). */
+  status?: FirmStatus;
   tier: 'elite-boutique' | 'bulge-bracket' | 'middle-market' | 'international' | 'gcc';
   focusAreas: string[];
-  /** Interviewer persona id from src/content/firms/personas.ts. */
+  /** Superday interviewer persona id from src/content/superday/personas.ts. */
   personaId: string | null;
   researchedDeals: string[];
   contacts: FirmContact[];

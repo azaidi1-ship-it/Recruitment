@@ -1,6 +1,8 @@
 import { db, type IbAscendDb } from './db';
 import { defaultProfile, defaultSettings } from './defaults';
 import { SEED_RESUME } from '../content/resume/resume';
+import { seedStories } from '../content/stories/seedStories';
+import { seedFirms } from '../content/firms/firms';
 import { SECTIONS } from '../content/sections';
 import { nowIso } from '../lib/dates';
 import type { SectionProgress, SectionId } from '../types/models';
@@ -28,7 +30,7 @@ export function emptySectionProgress(sectionId: SectionId): SectionProgress {
 export async function ensureSeeded(database: IbAscendDb = db): Promise<void> {
   await database.transaction(
     'rw',
-    [database.profile, database.settings, database.sectionProgress, database.resumes],
+    [database.profile, database.settings, database.sectionProgress, database.resumes, database.stories, database.firms],
     async () => {
       if (!(await database.profile.get('me'))) await database.profile.add(defaultProfile());
       if (!(await database.settings.get('settings'))) await database.settings.add(defaultSettings());
@@ -38,7 +40,9 @@ export async function ensureSeeded(database: IbAscendDb = db): Promise<void> {
         }
       }
       if ((await database.resumes.count()) === 0) await database.resumes.add(SEED_RESUME);
-      // TODO(Phase 9): seed Story Bank stories and Firm Tracker firms here.
+      // Starter Story Bank and Firm Tracker; never re-added once the user has any.
+      if ((await database.stories.count()) === 0) await database.stories.bulkAdd(seedStories(nowIso()));
+      if ((await database.firms.count()) === 0) await database.firms.bulkAdd(seedFirms(nowIso()));
     },
   );
 }

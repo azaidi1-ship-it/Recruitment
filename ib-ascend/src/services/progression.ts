@@ -115,6 +115,8 @@ async function computeDerived(now: Date): Promise<Derived> {
     await useProgressStore.getState().updateSection(id, { masteryPeak: peak });
   }
 
+  // Only finished stories count toward coverage: drafts with open [FILL IN]s don't.
+  const readyStories = stories.filter((s) => s.fillIns.length === 0);
   const masteryValues = Object.fromEntries(SECTIONS.map((s) => [s.id, mastery[s.id].mastery])) as Record<
     SectionId,
     number
@@ -127,7 +129,7 @@ async function computeDerived(now: Date): Promise<Derived> {
   const stats = computeStats({
     mastery: masteryValues,
     storyCoverage: storyCoverage(
-      stories,
+      readyStories,
       COMPETENCIES.map((c) => c.id),
     ),
     behavioralPractice: behavioral.length ? avg(behavioral.map((a) => a.score)) : null,
@@ -170,7 +172,7 @@ async function computeDerived(now: Date): Promise<Derived> {
   });
   const paperRuns = arcade.filter((r) => r.drillId === 'paper-lbo' && r.total > 0 && r.correct === r.total);
   const competencyCounts = COMPETENCIES.map(
-    (c) => stories.filter((s) => s.competencies.includes(c.id)).length,
+    (c) => readyStories.filter((s) => s.competencies.includes(c.id)).length,
   );
 
   const achievementCtx: AchievementContext = {
@@ -565,7 +567,7 @@ export async function reviewCard(id: string, quality: number, now: Date = new Da
  * award XP and advance matching quests.
  */
 export async function recordActivity(
-  event: Extract<ActivityEvent, { kind: 'storyPracticed' | 'arcadeRun' | 'dealLogged' }>,
+  event: Extract<ActivityEvent, { kind: 'storyPracticed' | 'arcadeRun' | 'dealLogged' | 'dealPitched' }>,
   xp: number,
   reason: string,
   now: Date = new Date(),

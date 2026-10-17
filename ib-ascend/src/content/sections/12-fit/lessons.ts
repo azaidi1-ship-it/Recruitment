@@ -31,7 +31,7 @@ export const lessons: Lesson[] = [
       },
       {
         kind: 'p',
-        text: 'For the 2-minute version, add Improve ME Institute (the six-submarket MECE framework and the variant-view recommendation), 180 Degrees Consulting and one line on Dubai College. Practice both versions until you can deliver them naturally, then use the Story Bank (Phase 9) to keep them in sync with your resume.',
+        text: 'For the 2-minute version, add Improve ME Institute (the six-submarket MECE framework and the variant-view recommendation), 180 Degrees Consulting and one line on Dubai College. Practice both versions until you can deliver them naturally, then use the Story Bank, which regenerates both from your latest resume, to keep them in sync.',
       },
       {
         kind: 'h',

@@ -96,7 +96,8 @@ export type ActivityEvent =
   | { kind: 'mistakeResolved'; sectionId: SectionId }
   | { kind: 'storyPracticed' }
   | { kind: 'arcadeRun' }
-  | { kind: 'dealLogged' };
+  | { kind: 'dealLogged' }
+  | { kind: 'dealPitched' };
 
 const SCORED_SESSION_MODES: AttemptMode[] = ['pre', 'post', 'mock', 'drill', 'review', 'mistakes', 'weeklyBoss'];
 

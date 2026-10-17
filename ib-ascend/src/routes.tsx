@@ -7,6 +7,7 @@ import { Settings } from './features/settings/Settings';
 import { Achievements } from './features/achievements/Achievements';
 import { HireVuePage } from './features/hirevue/HireVue';
 import { ComingSoon } from './components/ComingSoon';
+import { ErrorScreen } from './components/ErrorScreen';
 import { SectionLayout } from './features/section/SectionLayout';
 import { SectionPath } from './features/section/SectionPath';
 import { Chapter, ReadingList } from './features/section/Reading';
@@ -18,6 +19,10 @@ import { QuizPage } from './features/section/QuizPage';
 import { ReviewPage } from './features/review/ReviewPage';
 import { ToolsHub } from './features/tools/ToolsHub';
 import { Superday } from './features/superday/Superday';
+import { StoryBank } from './features/stories/StoryBank';
+import { FirmTracker } from './features/tracker/FirmTracker';
+import { Journal } from './features/tracker/Journal';
+import { RecruitingCalendar } from './features/tracker/Calendar';
 import { PaperLbo } from './features/tools/PaperLbo';
 import { Arcade } from './features/tools/Arcade';
 import { ModelBuilders } from './features/tools/ModelBuilders';
@@ -26,6 +31,7 @@ import { ModelBuilders } from './features/tools/ModelBuilders';
 export const router = createHashRouter([
   {
     element: <Layout />,
+    errorElement: <ErrorScreen />,
     children: [
       { index: true, element: <Dashboard /> },
       { path: 'tree', element: <SkillTree /> },
@@ -44,10 +50,11 @@ export const router = createHashRouter([
         ],
       },
       { path: 'review', element: <ReviewPage /> },
-      {
-        path: 'stories',
-        element: <ComingSoon title="Story Bank" phase={9} what="STAR stories for every resume item, the 75+ question behavioral bank, coverage matrix and practice mode." />,
-      },
+      { path: 'stories', element: <StoryBank /> },
+      { path: 'tools/firms', element: <FirmTracker /> },
+      { path: 'tools/firms/:firmId', element: <FirmTracker /> },
+      { path: 'tools/journal', element: <Journal /> },
+      { path: 'tools/calendar', element: <RecruitingCalendar /> },
       { path: 'superday', element: <Superday /> },
       { path: 'tools', element: <ToolsHub /> },
       { path: 'tools/paper-lbo', element: <PaperLbo /> },

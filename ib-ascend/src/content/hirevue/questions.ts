@@ -94,7 +94,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     ],
     outline:
       'Three reasons. First, [the firm]’s work in [sector or deal type]: I followed [recent deal you researched], and the way the firm advised on it is exactly the kind of transaction I want to work on. Second, the people: I spoke with [name] in [group], and what stood out was [specific thing they said about lean teams and early exposure]. Third, it fits my experience: I’ve built models for a pre-seed raise at Stratus Labs and valuation work at Clarus Capital, and I want a place where analysts get real exposure to clients and deals early, which is how the firm’s teams are set up.',
-    tips: ['Name a real deal and a real person; generic praise scores poorly.', 'Use the Firm Tracker notes for each firm (Phase 9).', DELIVERY_TIP],
+    tips: ['Name a real deal and a real person; generic praise scores poorly.', 'Use the Firm Tracker notes for each firm.', DELIVERY_TIP],
     explanation: 'Specificity is everything: deal, person, reason it fits you.',
   }),
   hv({
@@ -528,7 +528,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     outline:
       'A DCF values a company based on the present value of its future cash flows. First you project unlevered free cash flow for five to ten years: EBIT after tax, plus D&A, minus capex and the change in working capital. Then you calculate a terminal value for the years after that, using either a perpetuity growth rate or an exit multiple. You discount the cash flows and the terminal value back at the WACC and add them up to get enterprise value. Finally, you subtract net debt to get equity value and divide by diluted shares to get a share price.',
     tips: ['Four steps: FCF, terminal value, discount, bridge.', DELIVERY_TIP],
-    explanation: 'The DCF section (Phase 5) covers each step in depth.',
+    explanation: 'The DCF section covers each step in depth.',
   }),
 
   // ── Markets ──
@@ -547,7 +547,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     ],
     outline:
       'One deal I’ve followed is [acquirer]’s acquisition of [target], announced in [month], for about $[X] billion, paid in [cash / stock / mix]. The strategic rationale is [rationale, e.g. adding capabilities or scale and expected synergies of $X]. On valuation, it was roughly [X]x EBITDA, a [Y]% premium to the unaffected share price, which is [above / in line with] recent deals in the sector. My view is that it makes sense because [reason], but the main risk is [integration / regulatory / financing risk].',
-    tips: ['Use a deal from your Deal Journal (Phase 9).', 'Facts → rationale → valuation → your view and a risk.', DELIVERY_TIP],
+    tips: ['Use a deal from your Deal Journal.', 'Facts → rationale → valuation → your view and a risk.', DELIVERY_TIP],
     explanation: 'Interviewers test genuine interest and structure. Never pick a deal you can’t discuss for 3 minutes.',
   }),
   hv({
@@ -565,7 +565,7 @@ export const HIREVUE_QUESTIONS: HireVueQuestion[] = [
     ],
     outline:
       'The biggest driver right now is [interest rates: where they are and where they’re heading]. Rates matter for M&A because they set the cost of financing: when debt is expensive, private equity sponsors can pay less and leveraged deals slow down. Equity valuations matter too: [what equity markets are doing], and when boards feel confident about valuations, strategic deals pick up. Put together, I’d expect [your view on deal activity and which sectors or deal types are most active], and I’d watch [one indicator].',
-    tips: ['Update this weekly from your Market Notes (Phase 9).', 'Have one or two specific numbers ready (e.g. the policy rate).', DELIVERY_TIP],
+    tips: ['Update this weekly from your Market Notes.', 'Have one or two specific numbers ready (e.g. the policy rate).', DELIVERY_TIP],
     explanation: 'A framework (rates → financing → valuations → activity) beats a list of headlines.',
   }),
   hv({

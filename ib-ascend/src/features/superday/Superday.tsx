@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Check, ChevronDown, Info, RotateCcw, Swords, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { db } from '../../db/db';
@@ -32,7 +33,8 @@ const LENGTHS = [
 
 export function Superday() {
   const [stage, setStage] = useState<Stage>({ kind: 'setup' });
-  const [personaId, setPersonaId] = useState(PERSONAS[0]!.id);
+  const [params] = useSearchParams();
+  const [personaId, setPersonaId] = useState(PERSONA_BY_ID[params.get('persona') ?? '']?.id ?? PERSONAS[0]!.id);
   const [roundCount, setRoundCount] = useState(3);
   const [minutes, setMinutes] = useState(20);
   const [scope, setScope] = useState<'all' | 'unlocked'>('all');

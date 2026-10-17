@@ -64,6 +64,18 @@ Rubric keywords: each point lists keyword groups; a group matches when all its t
 - The scorecard rates technical accuracy, structure (verbal-answer rubric coverage), speed (completion × pace against each question's time budget) and story quality, weighted by the interviewer style. The verdict is "Would advance" only if the overall clears the bar and no category or round is below 50%.
 - **Tools** (`/tools`): the Paper LBO Trainer (random hand-solvable scenarios, 8 timed steps with worked solutions; feeds the Paper LBO achievements), the Mental Math Arcade (six 60–90 second drills with a leaderboard against your own scores), and the DCF, accretion/dilution and LBO Model Builders with live two-way sensitivity tables. Engines live in `src/engine/models`, `src/engine/paperLbo.ts` and `src/engine/arcade.ts`, all unit-tested against hand-calculated values.
 
+## Story Bank and recruiting tools
+
+- **Story Bank** (`/stories`): 27 STAR stories covering every item on the resume (2–3 angles for the richer ones), each with a 60–90 second spoken version and a 20-second version, tagged with the 15 competencies. Stories use only resume facts and confirmed notes; every other detail is a `[FILL IN: question]`, listed under **Fill-ins** (and in `docs/fill-in-questions.md`). Stories are fully editable; every save keeps the previous text in a version history you can restore.
+- **Questions**: 80 behavioral questions (the standard IB ones plus curveballs), each mapped to its best 1–2 stories with a note on how to angle them (`src/content/stories/behavioralQuestions.ts`).
+- **Coverage**: a competencies × stories grid. Any competency with fewer than two stories is flagged, with suggestions for which resume item could fill the gap. Only complete stories (no open `[FILL IN]`s) count toward the Polish stat and the Full Coverage achievement.
+- **Practice**: a random or chosen question, typed answer with a timer and word count, then a rubric (STAR structure, the competencies the question tests, and length) pre-ticked from your answer for you to confirm. The mapped story and angle are shown after you answer. Under 70% flags the story for a rewrite and adds it to the review queue.
+- **Walkthrough & Why**: the 60-second and 2-minute resume walkthroughs, Why IB, and Why [firm] for any firm in the tracker, all generated from the latest resume version.
+- **Resume re-import** (Resume page): upload a PDF or paste text, preview the diff, then save it as a new version. New items get a draft story; stories about changed items are flagged for review; nothing you wrote is overwritten.
+- **Firm Tracker** (`/tools/firms`): 15 starter firms (elite boutiques, bulge brackets, middle market) with status, focus areas, the matching Superday interviewer style, contacts, researched deals, interview notes and a generated Why-[firm] draft.
+- **Deal & Market Journal** (`/tools/journal`): log deals (acquirer, target, value, multiple, rationale, your view), keep one market note per week, and practice "Pitch me a deal" against a rubric built from your own entry.
+- **Recruiting Calendar** (`/tools/calendar`): deadlines, interviews and Superdays with countdowns. The suggested daily load rises as the next interview approaches (75 → 90 → 120 minutes) and tapers in the last two days; it also shows on the dashboard.
+
 ## HireVue practice
 
 `/hirevue` simulates a one-way video interview: choose 3/5/7 questions, a focus, prep time, answer time and retakes. Each question gives a prep countdown, then records from your camera (or audio-only) with an answer countdown, playback and limited retakes. A live transcript is used where the browser supports the Web Speech API (in Chrome it is processed by Google). The review screen shows pace (words per minute), filler words, rubric points detected from the transcript and a delivery checklist; the score is 70% content + 30% delivery. Recordings stay in memory and are never uploaded; download any you want to keep. Questions live in `src/content/hirevue/questions.ts`; resume-based outlines use only facts from your resume and mark personal details as `[your detail]`.
@@ -83,5 +95,5 @@ Progress, stories, notes and settings are stored only in this browser (IndexedDB
 - [x] 6. Content for sections 9–12 (171 questions, 24 worked examples, 16 chapters)
 - [x] 7. Spaced repetition, dashboard, analytics
 - [x] 8. Superday Simulator, Paper LBO, model builders, Mental Math Arcade
-- [ ] 9. Story Bank, Firm Tracker, Deal Journal, Recruiting Calendar
+- [x] 9. Story Bank, Firm Tracker, Deal Journal, Recruiting Calendar
 - [ ] 10. Optional LLM integration, polish, QA pass

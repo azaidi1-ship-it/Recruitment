@@ -1,4 +1,6 @@
+import { Link } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { ResumeImport } from './ResumeImport';
 import { db } from '../../db/db';
 import type { ResumeItemCategory } from '../../types/models';
 import { Badge, Card, PageHeader } from '../../components/ui';
@@ -11,10 +13,12 @@ const GROUPS: { category: ResumeItemCategory; title: string }[] = [
   { category: 'achievement', title: 'Achievements' },
 ];
 
-/** Read-only view of the stored resume. TODO(Phase 9): re-import + diff, story links per item. */
+/** The stored resume (latest version), story counts per item, and re-import. */
 export function ResumePage() {
   const resume = useLiveQuery(() => db.resumes.orderBy('version').last());
+  const stories = useLiveQuery(() => db.stories.toArray(), []);
   if (!resume) return null;
+  const storiesFor = (id: string) => stories?.filter((s) => s.resumeItemId === id) ?? [];
 
   return (
     <>
@@ -36,7 +40,12 @@ export function ResumePage() {
                       <div className="text-sm font-medium">
                         {item.role} <span className="text-muted">· {item.org}</span>
                       </div>
-                      <div className="text-xs text-faint tabular">
+                      <div className="flex items-center gap-2 text-xs text-faint tabular">
+                        {storiesFor(item.id).length > 0 && (
+                          <Link to={`/stories?tab=stories&story=${storiesFor(item.id)[0]!.id}`} className="text-accent hover:underline">
+                            {storiesFor(item.id).length} stor{storiesFor(item.id).length === 1 ? 'y' : 'ies'}
+                          </Link>
+                        )}
                         {item.start} – {item.end}
                       </div>
                     </div>
@@ -70,6 +79,7 @@ export function ResumePage() {
             <dd>{resume.certifications.join('; ')}</dd>
           </dl>
         </Card>
+        <ResumeImport resume={resume} />
       </div>
     </>
   );

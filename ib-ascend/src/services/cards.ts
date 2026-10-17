@@ -35,7 +35,7 @@ export async function upsertMissedQuestionCard(questionId: string, sectionId: Se
 
 /**
  * Schedule a behavioral story for review after a weak practice score.
- * Called by the Story Bank (Phase 9).
+ * Called by Story Bank practice.
  */
 export async function scheduleStoryCard(storyId: string, score: number, now: Date = new Date()): Promise<Card | null> {
   if (score >= SRS.weakStoryScore) return null;

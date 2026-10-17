@@ -221,7 +221,7 @@ export const lessons: Lesson[] = [
           'Track four numbers every week: the policy rate, the 10-year yield, the S&P 500 and high-yield credit spreads.',
           'Follow one or two live deals and one or two sectors you care about.',
           'Write a three-sentence view: what’s happening, what it means for deals, what you’re watching.',
-          'Log it in Market Notes (Phase 9) so you never walk into an interview cold.',
+          'Log it in Market Notes (Tools → Deal & Market Journal) so you never walk into an interview cold.',
         ],
       },
       {

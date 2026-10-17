@@ -4,7 +4,7 @@ import { SEED_RESUME_TEXT } from './resumeText';
 /**
  * Structured version of Ameen_Zaidi_Resume.pdf (confirmed Phase 0, Oct 2026).
  * Seeded into the database on first run, so later re-imports can be diffed
- * against it (Phase 9). `confirmedNotes` hold facts the user confirmed that
+ * against it on re-import. `confirmedNotes` hold facts the user confirmed that
  * are not printed on the resume.
  */
 export const SEED_RESUME: Resume = {
