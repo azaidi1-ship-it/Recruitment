@@ -6,6 +6,8 @@ import { BackupError, backupFileName, exportBackup, importBackup, parseBackup, w
 import { Button, Card, PageHeader } from '../../components/ui';
 import { LLM_MODELS } from '../../engine/ai';
 import { testConnection } from '../../services/llm';
+import { confirmAction } from '../../lib/confirm';
+import { isEmbedded, saveFile } from '../../lib/saveFile';
 
 const field = 'w-full rounded-lg border border-line bg-sunk px-3 py-2 text-sm text-ink placeholder:text-faint';
 
@@ -76,6 +78,11 @@ export function Settings() {
             Superday Simulator can run a conversational interviewer. The key stays in this browser and is left out of
             backups unless you choose to include it.
           </p>
+          {isEmbedded() && (
+            <p className="mb-4 rounded-lg border border-warn/40 bg-warn-soft/40 p-3 text-sm">
+              This hosted copy can’t reach the Anthropic API, so AI features are off here. Everything else works; grading uses keywords and your own judgment.
+            </p>
+          )}
           <div className="space-y-4 text-sm">
             <Row label="Anthropic API key">
               <div className="flex gap-2">
@@ -159,12 +166,12 @@ function BackupPanel() {
   async function onExport() {
     const file = await exportBackup(undefined, { includeApiKey: includeKey });
     const blob = new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = backupFileName();
-    a.click();
-    URL.revokeObjectURL(url);
+    try {
+      await saveFile(backupFileName(), blob);
+    } catch {
+      setStatus({ tone: 'bad', text: 'The backup wasn’t saved.' });
+      return;
+    }
     const rows = Object.values(file.tables).reduce((n, t) => n + t.length, 0);
     setStatus({ tone: 'ok', text: `Exported ${rows.toLocaleString()} records.` });
   }
@@ -173,7 +180,7 @@ function BackupPanel() {
     try {
       const parsed = parseBackup(await f.text());
       const when = new Date(parsed.exportedAt).toLocaleString();
-      if (!window.confirm(`Replace ALL current progress with the backup from ${when}? This can’t be undone.`)) return;
+      if (!await confirmAction(`Replace ALL current progress with the backup from ${when}? This can’t be undone.`)) return;
       const { counts } = await importBackup(parsed);
       await hydrateAll();
       const rows = Object.values(counts).reduce((n, c) => n + (c ?? 0), 0);
@@ -186,7 +193,7 @@ function BackupPanel() {
   }
 
   async function onReset() {
-    if (!window.confirm('Delete ALL progress, stories and notes in this browser? Export a backup first if unsure.')) return;
+    if (!await confirmAction('Delete ALL progress, stories and notes in this browser? Export a backup first if unsure.')) return;
     await wipeAll();
     await hydrateAll();
     setStatus({ tone: 'ok', text: 'All progress reset.' });

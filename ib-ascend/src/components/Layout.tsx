@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { BookOpen, CalendarDays, FileText, Gauge, GitBranch, Landmark, Newspaper, Repeat, Settings, Swords, Trophy, Video, Wrench } from 'lucide-react';
 import { CelebrationLayer } from '../features/gamification/CelebrationLayer';
+import { ConfirmHost } from '../lib/confirm';
 import { useGameStore } from '../store/useGameStore';
 import type { ComponentType, ReactNode } from 'react';
 import { cx } from './ui';
@@ -76,6 +77,7 @@ export function Layout() {
         </PageFade>
       </main>
       <CelebrationLayer />
+      <ConfirmHost />
 
       <nav className="no-print fixed inset-x-0 bottom-0 z-20 flex justify-around border-t border-line bg-surface/95 px-2 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
         {NAV.filter((n) => n.mobile).map(({ to, label, icon: Icon }) => (

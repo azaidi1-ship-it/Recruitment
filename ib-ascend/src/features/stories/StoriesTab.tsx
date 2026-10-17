@@ -9,6 +9,7 @@ import { createStory, deleteStory, restoreVersion, saveStory } from '../../servi
 import type { CompetencyId, Resume, Story } from '../../types/models';
 import { Badge, Button, Card, cx } from '../../components/ui';
 import { CompetencyChip, FillInText, speakSeconds, wordCount } from './shared';
+import { confirmAction } from '../../lib/confirm';
 
 export function StoriesTab({ resume, stories }: { resume: Resume; stories: Story[] }) {
   const [params, setParams] = useSearchParams();
@@ -225,7 +226,7 @@ function StoryEditor({ story, resume }: { story: Story; resume: Resume }) {
               variant="ghost"
               aria-label="Delete story"
               onClick={async () => {
-                if (window.confirm(`Delete “${story.title}” and its version history?`)) await deleteStory(story.id);
+                if (await confirmAction(`Delete “${story.title}” and its version history?`)) await deleteStory(story.id);
               }}
             >
               <Trash2 size={15} />
@@ -237,10 +238,12 @@ function StoryEditor({ story, resume }: { story: Story; resume: Resume }) {
             <CompetencyChip key={c} id={c} />
           ))}
           {story.fillIns.length > 0 && <Badge tone="warn">{story.fillIns.length} to fill in</Badge>}
+          {story.unverifiedDetails.length > 0 && <Badge tone="warn">{story.unverifiedDetails.length} made-up details to check</Badge>}
           {story.needsRewrite && <Badge tone="warn">Flagged for rewrite</Badge>}
           {story.practiceScore !== null && <Badge tone={story.practiceScore >= 0.7 ? 'ok' : 'bad'}>Last practice {Math.round(story.practiceScore * 100)}%</Badge>}
           {story.userEdited && <Badge tone="info">Edited by you</Badge>}
         </div>
+        {story.unverifiedDetails.length > 0 && <UnverifiedBox story={story} />}
         <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-faint">
           60–90 second version · {spokenWords} words ≈ {speakSeconds(story.spoken)}s
         </h3>
@@ -283,7 +286,7 @@ function StoryEditor({ story, resume }: { story: Story; resume: Resume }) {
                   variant="ghost"
                   className="!px-2 !py-1 text-xs"
                   onClick={async () => {
-                    if (window.confirm('Restore this version? Your current text is saved as a version first.')) await restoreVersion(v.id);
+                    if (await confirmAction('Restore this version? Your current text is saved as a version first.')) await restoreVersion(v.id);
                   }}
                 >
                   <RotateCcw size={13} /> Restore
@@ -293,6 +296,32 @@ function StoryEditor({ story, resume }: { story: Story; resume: Resume }) {
           </ul>
         )}
       </Card>
+    </div>
+  );
+}
+
+/** Details the app invented to complete the story; the user confirms or rewrites them. */
+function UnverifiedBox({ story }: { story: Story }) {
+  return (
+    <div className="mb-4 rounded-lg border border-warn/40 bg-warn-soft/40 p-3 text-sm">
+      <p className="mb-1 flex items-center gap-1.5 font-semibold text-warn">
+        <AlertTriangle size={14} /> Made up by the app: check before you say it
+      </p>
+      <p className="mb-2 text-xs text-muted">These details aren’t on your resume. An interviewer can ask about any of them, so change anything that isn’t true (Edit), then confirm.</p>
+      <ul className="mb-2 list-disc space-y-0.5 pl-5">
+        {story.unverifiedDetails.map((d) => (
+          <li key={d}>{d}</li>
+        ))}
+      </ul>
+      <Button
+        className="!px-2.5 !py-1 text-xs"
+        onClick={async () => {
+          if (await confirmAction('Confirm these details are true (or that you have edited the story to make them true)?'))
+            await db.stories.update(story.id, { unverifiedDetails: [], userEdited: true, updatedAt: new Date().toISOString() });
+        }}
+      >
+        These are true now
+      </Button>
     </div>
   );
 }

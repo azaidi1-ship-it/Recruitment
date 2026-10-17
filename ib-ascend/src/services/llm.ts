@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { DEFAULT_MODEL, GRADER_SYSTEM, SCORER_SYSTEM, gradeRequestText, scoreRequestText, type GradeInput, type GradeResult } from '../engine/ai';
 import { useSettingsStore, hasLlmKey } from '../store/useSettingsStore';
 import type { Settings } from '../types/models';
+import { isEmbedded } from '../lib/saveFile';
 
 export class LlmError extends Error {
   constructor(
@@ -24,7 +25,8 @@ function settings(): Settings {
 }
 
 export function llmEnabled(s: Settings = settings()): boolean {
-  return s.llmProvider === 'anthropic' && hasLlmKey(s);
+  // Embedded hosts (a published artifact) block requests to other sites.
+  return s.llmProvider === 'anthropic' && hasLlmKey(s) && !isEmbedded();
 }
 
 type Sdk = typeof import('@anthropic-ai/sdk').default;

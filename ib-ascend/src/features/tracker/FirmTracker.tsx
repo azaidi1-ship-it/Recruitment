@@ -12,6 +12,7 @@ import { toLocalDate } from '../../lib/dates';
 import type { Firm, FirmStatus } from '../../types/models';
 import { Badge, Button, Card, PageHeader, cx } from '../../components/ui';
 import { FillInText } from '../stories/shared';
+import { confirmAction } from '../../lib/confirm';
 
 export const TIER_LABEL: Record<Firm['tier'], string> = {
   'elite-boutique': 'Elite boutique',
@@ -174,7 +175,7 @@ function FirmDetail({ id }: { id: string }) {
               variant="ghost"
               aria-label="Delete firm"
               onClick={async () => {
-                if (window.confirm(`Delete ${firm.name}?`)) {
+                if (await confirmAction(`Delete ${firm.name}?`)) {
                   await deleteFirm(firm.id);
                   navigate('/tools/firms');
                 }

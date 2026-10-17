@@ -11,6 +11,7 @@ import type { DealEntry } from '../../types/models';
 import { Badge, Button, Card, PageHeader, cx } from '../../components/ui';
 import { FillInText, speakSeconds, wordCount } from '../stories/shared';
 import { AiFeedback, PointNote, useAiGrade } from '../questions/useAiGrade';
+import { confirmAction } from '../../lib/confirm';
 
 const TABS = [
   { id: 'deals', label: 'Deals' },
@@ -143,7 +144,7 @@ function Deals() {
                   className="!px-2 !py-1"
                   aria-label="Delete deal"
                   onClick={async () => {
-                    if (window.confirm('Delete this deal?')) await deleteDeal(d.id);
+                    if (await confirmAction('Delete this deal?')) await deleteDeal(d.id);
                   }}
                 >
                   <Trash2 size={14} />

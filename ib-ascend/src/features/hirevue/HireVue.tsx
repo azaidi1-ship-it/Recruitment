@@ -13,6 +13,8 @@ import { hashString, mulberry32 } from '../../lib/random';
 import { newId } from '../../lib/id';
 import { Badge, Button, Card, PageHeader, cx } from '../../components/ui';
 import { createTranscriber, mediaSupported, openCamera, speechSupported, stopStream, TakeRecorder, type Transcriber } from './media';
+import { confirmAction } from '../../lib/confirm';
+import { saveFile } from '../../lib/saveFile';
 
 interface Settings {
   count: number;
@@ -404,7 +406,7 @@ function HireVueRun({
             Question {index + 1} of {questions.length}
           </p>
         </div>
-        <Button variant="ghost" onClick={() => window.confirm('Quit this HireVue? Your answers so far won’t be saved.') && onQuit()}>
+        <Button variant="ghost" onClick={async () => { if (await confirmAction('Quit this HireVue? Your answers so far won’t be saved.')) onQuit(); }}>
           Quit
         </Button>
       </div>
@@ -574,7 +576,7 @@ function HireVueReview({ takes, startedAt, onRestart }: { takes: Take[]; started
           <>
             <p className="text-sm text-muted">Score = 70% content (rubric) + 30% delivery (checklist).</p>
             <div className="flex gap-2">
-              <Button variant="ghost" onClick={() => window.confirm('Discard this session without saving?') && onRestart()}>
+              <Button variant="ghost" onClick={async () => { if (await confirmAction('Discard this session without saving?')) onRestart(); }}>
                 Discard
               </Button>
               <Button variant="primary" onClick={() => void save()} disabled={saving}>
@@ -626,9 +628,19 @@ function ReviewCard({
           {take.videoUrl && (
             <>
               <video src={take.videoUrl} controls playsInline className="aspect-video w-full rounded-lg bg-black" />
-              <a href={take.videoUrl} download={`hirevue-${q.id}.${ext}`} className="inline-flex items-center gap-1.5 text-xs text-accent hover:underline">
+              <button
+                type="button"
+                onClick={async () => {
+                  try {
+                    await saveFile(`hirevue-${q.id}.${ext}`, await (await fetch(take.videoUrl!)).blob());
+                  } catch {
+                    /* declined or unavailable; nothing to do */
+                  }
+                }}
+                className="inline-flex items-center gap-1.5 text-xs text-accent hover:underline"
+              >
                 <Download size={13} /> Download recording
-              </a>
+              </button>
             </>
           )}
           <label className="block text-xs font-medium uppercase tracking-wide text-muted">

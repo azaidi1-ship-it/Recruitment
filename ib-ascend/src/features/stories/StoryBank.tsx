@@ -23,7 +23,7 @@ const TABS = [
   { id: 'coverage', label: 'Coverage' },
   { id: 'practice', label: 'Practice' },
   { id: 'answers', label: 'Walkthrough & Why' },
-  { id: 'fill-ins', label: 'Fill-ins' },
+  { id: 'fill-ins', label: 'Fill-ins & checks' },
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
 
@@ -481,11 +481,45 @@ function FillInsTab({ resume, stories }: { resume: Resume; stories: Story[] }) {
     .map((item) => ({ item, stories: stories.filter((s) => s.resumeItemId === item.id && s.fillIns.length > 0) }))
     .filter((g) => g.stories.length);
   const total = stories.reduce((n, s) => n + s.fillIns.length, 0);
+  const toCheck = resume.items
+    .map((item) => ({ item, stories: stories.filter((s) => s.resumeItemId === item.id && s.unverifiedDetails.length > 0) }))
+    .filter((g) => g.stories.length);
+  const checkTotal = stories.reduce((n, s) => n + s.unverifiedDetails.length, 0);
   return (
+    <>
+    {checkTotal > 0 && (
+      <Card className="mb-4 border-warn/40">
+        <h2 className="mb-1 font-semibold">{checkTotal} made-up details to check</h2>
+        <p className="mb-4 text-sm text-muted">
+          You asked the app to complete your stories, so these details were invented to fit your resume. They are plausible, not true. Before an interview, open each story and replace anything that didn’t happen with what did, then press “These are true now”.
+        </p>
+        <div className="space-y-4">
+          {toCheck.map(({ item, stories: own }) => (
+            <section key={item.id}>
+              <h3 className="mb-1 text-sm font-semibold">
+                {item.role}, {shortOrg(item.org)}
+              </h3>
+              {own.map((s) => (
+                <div key={s.id} className="mb-2">
+                  <Link to={`/stories?tab=stories&story=${s.id}`} className="text-sm text-accent hover:underline">
+                    {s.title}
+                  </Link>
+                  <ul className="mt-1 list-disc space-y-0.5 pl-6 text-sm text-muted">
+                    {s.unverifiedDetails.map((d) => (
+                      <li key={d}>{d}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </section>
+          ))}
+        </div>
+      </Card>
+    )}
     <Card>
       <h2 className="mb-1 font-semibold">{total} open questions</h2>
       <p className="mb-4 text-sm text-muted">
-        Details only you can supply. Answer them by editing the story: replace the bracketed text with your detail. The app never fills these in for you.
+        Details still missing from your stories. Answer them by editing the story: replace the bracketed text with your detail.
       </p>
       <div className="space-y-5">
         {groups.map(({ item, stories: own }) => (
@@ -510,6 +544,7 @@ function FillInsTab({ resume, stories }: { resume: Resume; stories: Story[] }) {
         {total === 0 && <p className="text-sm text-ok">All filled in.</p>}
       </div>
     </Card>
+    </>
   );
 }
 

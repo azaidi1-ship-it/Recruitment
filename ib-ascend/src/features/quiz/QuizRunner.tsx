@@ -11,6 +11,7 @@ import { ProgressBar } from '../../components/Progress';
 import { QuestionView } from '../questions/QuestionView';
 import { Feedback } from '../questions/Feedback';
 import { QuizSummary } from './QuizSummary';
+import { confirmAction } from '../../lib/confirm';
 
 export interface QuizResult {
   questionId: string;
@@ -135,7 +136,7 @@ export function QuizRunner({ title, mode, sectionId, quiz, feedback, onExit }: P
           {quiz.timeLimitSec !== null && (
             <QuizTimer seconds={quiz.timeLimitSec} onExpire={() => void finish(results, true)} paused={Boolean(summary)} />
           )}
-          <Button variant="ghost" onClick={() => (window.confirm('Leave this quiz? Answers so far are saved, but the quiz won’t count as finished.') ? onExit() : null)}>
+          <Button variant="ghost" onClick={async () => { if (await confirmAction('Leave this quiz? Answers so far are saved, but the quiz won’t count as finished.')) onExit(); }}>
             Exit
           </Button>
         </div>

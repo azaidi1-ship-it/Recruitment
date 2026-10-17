@@ -11,6 +11,7 @@ import type { QuestionResponse } from '../../types/questions';
 import { Badge, Button, Card, cx } from '../../components/ui';
 import { ProgressBar } from '../../components/Progress';
 import { QuestionView } from '../questions/QuestionView';
+import { confirmAction } from '../../lib/confirm';
 
 export interface SuperdayLogEntry {
   item: SuperdayItem;
@@ -140,7 +141,7 @@ export function SuperdayRun({ persona, rounds, onFinish, onAbandon }: Props) {
             >
               Start round {next.index + 1} <ArrowRight size={16} />
             </Button>
-            <Button variant="ghost" onClick={() => (window.confirm('Leave this Superday? It won’t be scored.') ? onAbandon() : null)}>
+            <Button variant="ghost" onClick={async () => { if (await confirmAction('Leave this Superday? It won’t be scored.')) onAbandon(); }}>
               Leave
             </Button>
           </div>
