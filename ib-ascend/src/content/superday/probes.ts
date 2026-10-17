@@ -1,11 +1,13 @@
 import type { Resume, ResumeItem } from '../../types/models';
 import type { FreeTextQuestion } from '../../types/questions';
+import type { CandidateBackstory } from '../resume/backstory';
 
 /**
  * Resume probes: "Your resume says X. What exactly was your role?" One per
  * bullet on experience, project and leadership items. Generated from the
- * resume so they follow re-imports. Model answers use only the resume text
- * and confirmed notes; everything else is a [your detail] placeholder.
+ * resume so they follow re-imports. Model answers use the resume text, the
+ * confirmed notes and, when given, the candidate backstory's detail for that
+ * bullet; anything still missing is a [your detail] placeholder.
  */
 
 const PROBED: ResumeItem['category'][] = ['experience', 'project', 'leadership'];
@@ -33,7 +35,7 @@ export function detailStems(bullet: string): string[] {
   return stems.slice(0, 4);
 }
 
-export function resumeProbes(resume: Resume): FreeTextQuestion[] {
+export function resumeProbes(resume: Resume, backstory?: Pick<CandidateBackstory, 'probes'>): FreeTextQuestion[] {
   const out: FreeTextQuestion[] = [];
   for (const item of resume.items) {
     if (!PROBED.includes(item.category)) continue;
@@ -42,6 +44,7 @@ export function resumeProbes(resume: Resume): FreeTextQuestion[] {
       const stems = detailStems(bullet);
       if (stems.length === 0) return;
       const confirmed = (item.confirmedNotes ?? []).join(' ');
+      const detail = backstory?.probes?.[`${item.id}-${i + 1}`];
       out.push({
         id: `probe-${item.id}-${i + 1}`,
         sectionId: 'fit',
@@ -60,9 +63,15 @@ export function resumeProbes(resume: Resume): FreeTextQuestion[] {
         modelAnswer: [
           `My role was ${item.role} at ${org}.`,
           firstPerson(bullet),
-          '[your detail: the specific steps you took yourself and the tools you used]',
-          confirmed ? `The result was this: ${confirmed}` : 'The result was [your detail: the outcome, ideally with a number].',
-          'What I learned is [your detail], and it matters in banking because [your detail].',
+          detail?.how ?? '[your detail: the specific steps you took yourself and the tools you used]',
+          detail?.result
+            ? `The result was ${detail.result}`
+            : confirmed
+              ? `The result was this: ${confirmed}`
+              : 'The result was [your detail: the outcome, ideally with a number].',
+          detail
+            ? `What I learned is ${detail.learned}, and it matters in banking because ${detail.whyBanking}.`
+            : 'What I learned is [your detail], and it matters in banking because [your detail].',
         ].join(' '),
         targetSeconds: 60,
         explanation: 'Interviewers probe resume bullets to check you did the work. Use “I”, explain how, give the result, and link it to banking.',

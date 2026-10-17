@@ -22,6 +22,7 @@ import { AiInterview, type AiInterviewResult } from './AiInterview';
 import { transcriptText, type InterviewerSetup } from '../../engine/ai';
 import { llmEnabled } from '../../services/llm';
 import { useSettingsStore } from '../../store/useSettingsStore';
+import { CANDIDATE_BACKSTORY } from '../../content/resume/backstory';
 
 type Stage =
   | { kind: 'setup' }
@@ -78,7 +79,7 @@ export function Superday() {
       minutes,
       technical,
       behavioral: getSectionContent('fit').questions,
-      probes: resumeProbes(resume ?? SEED_RESUME),
+      probes: resumeProbes(resume ?? SEED_RESUME, CANDIDATE_BACKSTORY),
       rng: mulberry32(Date.now() >>> 0),
     });
     setStage({ kind: 'running', persona, rounds, startedAt: new Date().toISOString() });

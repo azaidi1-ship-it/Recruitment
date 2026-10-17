@@ -3,6 +3,7 @@ import { PERSONAS, PERSONA_BY_ID } from '../../content/superday/personas';
 import { firstPerson, resumeProbes, shortOrg } from '../../content/superday/probes';
 import { CURVEBALLS } from '../../content/superday/curveballs';
 import { SEED_RESUME } from '../../content/resume/resume';
+import { CANDIDATE_BACKSTORY } from '../../content/resume/backstory';
 import { getSectionContent } from '../../content/registry';
 import { SECTIONS } from '../../content/sections';
 import { matchRubric, scoreRubric } from '../grading/rubric';
@@ -40,6 +41,22 @@ describe('resume probes', () => {
     expect(stratus.modelAnswer).toContain('The $250K pre-seed raise closed.');
     const ayah = probes.find((p) => p.id === 'probe-exp-ayah-1')!;
     expect(ayah.modelAnswer).toContain('The result was [your detail');
+  });
+
+  it('fills probe answers from the candidate backstory when given, keyed by item and bullet', () => {
+    const filled = resumeProbes(SEED_RESUME, CANDIDATE_BACKSTORY);
+    expect(filled.map((p) => p.id)).toEqual(probes.map((p) => p.id));
+    for (const p of filled) {
+      expect(scoreRubric(p.rubric, matchRubric(p.rubric, p.modelAnswer)), p.id).toBe(1);
+      expect(p.modelAnswer, p.id).not.toContain('[your detail');
+    }
+    for (const key of Object.keys(CANDIDATE_BACKSTORY.probes ?? {})) expect(filled.some((p) => p.id === `probe-${key}`), key).toBe(true);
+    // No result in the backstory: the confirmed note is still used.
+    expect(filled.find((p) => p.id === 'probe-exp-stratus-1')!.modelAnswer).toContain('The $250K pre-seed raise closed.');
+    // A bullet without a backstory entry keeps its placeholders.
+    const partial = resumeProbes(SEED_RESUME, { probes: { 'exp-ayah-1': CANDIDATE_BACKSTORY.probes!['exp-ayah-1']! } });
+    expect(partial.find((p) => p.id === 'probe-exp-ayah-1')!.modelAnswer).not.toContain('[your detail');
+    expect(partial.find((p) => p.id === 'probe-exp-ayah-2')!.modelAnswer).toContain('[your detail');
   });
 
   it('turns bullets into first person', () => {

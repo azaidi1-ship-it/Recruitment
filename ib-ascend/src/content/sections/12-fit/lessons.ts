@@ -27,7 +27,7 @@ export const lessons: Lesson[] = [
       {
         kind: 'example',
         title: 'Your 60-second version',
-        text: 'I went to school in Dubai, at Dubai College, and I’m now at Swarthmore studying economics and philosophy. [your detail: where your interest in finance started, e.g. with my own business]. In December 2023 I founded Ayah Apparel, a streetwear brand in the UAE, and built a three-statement model from our sales records to set prices and sourcing. Since then my work has become more directly financial. I built the model and investor deck behind Stratus Labs’ $250K pre-seed raise, which closed, and I build DCF and comps models for Clarus Capital at Swarthmore. Now I want to do this analysis on live transactions, which is why I’m applying to banking.',
+        text: 'I went to school in Dubai, at Dubai College, and I’m now at Swarthmore studying economics and philosophy. My interest in finance started with a Lumiere research project in the summer of 2023, the first time I had to ask whether a business was worth backing. That December I founded Ayah Apparel, a streetwear brand in the UAE, and built a three-statement model from our sales records to set prices and sourcing. Since then my work has become more directly financial. I built the model and investor deck behind Stratus Labs’ $250K pre-seed raise, which closed, and I build DCF and comps models for Clarus Capital at Swarthmore. Now I want to do this analysis on live transactions, which is why I’m applying to banking.',
       },
       {
         kind: 'p',
@@ -53,7 +53,7 @@ export const lessons: Lesson[] = [
       },
     ],
     sixtySecond:
-      'Walk through your resume as a story: background in a line, the spark ([your detail: e.g. Ayah Apparel’s model]), the thread to more financial work (Stratus Labs’ $250K raise, Clarus Capital), then land on why banking. Have a 60-second (≈ 150 words) and 2-minute (≈ 300 words) version, link the steps, and be ready for two levels of follow-up on every bullet.',
+      'Walk through your resume as a story: background in a line, the spark (the Lumiere project, then Ayah Apparel’s model), the thread to more financial work (Stratus Labs’ $250K raise, Clarus Capital), then land on why banking. Have a 60-second (≈ 150 words) and 2-minute (≈ 300 words) version, link the steps, and be ready for two levels of follow-up on every bullet.',
   },
   {
     id: 'fit-l2',
@@ -143,7 +143,7 @@ export const lessons: Lesson[] = [
           ['Modelcore speaker network', 'Leadership, teamwork'],
           ['TCS credit risk analysis', 'Data-quality issues, technical judgment, ethics'],
           ['Door of Awareness', 'Commitment, values, teaching'],
-          ['Failure or mistake', '[your detail: pick a real one and own it]'],
+          ['Ayah Apparel hoodie over-order', 'Failure or mistake, ownership, learning from data'],
         ],
       },
       {

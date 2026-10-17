@@ -1,6 +1,7 @@
 import { COMPETENCIES } from '../content/behavioral/competencies';
 import { COVERAGE_SUGGESTIONS } from '../content/stories/coverageSuggestions';
 import { firstPerson, shortOrg } from '../content/superday/probes';
+import type { CandidateBackstory } from '../content/resume/backstory';
 import { STATS } from '../config/gameConfig';
 import type { Competency, CompetencyId, DealEntry, Firm, Resume, ResumeItem, ResumeItemCategory, Story } from '../types/models';
 
@@ -80,18 +81,34 @@ export function possessive(name: string): string {
   return /s$/i.test(name) ? `${name}’` : `${name}’s`;
 }
 
-/** Where the interest in finance started, and what it showed: only the candidate can say, so the templates ask. */
+/**
+ * Where the interest in finance started, and what it showed: only the candidate
+ * can say, so the templates ask unless the candidate's backstory supplies them.
+ */
 const ORIGIN_FILL_IN = '[FILL IN: What first got you interested in finance?]';
 const SHOWED_FILL_IN = '[FILL IN: what that experience showed you about finance]';
+
+/** Optional facts that are not on the resume (see content/resume/backstory.ts). */
+export type CandidateFacts = Pick<CandidateBackstory, 'origin' | 'sparkLesson'>;
+
+function originOf(facts?: CandidateFacts): string {
+  const o = facts?.origin?.trim();
+  return o ? (/[.!?]$/.test(o) ? o : `${o}.`) : ORIGIN_FILL_IN;
+}
+
+function showedOf(facts?: CandidateFacts): string {
+  return facts?.sparkLesson?.trim().replace(/[.!?]$/, '') || SHOWED_FILL_IN;
+}
 
 /**
  * "Walk me through your resume", generated from the resume so it follows
  * re-imports: background, the first experience (founded roles first), the
  * most finance-relevant later items in order, then the landing on banking.
- * It never asserts where the interest in finance started.
+ * It never asserts where the interest in finance started unless `facts`
+ * (the candidate's backstory) says so.
  */
 
-export function resumeWalkthrough(resume: Resume, length: '60s' | '2min'): string {
+export function resumeWalkthrough(resume: Resume, length: '60s' | '2min', facts?: CandidateFacts): string {
   const edu = resume.items.filter((i) => i.category === 'education');
   const college = edu.find((e) => /college|university/i.test(e.org) && /B\.?A|B\.?S|degree|major/i.test(e.role)) ?? edu[0];
   const school = edu.find((e) => e !== college);
@@ -109,8 +126,9 @@ export function resumeWalkthrough(resume: Resume, length: '60s' | '2min'): strin
   }
   if (college) parts.push(`I’m now at ${college.org}${major ? ` studying ${major.toLowerCase()}` : ''}.`);
   if (spark) {
-    parts.push(`${ORIGIN_FILL_IN} At ${shortOrg(spark.org)}, ${clause(spark.bullets[0] ?? '')}`);
-    if (spark.bullets[0]?.includes(', building')) parts.push(`I built ${spark.bullets[0].split(', building ')[1]!.replace(/\.$/, '')}, and ${SHOWED_FILL_IN}.`);
+    parts.push(`${originOf(facts)} At ${shortOrg(spark.org)}, ${clause(spark.bullets[0] ?? '')}`);
+    if (spark.bullets[0]?.includes(', building')) parts.push(`I built ${spark.bullets[0].split(', building ')[1]!.replace(/\.$/, '')}, and ${showedOf(facts)}.`);
+    else if (facts?.sparkLesson?.trim()) parts.push(`${showedOf(facts).replace(/^./, (c) => c.toUpperCase())}.`);
     else parts.push('[FILL IN: What did that experience show you about finance?]');
   }
   const linkers = ['Building on that,', 'Since then,', 'Most recently,', 'Alongside that,'];
@@ -131,7 +149,7 @@ export function resumeWalkthrough(resume: Resume, length: '60s' | '2min'): strin
 }
 
 /** "Why investment banking?" from the resume: origin, evidence, what you want to learn. */
-export function whyIb(resume: Resume): string {
+export function whyIb(resume: Resume, facts?: CandidateFacts): string {
   const exps = resume.items.filter((i) => i.category === 'experience' || i.category === 'project');
   const spark = exps.find((e) => /found/i.test(e.role)) ?? exps[0];
   const evidence = [...exps].filter((e) => e !== spark).sort((a, b) => relevance(b) - relevance(a)).slice(0, 2);
@@ -141,8 +159,8 @@ export function whyIb(resume: Resume): string {
     return `at ${shortOrg(e.org)} I ${verb}${done ? `, which ${done.split(' ').pop()!.replace(/\.$/, '')}` : ''}`;
   });
   return [
-    ORIGIN_FILL_IN,
-    spark ? `At ${shortOrg(spark.org)} I ${clause(spark.bullets[0] ?? '').replace(/^I /, '').replace(/\.$/, '')}, and ${SHOWED_FILL_IN}.` : '',
+    originOf(facts),
+    spark ? `At ${shortOrg(spark.org)} I ${clause(spark.bullets[0] ?? '').replace(/^I /, '').replace(/\.$/, '')}, and ${showedOf(facts)}.` : '',
     ev.length ? `Since then I’ve tested that interest: ${ev.join(', and ')}.` : '',
     'What draws me to banking rather than consulting is that the analysis sits at the center of a live transaction, where it decides a concrete outcome for a client.',
     'And I want the steepest learning curve I can find early in my career: I want to learn how deals are valued, negotiated and closed.',

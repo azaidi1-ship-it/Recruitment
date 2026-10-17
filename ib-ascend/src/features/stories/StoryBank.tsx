@@ -16,6 +16,7 @@ import { Badge, Button, Card, PageHeader, cx } from '../../components/ui';
 import { StoriesTab } from './StoriesTab';
 import { AiFeedback, PointNote, useAiGrade } from '../questions/useAiGrade';
 import { CompetencyChip, FillInText, speakSeconds, wordCount } from './shared';
+import { CANDIDATE_BACKSTORY } from '../../content/resume/backstory';
 
 const TABS = [
   { id: 'stories', label: 'Stories' },
@@ -404,9 +405,9 @@ function AnswersTab({ resume }: { resume: Resume }) {
   const [firmId, setFirmId] = useState<string>('');
   const firm = firms?.find((f) => f.id === firmId) ?? firms?.[0];
   const blocks = [
-    { title: 'Walk me through your resume: 60 seconds', text: resumeWalkthrough(resume, '60s') },
-    { title: 'Walk me through your resume: 2 minutes', text: resumeWalkthrough(resume, '2min') },
-    { title: 'Why investment banking?', text: whyIb(resume) },
+    { title: 'Walk me through your resume: 60 seconds', text: resumeWalkthrough(resume, '60s', CANDIDATE_BACKSTORY) },
+    { title: 'Walk me through your resume: 2 minutes', text: resumeWalkthrough(resume, '2min', CANDIDATE_BACKSTORY) },
+    { title: 'Why investment banking?', text: whyIb(resume, CANDIDATE_BACKSTORY) },
   ];
   return (
     <div className="grid gap-4 lg:grid-cols-2">

@@ -5,8 +5,8 @@ const { mcq, rapid, order, free } = builders('fit');
 
 /**
  * Fit & Behavioral. Model answers use only facts from the resume (and the
- * confirmed notes); anything else is a [your detail] placeholder to fill in
- * from the Story Bank.
+ * confirmed notes) and the candidate backstory kept consistent with the Story
+ * Bank. Firm-specific details stay as [brackets] to fill per firm.
  */
 export const questions: Question[] = [
   // ── Resume walkthrough ──
@@ -83,7 +83,7 @@ export const questions: Question[] = [
       ['finance', 'Recent, relevant finance work with a number', [['stratus|clarus'], ['250*|dcf|comps']]],
       ['close', 'Lands on why banking', [['bank*|analyst']]],
     ],
-    'I went to school in Dubai, at Dubai College, and I’m now at Swarthmore studying economics and philosophy. [your detail: where your interest in finance started, e.g. with my own business]: in December 2023 I founded Ayah Apparel, a streetwear brand in the UAE, and built a three-statement model from our sales records to set prices and sourcing. [your detail: what that experience showed you about finance]. Building on that, I interned at Improve ME Institute, where I built a MECE framework across six Dubai submarkets, quantifying yields and price growth, and made a variant-view expansion recommendation to the founders. Since then my work has become more directly financial: I built the model and investor deck behind Stratus Labs’ $250K pre-seed raise, which closed, and at Swarthmore I build DCF and comps models for Clarus Capital and work on strategy projects with 180 Degrees Consulting. Now I want to do this kind of analysis in banking, on live transactions, with a team that will push me much further.',
+    'I went to school in Dubai, at Dubai College, and I’m now at Swarthmore studying economics and philosophy. My interest in finance started in the summer of 2023 with a Lumiere research project, the first time I had to ask whether a business was worth backing. That December it became hands-on: I founded Ayah Apparel, a streetwear brand in the UAE, and built a three-statement model from our sales records to set prices and sourcing. That model was where I first saw numbers drive real decisions: it showed which products actually made money after shipping and returns, so I cut two low-margin lines. Building on that, I interned at Improve ME Institute, where I built a MECE framework across six Dubai submarkets, quantifying yields and price growth, and made a variant-view expansion recommendation to the founders. Since then my work has become more directly financial: I built the model and investor deck behind Stratus Labs’ $250K pre-seed raise, which closed, and at Swarthmore I build DCF and comps models for Clarus Capital and work on strategy projects with 180 Degrees Consulting. Now I want to do this kind of analysis in banking, on live transactions, with a team that will push me much further.',
     'Thread: building things → numbers drive decisions → increasingly financial work → banking.',
     120,
   ),
@@ -97,7 +97,7 @@ export const questions: Question[] = [
       ['result', 'The outcome: the $250K raise closed', [['250*|closed']]],
       ['learning', 'What it taught you', [['learn*|taught']]],
     ],
-    'Stratus Labs is an early-stage company based in San Francisco, and I worked with them remotely from October to December 2025 as an advisor and analyst. The goal was a pre-seed raise. I built the financial model, with [your detail: the revenue build, key drivers and burn assumptions], and the investor pitch deck that presented it, and I helped shape which investors to target and directed the outreach. I also supported business development conversations with Fortune 500 prospects and frontier AI labs, including xAI. The $250K raise closed. The biggest thing I learned was [your detail: e.g. how investors pressure-test the assumptions that drive the whole model].',
+    'Stratus Labs is an early-stage company based in San Francisco, and I worked with them remotely from October to December 2025 as an advisor and analyst. The goal was a pre-seed raise. I built the financial model, starting with the revenue build and the use of funds and later adding a customer acquisition cost and payback sensitivity, and the investor pitch deck that presented it, and I helped shape which investors to target and directed the outreach. I also supported business development conversations with Fortune 500 prospects and frontier AI labs, including xAI. The $250K raise closed. The biggest thing I learned was how quickly investors go to the one assumption that drives the whole model: almost every question was about customer acquisition cost, so you need to have stress-tested it before they ask.',
     'Be ready for: which assumption mattered most, how you picked investors, what you’d change.',
     90,
   ),
@@ -167,7 +167,7 @@ export const questions: Question[] = [
       ['evidence', 'Evidence from your own experience', [['stratus|clarus|model*']]],
       ['learning', 'What you want to learn', [['learn*']]],
     ],
-    'I’ve done strategy work with 180 Degrees Consulting, structuring problems for nonprofit clients, and [your detail: what you value in it]. But [your detail: why transaction work engages you more]. At Stratus Labs, I built the model and deck behind a $250K pre-seed raise that closed, and at Clarus Capital my DCF and comps models support equity research and portfolio analysis for the club’s fund. Banking puts that kind of analysis at the center of live transactions, and that’s what I want to learn: how deals are valued, negotiated and closed.',
+    'I’ve done strategy work with 180 Degrees Consulting, structuring problems for nonprofit clients, and I value how it forces you to structure a messy problem, like working out why a tutoring nonprofit’s volunteers were dropping out mid-semester. But a consulting recommendation ends with the client deciding whether to act on it, and what engages me more is analysis that feeds directly into a transaction. At Stratus Labs, I built the model and deck behind a $250K pre-seed raise that closed, and at Clarus Capital my DCF and comps models support equity research and portfolio analysis for the club’s fund. Banking puts that kind of analysis at the center of live transactions, and that’s what I want to learn: how deals are valued, negotiated and closed.',
     'Respect consulting, then show why transactions pull you more.',
     60,
   ),
@@ -270,7 +270,7 @@ export const questions: Question[] = [
       ['conflicts', 'No lending or balance sheet conflicts', [['conflict*|lending|balance sheet']]],
       ['fit', 'Why that fits you', [['stratus|ayah|my experience|fit*']]],
     ],
-    'Two reasons. First, the work: elite boutiques focus on advisory, so the work is centered on strategic M&A and restructuring advice rather than selling lending or other products, and the advice is independent of any balance sheet conflicts. Second, the team structure: deal teams are lean, so analysts get real responsibility and exposure to senior bankers and clients early. That fits how I’ve worked so far. At Stratus Labs I built the model and deck behind the raise and shaped investor targeting, and at Ayah Apparel I ran the business myself. As an analyst I want [your detail: what you want more of, e.g. that level of responsibility and exposure].',
+    'Two reasons. First, the work: elite boutiques focus on advisory, so the work is centered on strategic M&A and restructuring advice rather than selling lending or other products, and the advice is independent of any balance sheet conflicts. Second, the team structure: deal teams are lean, so analysts get real responsibility and exposure to senior bankers and clients early. That fits how I’ve worked so far. At Stratus Labs I built the model and deck behind the raise and shaped investor targeting, and at Ayah Apparel I ran the business myself. As an analyst I want that level of responsibility, on much larger transactions and with senior bankers to learn from.',
     'Advisory focus, independence, lean teams, and why it fits you.',
     60,
   ),
@@ -385,8 +385,8 @@ export const questions: Question[] = [
       ['result', 'Result, ideally with specifics', [['careem|property finder|speaker*']]],
       ['learning', 'What you learned about leading', [['learn*|taught']]],
     ],
-    'At Dubai College I was vice president of Modelcore, the school’s business society. Our goal was to bring C-suite executives in to speak and build a speaker network. I led a cross-functional team: [your detail: how you split the work, who owned what and how you tracked progress]. As a result we hosted executives from companies including Careem and Property Finder. What I learned about leading is [your detail: e.g. that giving people clear ownership worked better than checking everything myself].',
-    'STAR with most time on your actions; fill the brackets from the Story Bank.',
+    'At Dubai College I was vice president of Modelcore, the school’s business society. Our goal was to bring C-suite executives in to speak and build a speaker network. I led a cross-functional team of six, and when the speaker program stalled in autumn 2023 I rebuilt it. I split the work into outreach, logistics and promotion, each with an owner; I built a target list of about 40 executives, prioritized by alumni and parent connections; I wrote a one-page pitch tailored to each company and went to warm introductions first; and I set up a shared tracker with weekly check-ins. As a result we hosted about eight speaker events over two years, with audiences of 80 to 120 students, including executives from Careem and Property Finder. What I learned about leading is that giving people clear ownership and one shared tracker worked better than trying to do the outreach myself.',
+    'STAR with most time on your actions.',
     90,
   ),
   free(
@@ -398,7 +398,7 @@ export const questions: Question[] = [
       ['variant', 'Why it went against the obvious answer', [['variant|independent|disagree*|obvious|consensus']]],
       ['result', 'How it was received and the outcome', [['founders|recommend*']]],
     ],
-    'At the Improve ME Institute, the founders were weighing an expansion decision. I structured a MECE framework across six Dubai submarkets and quantified rental yields and price growth for each. The analysis pointed to [your detail: the submarket you recommended and why], which was a variant view compared with [your detail: the obvious choice]. I presented the independent recommendation to the founders and backed it with the yield and growth numbers, and [your detail: how they responded]. It taught me that a contrarian recommendation only works if the numbers are clear enough that people can check them.',
+    'At the Improve ME Institute, the founders were weighing an expansion decision. I structured a MECE framework across six Dubai submarkets and quantified rental yields and price growth for each. The analysis pointed to Dubai Silicon Oasis: gross rental yields of around 7%, against about 5% in Dubai Marina, faster price growth and a large family population near schools. That was a variant view compared with the obvious choice, Dubai Marina, which had the prestige and the footfall. I presented the independent recommendation to the founders and backed it with the yield and growth numbers, and they added Silicon Oasis to their shortlist for the next center. It taught me that a contrarian recommendation only works if the numbers are clear enough that people can check them.',
     'Show the analysis, why it was contrarian, and how you defended it.',
     90,
   ),
@@ -411,7 +411,7 @@ export const questions: Question[] = [
       ['choice', 'The analytical choice and why', [['decision tree|logistic regression|model']]],
       ['result', 'The recommendation', [['recommend*|strategy']]],
     ],
-    'In my Tata Consultancy Services externship I worked on credit risk analysis using a 500-record dataset with 19 variables. Before modeling, I diagnosed data-quality issues: [your detail: e.g. missing values or inconsistent fields] and [your detail: how you treated them]. I then compared a decision-tree model with logistic regression using precision, recall and AUC-ROC, and tested for bias, which justified choosing the decision tree. I translated the findings into a SMART collections-strategy recommendation and a governance framework mapped to ECOA, FCRA and GDPR requirements.',
+    'In my Tata Consultancy Services externship I worked on credit risk analysis using a 500-record dataset with 19 variables. Before modeling, I diagnosed data-quality issues: missing income values and duplicate records. I removed the duplicates, filled the missing incomes with the median and flagged which values were filled, then checked the results didn’t depend on them. I then compared a decision-tree model with logistic regression using precision, recall and AUC-ROC, and tested for bias, which justified choosing the decision tree. I translated the findings into a SMART collections-strategy recommendation and a governance framework mapped to ECOA, FCRA and GDPR requirements.',
     'Diagnose → choose the method → recommend.',
     90,
   ),

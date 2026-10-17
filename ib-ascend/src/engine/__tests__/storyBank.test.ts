@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { SEED_RESUME } from '../../content/resume/resume';
 import { SEED_RESUME_TEXT } from '../../content/resume/resumeText';
+import { CANDIDATE_BACKSTORY } from '../../content/resume/backstory';
 import { seedStories } from '../../content/stories/seedStories';
 import { coverageMatrix, dateKey, diffResume, draftStoryForItem, parseResumeText, resumeWalkthrough, whyFirm, whyIb } from '../storyBank';
 
@@ -45,6 +46,32 @@ describe('generated answers', () => {
       expect(t).toContain('[FILL IN: What first got you interested in finance?]');
       expect(t).not.toMatch(/grew up|interest in finance started|hooked/);
     }
+  });
+
+  it('says where the interest in finance started when the candidate backstory supplies it', () => {
+    const facts = { origin: 'My interest started with a research project', sparkLesson: 'it showed me numbers drive decisions.' };
+    for (const len of ['60s', '2min'] as const) {
+      const t = resumeWalkthrough(SEED_RESUME, len, facts);
+      expect(t).toContain('My interest started with a research project. At Ayah Apparel,');
+      expect(t).toContain(', and it showed me numbers drive decisions.');
+      expect(t).not.toContain('[FILL IN');
+    }
+    const ib = whyIb(SEED_RESUME, facts);
+    expect(ib.startsWith('My interest started with a research project. At Ayah Apparel I launched')).toBe(true);
+    expect(ib).not.toContain('[FILL IN');
+    // The seed candidate's own backstory keeps both walkthroughs inside their word budgets.
+    const short = resumeWalkthrough(SEED_RESUME, '60s', CANDIDATE_BACKSTORY);
+    const long = resumeWalkthrough(SEED_RESUME, '2min', CANDIDATE_BACKSTORY);
+    expect(short).toContain(CANDIDATE_BACKSTORY.origin!);
+    expect(words(short)).toBeLessThanOrEqual(175);
+    expect(words(long)).toBeLessThanOrEqual(330);
+    expect(whyIb(SEED_RESUME, CANDIDATE_BACKSTORY)).not.toContain('[FILL IN');
+  });
+
+  it('falls back to FILL INs when the backstory is empty', () => {
+    expect(resumeWalkthrough(SEED_RESUME, '60s', { origin: '  ' })).toBe(resumeWalkthrough(SEED_RESUME, '60s'));
+    expect(whyIb(SEED_RESUME, {})).toBe(whyIb(SEED_RESUME));
+    expect(whyIb(SEED_RESUME, {})).toContain('[FILL IN: what that experience showed you about finance]');
   });
 
   it('writes Why IB and Why [firm] drafts, with FILL INs where data is missing', () => {
