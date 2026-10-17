@@ -24,7 +24,7 @@ function q(id: string, prompt: string, category: BehavioralQuestion['category'],
 const BANK: BehavioralQuestion[] = [
   // ── Core ──
   q('bq-01', 'Tell me about yourself.', 'core', ['analytical', 'initiative'], [
-    ['st-ayah-model', 'Open with what first got you interested in finance; if it was building the model for your own business, say so and why.'],
+    ['st-ayah-model', 'Open with where your interest in finance started: Lumiere sparked it, and building the model for Ayah Apparel made it practical.'],
     ['st-stratus-raise', 'Land on your most relevant, recent finance work and why it led to banking.'],
   ]),
   q('bq-02', 'Walk me through your resume.', 'core', ['analytical', 'initiative'], [
@@ -37,7 +37,7 @@ const BANK: BehavioralQuestion[] = [
   ]),
   q('bq-04', 'What is your biggest weakness?', 'core', ['criticism', 'adaptability'], [
     ['st-dc-maths', 'Use the Maths B as evidence of a past gap and what you did to close it.'],
-    ['st-ayah-mistake', 'Name the habit behind the mistake (e.g. committing before checking the numbers) and your fix.'],
+    ['st-ayah-mistake', 'Name the habit behind the over-order (committing on TikTok buzz before checking sell-through) and your fix: sizing from the model and pre-orders.'],
   ]),
   q('bq-05', 'What is your greatest strength?', 'core', ['analytical'], [
     ['st-ayah-model', 'Strength: turning raw sales records into a model that drives pricing and sourcing decisions.'],
@@ -45,15 +45,15 @@ const BANK: BehavioralQuestion[] = [
   ]),
   q('bq-06', 'Tell me about a time you failed.', 'core', ['failure'], [
     ['st-ayah-mistake', 'Own the mistake in the first sentence; spend most of the time on the fix and the process change.'],
-    ['st-clarus-backtest', 'If a backtest ever misled you, use it: what the flaw was and how you found it.'],
+    ['st-clarus-backtest', 'The backtest that looked too good: the look-ahead bias, how you found it by tracing trades, and the corrected Sharpe ratio.'],
   ]),
   q('bq-07', 'Tell me about a time you made a mistake under pressure.', 'core', ['failure', 'pressure'], [
-    ['st-clarus-backtest', 'If you caught a flaw in a backtest yourself, stress that you reported it, even if the result got worse.'],
-    ['st-ayah-mistake', 'If the mistake happened under time pressure, explain what the pressure was and how it affected the call.'],
+    ['st-clarus-backtest', 'Stress that you caught the look-ahead bias yourself and reported the corrected result, even though the Sharpe fell from about 1.1 to 0.6.'],
+    ['st-ayah-mistake', 'The pressure was early TikTok buzz pushing you to order fast; explain how it led you to skip the sell-through check.'],
   ]),
   q('bq-08', 'Tell me about a time you disagreed with a teammate.', 'core', ['conflict', 'teamwork'], [
-    ['st-modelcore-leadership', 'If the team disagreed, use that moment: show how you listened and how you decided.'],
-    ['st-180dc-engagement', 'If your team disagreed about the recommendation, explain the disagreement and how it was resolved.'],
+    ['st-modelcore-leadership', 'Use the autumn 2023 stall: show how you listened to the team and reset the outreach approach.'],
+    ['st-180dc-engagement', 'A teammate wanted paid tutors: show how you asked what worried them (reliability) and compared both options on cost per retained tutor.'],
   ]),
   q('bq-09', 'Tell me about a time you led without formal authority.', 'core', ['leadership', 'persuasion'], [
     ['st-mun-trainer', 'As a trainer you developed junior delegates: explain how you got them to take your advice beyond what the title alone gave you.'],
@@ -61,7 +61,7 @@ const BANK: BehavioralQuestion[] = [
   ]),
   q('bq-10', 'What is the most difficult decision you’ve made?', 'core', ['analytical', 'pressure'], [
     ['st-improveme-variant', 'Choosing to back a non-obvious recommendation over the safe one.'],
-    ['st-clarus-backtest', 'Use a hard call from your Clarus backtesting, if you had one, e.g. whether to report a less flattering result.'],
+    ['st-clarus-backtest', 'Choosing to report the corrected, less exciting backtest result instead of the Sharpe of about 1.1.'],
   ]),
   q('bq-11', 'Tell me about a time you showed leadership.', 'core', ['leadership'], [
     ['st-modelcore-leadership', 'Clear ownership, follow-up and the speaker results.'],
@@ -77,13 +77,13 @@ const BANK: BehavioralQuestion[] = [
   ]),
   q('bq-14', 'How would your friends or teammates describe you?', 'core', ['teamwork', 'client-focus'], [
     ['st-mun-trainer', 'Back the adjective with how you helped others improve.'],
-    ['st-fitness-retention', 'Reliable and consistent: you built to five recurring clients over two years; mention how long your longest client has stayed.'],
+    ['st-fitness-retention', 'Reliable and consistent: you built to five recurring clients over two years; mention the client who nearly quit and then stayed another year.'],
   ]),
 
   // ── Motivation ──
   q('bq-15', 'Why investment banking?', 'motivation', ['initiative'], [
-    ['st-ayah-model', 'The origin: say what first got you interested in finance, and use the model if it played a part.'],
-    ['st-stratus-raise', 'The evidence: you’ve done the work; say what you liked about it, if true.'],
+    ['st-ayah-model', 'The origin: Lumiere sparked your interest, and the Ayah model was where you first saw numbers drive real decisions.'],
+    ['st-stratus-raise', 'The evidence: you’ve done the work, and it was the first time your analysis decided a real outcome.'],
   ]),
   q('bq-16', 'Why investment banking and not consulting?', 'motivation', ['analytical'], [
     ['st-180dc-engagement', 'Respect consulting: say what you valued in the 180 Degrees work.'],
@@ -93,8 +93,8 @@ const BANK: BehavioralQuestion[] = [
     ['st-stratus-raise', 'Link the firm’s lean teams and client exposure to how you worked at Stratus.'],
   ]),
   q('bq-18', 'Why an elite boutique rather than a bulge bracket?', 'motivation', ['client-focus', 'initiative'], [
-    ['st-stratus-raise', 'Say what you liked about working directly with the Stratus team, if true, and link it to lean boutique teams.'],
-    ['st-ayah-model', 'Founder experience: if true, say you want real responsibility early.'],
+    ['st-stratus-raise', 'Link working directly with the Stratus founders on the model, deck and investor list to lean boutique teams.'],
+    ['st-ayah-model', 'Founder experience: you want real responsibility early.'],
   ]),
   q('bq-19', 'You study economics and philosophy. Why finance?', 'motivation', ['analytical'], [
     ['st-swarthmore-major', 'The combination is the point: models plus testing assumptions.'],
@@ -129,11 +129,11 @@ const BANK: BehavioralQuestion[] = [
     ['st-stratus-bd', 'Mention the BD work only briefly unless asked.'],
   ]),
   q('bq-27', 'What exactly did you build at Stratus Labs, and which assumption mattered most?', 'resume', ['analytical', 'detail'], [
-    ['st-stratus-raise', 'Name the key driver and how you tested it.'],
+    ['st-stratus-raise', 'Name the key driver (pilot-to-paid conversion) and how you tested it with base, downside and upside cases.'],
   ]),
   q('bq-28', 'What have you learned from building valuation models at Clarus Capital?', 'resume', ['analytical'], [
     ['st-clarus-reverse-dcf', 'The reverse DCF insight: argue about expectations, not targets.'],
-    ['st-clarus-backtest', 'Use what backtesting has taught you, e.g. about results that look too good, if true.'],
+    ['st-clarus-backtest', 'What backtesting taught you: be most suspicious of the results that look best.'],
   ]),
   q('bq-29', 'Pitch me the stock you analyzed at Clarus Capital.', 'resume', ['persuasion', 'analytical'], [
     ['st-clarus-reverse-dcf', 'Recommendation first, then what the price implies vs your view.'],
@@ -182,7 +182,7 @@ const BANK: BehavioralQuestion[] = [
 
   // ── Competencies ──
   q('bq-42', 'Tell me about a time you worked under a tight deadline.', 'competency', ['pressure', 'time-management'], [
-    ['st-stratus-raise', 'A three-month engagement alongside university; describe the deadline pressure, if there was any.'],
+    ['st-stratus-raise', 'About three weeks to get the model and deck ready before investor meetings, alongside university; explain how you prioritized.'],
     ['st-academics-balance', 'Exam season while running a business.'],
   ]),
   q('bq-43', 'Describe a time you had to manage competing priorities.', 'competency', ['time-management'], [
@@ -190,15 +190,15 @@ const BANK: BehavioralQuestion[] = [
     ['st-stratus-bd', 'BD discussions and the fundraise at the same time.'],
   ]),
   q('bq-44', 'Tell me about a time you persuaded someone to change their mind.', 'competency', ['persuasion'], [
-    ['st-improveme-variant', 'You took a variant view to the founders with transparent numbers; say how they responded.'],
-    ['st-stratus-investors', 'Use an investor who pushed back, if there was one, and how you responded.'],
+    ['st-improveme-variant', 'You took a variant view to the founders with transparent numbers, and they added Silicon Oasis to their shortlist.'],
+    ['st-stratus-investors', 'Investors pushed back on customer acquisition cost; explain the CAC and payback sensitivity you added.'],
   ]),
   q('bq-45', 'Tell me about a time you went above and beyond.', 'competency', ['initiative'], [
     ['st-lumiere-memo', 'You turned a research paper into a diligence memo.'],
     ['st-ayah-channels', 'You built the site and the channel yourself.'],
   ]),
   q('bq-46', 'Tell me about a time you received critical feedback.', 'competency', ['criticism'], [
-    ['st-stratus-raise', 'Use any investor or founder feedback that changed your model or deck, if there was some.'],
+    ['st-stratus-raise', 'Investor questions about customer acquisition cost changed your model: explain the sensitivity you added.'],
     ['st-dc-maths', 'Feedback from a result, and how you responded.'],
   ]),
   q('bq-47', 'Tell me about a time you had to learn something new quickly.', 'competency', ['adaptability'], [
@@ -207,7 +207,7 @@ const BANK: BehavioralQuestion[] = [
   ]),
   q('bq-48', 'Describe a time you faced an ethical dilemma.', 'competency', ['ethics'], [
     ['st-tcs-ethics', 'Fairness versus accuracy in a credit model.'],
-    ['st-clarus-backtest', 'If you ever had to report a less flattering backtest result, use it.'],
+    ['st-clarus-backtest', 'Reporting the corrected, less flattering backtest result rather than the exciting one.'],
   ]),
   q('bq-49', 'Tell me about a time you dealt with a difficult client or customer.', 'competency', ['client-focus', 'conflict'], [
     ['st-fitness-difficult', 'Show how you responded, what you changed in the plan, and how you checked progress.'],
@@ -221,7 +221,7 @@ const BANK: BehavioralQuestion[] = [
     ['st-improveme-reports', 'Checking reports before they went to leadership.'],
   ]),
   q('bq-52', 'Tell me about a time you caught an error before it caused a problem.', 'competency', ['detail', 'ethics'], [
-    ['st-clarus-backtest', 'Use an error you caught in a backtest, if there was one.'],
+    ['st-clarus-backtest', 'The look-ahead bias you caught before the fund relied on the result.'],
     ['st-improveme-reports', 'An error you caught in a report.'],
   ]),
   q('bq-53', 'Tell me about a time you used data to make a recommendation.', 'competency', ['analytical', 'persuasion'], [
@@ -237,8 +237,8 @@ const BANK: BehavioralQuestion[] = [
     ['st-stratus-bd', 'Fortune 500 prospects and AI labs.'],
   ]),
   q('bq-56', 'Tell me about a time you had to deliver bad news.', 'competency', ['ethics', 'client-focus'], [
-    ['st-clarus-backtest', 'If you had to tell the group a strategy didn’t work, use it.'],
-    ['st-ayah-mistake', 'If you told anyone affected by your mistake, explain how you handled it.'],
+    ['st-clarus-backtest', 'Telling the group the Sharpe fell from about 1.1 to 0.6 once the bug was fixed.'],
+    ['st-ayah-mistake', 'Telling your supplier straight away that the next order would be smaller and later.'],
   ]),
   q('bq-57', 'Tell me about a time you had to influence senior people.', 'competency', ['persuasion', 'client-focus'], [
     ['st-modelcore-outreach', 'C-suite executives with no reason to say yes.'],
@@ -246,10 +246,10 @@ const BANK: BehavioralQuestion[] = [
   ]),
   q('bq-58', 'Tell me about a time you motivated others.', 'competency', ['leadership', 'teamwork'], [
     ['st-modelcore-leadership', 'Keeping a team going for almost two years.'],
-    ['st-mun-trainer', 'Use a delegate you helped improve, if you have one.'],
+    ['st-mun-trainer', 'The delegate who froze when challenged, and the practice rebuttals you ran with her.'],
   ]),
   q('bq-59', 'Tell me about a time a project didn’t go to plan.', 'competency', ['failure', 'adaptability'], [
-    ['st-clarus-backtest', 'Use a backtest that didn’t go to plan, if there was one.'],
+    ['st-clarus-backtest', 'The backtest that looked too good, and what changed once you fixed it.'],
     ['st-ayah-mistake', 'A business decision that went wrong.'],
   ]),
   q('bq-60', 'Tell me about a time you had to work with incomplete or messy data.', 'competency', ['analytical', 'detail'], [
@@ -265,19 +265,19 @@ const BANK: BehavioralQuestion[] = [
     ['st-dc-epq', 'An A* in a self-directed project.'],
   ]),
   q('bq-63', 'Tell me about a time you put a client’s needs first.', 'competency', ['client-focus'], [
-    ['st-180dc-engagement', 'Use what the client needed and how your recommendations reflected its constraints.'],
+    ['st-180dc-engagement', 'The director’s cost constraint and how you cut the plan to low-cost steps.'],
     ['st-fitness-difficult', 'Changing the plan around what the client wanted.'],
   ]),
   q('bq-64', 'Tell me about a time you explained something complex simply.', 'competency', ['client-focus', 'persuasion'], [
     ['st-door-teaching', 'Explaining a concept a new way.'],
-    ['st-tcs-model', 'Use how you explained the model choice to a non-technical audience.'],
+    ['st-tcs-model', 'Explaining the decision tree as if-then rules, like a loan officer’s checklist.'],
   ]),
   q('bq-65', 'Tell me about a time you were wrong.', 'competency', ['failure', 'criticism'], [
-    ['st-clarus-backtest', 'Use a time a first backtest result misled you, if there was one.'],
-    ['st-fitness-difficult', 'If you misjudged what the client wanted, say what you missed.'],
+    ['st-clarus-backtest', 'Your first backtest result was wrong: the look-ahead bias and what you changed.'],
+    ['st-fitness-difficult', 'You focused on the long-term target and missed how the daily scale swings felt to her.'],
   ]),
   q('bq-66', 'Tell me about a time you managed a team through a setback.', 'competency', ['leadership', 'adaptability'], [
-    ['st-modelcore-leadership', 'Use a setback for the team, if there was one, and what you did.'],
+    ['st-modelcore-leadership', 'The autumn 2023 stall when cold emails got no replies, and how you rebuilt the outreach.'],
   ]),
   q('bq-67', 'Tell me about a time you balanced accuracy against speed.', 'competency', ['detail', 'pressure'], [
     ['st-stratus-raise', 'Explain how you balanced speed and accuracy on the model and deck.'],
@@ -289,7 +289,7 @@ const BANK: BehavioralQuestion[] = [
     ['st-ayah-mistake', 'Say what you would do differently at Ayah Apparel, and why.'],
   ]),
   q('bq-69', 'Tell me something about yourself that isn’t on your resume.', 'curveball', ['initiative'], [
-    ['st-door-teaching', 'If you need a bridge: what teaching taught you about yourself.'],
+    ['st-door-teaching', 'Mention running half-marathons, or bridge to what teaching taught you about yourself.'],
   ]),
   q('bq-70', 'What’s the last book you read, and what did you take from it?', 'curveball', ['analytical'], [
     ['st-swarthmore-major', 'Connect it to how you think about assumptions.'],
@@ -310,16 +310,16 @@ const BANK: BehavioralQuestion[] = [
     ['st-clarus-reverse-dcf', 'The market can misprice expectations.'],
   ]),
   q('bq-75', 'What would your previous manager say you need to work on?', 'curveball', ['criticism'], [
-    ['st-stratus-raise', 'Feedback you received during the raise and what you changed.'],
+    ['st-stratus-raise', 'Investor questions about customer acquisition cost during the raise, and the sensitivity you added.'],
     ['st-improveme-reports', 'Feedback on a report and how you used it.'],
   ]),
   q('bq-76', 'You’ve run your own business. Why would you want to be a junior employee?', 'curveball', ['adaptability', 'teamwork'], [
-    ['st-ayah-model', 'Say what running a small business showed you about what you still have to learn, if true.'],
+    ['st-ayah-model', 'Running Ayah alone, e.g. the over-order, showed you how much you still have to learn from experienced people.'],
     ['st-stratus-raise', 'Say what you liked about advising at Stratus compared with running your own business.'],
   ]),
   q('bq-77', 'Tell me about a time you had to work with someone you didn’t get along with.', 'curveball', ['conflict', 'teamwork'], [
     ['st-180dc-engagement', 'Focus on the work and the shared goal.'],
-    ['st-modelcore-leadership', 'If there was a team disagreement, show how you handled it professionally.'],
+    ['st-modelcore-leadership', 'When the team was frustrated by the outreach stall, show how you kept it focused and professional.'],
   ]),
   q('bq-78', 'What’s the biggest risk you’ve taken?', 'curveball', ['initiative', 'pressure'], [
     ['st-ayah-model', 'Starting a business at school.'],

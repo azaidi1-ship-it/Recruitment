@@ -44,6 +44,22 @@ describe('seed stories', () => {
     }
   });
 
+  it('have no [FILL IN] left, and list every invented detail as unverified', () => {
+    for (const s of stories) {
+      expect(s.fillIns, s.id).toEqual([]);
+      expect(/FILL IN/i.test([s.title, s.situation, s.task, s.action, s.result, s.short].join(' ')), s.id).toBe(false);
+    }
+    for (const d of SEED_STORY_DRAFTS) {
+      const row = stories.find((s) => s.id === d.id)!;
+      // Every seed story now carries app-drafted detail beyond the resume.
+      expect(d.unverified?.length ?? 0, d.id).toBeGreaterThan(0);
+      expect(row.unverifiedDetails, d.id).toEqual(d.unverified);
+      for (const u of row.unverifiedDetails) expect(u.trim().length, d.id).toBeGreaterThan(5);
+      // The drafting-only field does not leak into the stored Story row.
+      expect('unverified' in row, d.id).toBe(false);
+    }
+  });
+
   it('end the result with a learning or banking link', () => {
     for (const s of SEED_STORY_DRAFTS) expect(/learn|bank|analyst|deal|client/i.test(s.result), s.id).toBe(true);
   });

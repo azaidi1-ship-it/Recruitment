@@ -3,7 +3,8 @@ import type { CompetencyId } from '../../types/models';
 /**
  * Where on the resume a missing competency could come from. Used by the
  * coverage matrix to suggest a story for any competency with fewer than two.
- * Ideas are prompts for the user to check, not claims about what happened.
+ * Ideas use the drafted story details where the seed stories supply them
+ * (listed there as unverified for the user to check); the rest are prompts.
  */
 export const COVERAGE_SUGGESTIONS: Record<CompetencyId, { itemId: string; idea: string }[]> = {
   leadership: [
@@ -15,20 +16,20 @@ export const COVERAGE_SUGGESTIONS: Record<CompetencyId, { itemId: string; idea: 
     { itemId: 'exp-improveme', idea: 'Co-authoring course materials with colleagues' },
   ],
   conflict: [
-    { itemId: 'exp-180dc', idea: 'A disagreement on the team about the recommendation' },
+    { itemId: 'exp-180dc', idea: 'The teammate who wanted paid tutors, and how you compared the options' },
     { itemId: 'lead-modelcore', idea: 'A disagreement within the Modelcore team' },
-    { itemId: 'exp-stratus', idea: 'Pushback from an investor or the founders on your model' },
+    { itemId: 'exp-stratus', idea: 'Investor pushback on customer acquisition cost' },
   ],
   failure: [
-    { itemId: 'exp-fitness', idea: 'A client you lost, and what you changed afterwards' },
-    { itemId: 'lead-modelcore', idea: 'A speaker or event that fell through' },
+    { itemId: 'exp-fitness', idea: 'The client who nearly quit: what you had misjudged, and what you changed' },
+    { itemId: 'lead-modelcore', idea: 'The autumn 2023 stall, when cold emails got almost no replies' },
   ],
   initiative: [
     { itemId: 'exp-clarus', idea: 'Proposing a stock or strategy nobody asked you to look at' },
     { itemId: 'lead-door-of-awareness', idea: 'Offering to build the fundraising models' },
   ],
   pressure: [
-    { itemId: 'exp-stratus', idea: 'Any deadline pressure during the raise' },
+    { itemId: 'exp-stratus', idea: 'Three weeks to get the model and deck ready before investor meetings' },
     { itemId: 'proj-tcs', idea: 'Delivering the externship analysis on its timeline' },
   ],
   detail: [
@@ -40,20 +41,20 @@ export const COVERAGE_SUGGESTIONS: Record<CompetencyId, { itemId: string; idea: 
     { itemId: 'exp-clarus', idea: 'A DCF or reverse DCF' },
   ],
   persuasion: [
-    { itemId: 'exp-clarus', idea: 'Pitching a stock to the club' },
+    { itemId: 'exp-clarus', idea: 'Pitching your Nike hold view to the investment committee' },
     { itemId: 'lead-mun', idea: 'Winning support for a resolution' },
   ],
   ethics: [
-    { itemId: 'exp-clarus', idea: 'A time you reported a backtest result that looked worse than expected, if there was one' },
+    { itemId: 'exp-clarus', idea: 'Reporting the corrected backtest result after you found look-ahead bias' },
     { itemId: 'exp-improveme', idea: 'Giving an independent view rather than the answer people expected' },
-    { itemId: 'exp-ayah', idea: 'Being straight with customers or suppliers when something went wrong' },
+    { itemId: 'exp-ayah', idea: 'Telling your supplier upfront after the winter hoodie over-order' },
   ],
   adaptability: [
     { itemId: 'exp-improveme', idea: 'Getting up to speed on Dubai real estate quickly' },
     { itemId: 'proj-tcs', idea: 'Learning credit-risk modeling in a short externship' },
   ],
   criticism: [
-    { itemId: 'exp-stratus', idea: 'Investor or founder feedback that changed your model or deck' },
+    { itemId: 'exp-stratus', idea: 'Investor questions on CAC that led you to add a payback sensitivity' },
     { itemId: 'exp-improveme', idea: 'Feedback from the founders on your analysis' },
     { itemId: 'exp-clarus', idea: 'Pushback on your stock pitch from the club' },
   ],

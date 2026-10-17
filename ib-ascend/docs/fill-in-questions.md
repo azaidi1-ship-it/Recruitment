@@ -1,287 +1,244 @@
-# Your [FILL IN] questions
+# Made-up details to check
 
-Details only you can supply for your Story Bank. Answer them in the app (Story Bank → Fill-ins → edit the story), or reply with answers and they can be written in for you.
+You asked the app to fill in every missing detail itself, so these were invented to fit your resume. They are plausible, not true. Interviewers can ask about any of them: before you use a story, change anything that didn’t happen (Story Bank → open the story → Edit), then press “These are true now”. The same list is in the app under Story Bank → Fill-ins & checks.
 
 ## B.A. in Economics and Philosophy (intended double major), Swarthmore College
 
 **Choosing economics and philosophy**
 
-1. why you wanted this combination, and whether you were already set on finance
-2. why you took Physics
-3. Which philosophy course or idea has most changed how you analyze problems, and how?
-4. How do economics and philosophy work together in how you analyze problems?
-5. A concrete moment where this combination helped you, e.g. a paper, a grade or a project.
+1. Already leaning towards finance (from running Ayah Apparel) when choosing the major
+2. Took Physics because you enjoyed it at A-Level and it trains first-principles modeling
+3. Philosophy course: introduction to logic and epistemology; the “what would have to be true?” habit
+4. The Nike reverse DCF as the example of the combination at work
 
 ## A-Levels, GCSEs, Dubai College
 
-**Independent research for my EPQ (A*)**
+**Researching vertical farming for my EPQ (A*)**
 
-6. What was your EPQ topic and research question?
-7. how you scheduled the project around A-Level revision
-8. one specific method you used, e.g. a survey, data analysis or a framework
-9. the hardest problem in the project
-10. how you solved it
-11. how you made sure your conclusion only claimed what the evidence supported
+5. EPQ question: can vertical farming make the UAE more food-secure at a viable cost?
+6. Method: cost-per-kg comparison vs imported produce from published figures, plus a literature review
+7. Hardest problem: inconsistent energy-price and yield assumptions; normalized to one energy price, best/worst case
+8. Conclusion: viable for leafy greens, not staples
+9. Schedule: fixed weekend hours, most research in the summer before your final year
 
 **Learning from a B in Mathematics**
 
-12. What honestly went wrong in Maths: preparation, a specific topic, or exam technique?
-13. what you did afterwards to strengthen your maths, e.g. extra practice or a topic you mastered
-14. A quantitative result since then, e.g. your Statistics grade.
+10. Maths B cause: exam technique, over-checking early questions and running out of time on the pure papers
+11. Fix: timed past papers
+12. Statistics grade at Swarthmore: A−
 
 ## Consultant, 180 Degrees Consulting, Swarthmore College
 
-**Pro bono strategy work for a mission-driven client**
+**Helping a tutoring nonprofit keep its volunteers**
 
-15. Describe the client without naming it if confidential
-16. outreach or operations, and what the problem was
-17. your specific workstream on the team
-18. what analysis you did, e.g. interviews, data or benchmarks
-19. how you worked with the client during the engagement
-20. What were the client’s constraints, and how did you reflect them in the recommendations?
-21. the recommendation and any measurable outcome
+13. Client: small Philadelphia-area after-school tutoring nonprofit (unnamed); problem: volunteer tutors dropping out mid-semester
+14. Your workstream: benchmarking 8 peer programs + two years of sign-up/attendance data
+15. MECE split: recruitment, onboarding, retention
+16. Director pushed back on cost mid-engagement; plan cut to low-cost steps
+17. Teammate wanted paid tutors (reliability); compared on cost per retained tutor
+18. Recommendation: partnership pipeline with two universities + four-week onboarding with buddy system; onboarding adopted for fall 2026
 
 ## Member, Clarus Capital Investments, Swarthmore College
 
-**Using a reverse DCF to test a stock idea**
+**A reverse DCF on Nike**
 
-22. the company you analyzed
-23. Who was the analysis for, e.g. the portfolio managers or the whole club?
-24. What growth or margin did the price imply, and what did you think was realistic, and why?
-25. how you tested them, e.g. sensitivity tables or a peer cross-check
-26. your recommendation
-27. what you did with it, e.g. presented it, and to whom
-28. The outcome, e.g. whether the fund acted on it and how it has performed.
-29. What did the reverse DCF teach you?
+19. Company: Nike, for a spring 2026 pitch to the investment committee
+20. Reverse DCF: price implied ~8–9% annual revenue growth for 10 years vs your 5–6%
+21. Tests: growth/margin sensitivity tables and a peer EV/EBITDA cross-check
+22. Recommendation: hold / don’t add; the fund held off adding
 
-**Backtesting a trading strategy for the fund**
+**A backtest that looked too good**
 
-30. the strategy, e.g. momentum or mean reversion
-31. what data and time period you tested it on
-32. Did a strategy look good at first and then fail a closer test? What was the flaw, e.g. look-ahead bias, overfitting or ignoring transaction costs?
-33. how you found it
-34. the fix
-35. If the corrected result was worse, how did you report it to the group, and what did you explain?
-36. the corrected result and what the fund did.
-37. what you learned from backtesting
+23. Strategy: 12-month momentum across the 11 S&P 500 sector ETFs, monthly rebalancing, 2010–2024 data
+24. Sharpe ~1.1 at first; ~0.6 after trading at the next day’s open and adding transaction costs
+25. Found the look-ahead bias by tracing a few trades by hand
+26. Reported the corrected result; the fund uses momentum as one input to sector tilts, not a rule
 
 ## Advisor & Analyst, Stratus Labs
 
 **Building the model and deck behind a $250K raise**
 
-38. the main revenue drivers and cost assumptions
-39. How did you check the deck against the model?
-40. how you tested them, e.g. scenarios or comparisons with similar companies
-41. One moment that tested the work, e.g. an investor question that made you change the model, and what you changed.
-42. Is this the work you’re proudest of, and why?
+27. Model drivers: enterprise pilots → paid conversion → average contract value; costs mainly engineering hires and compute
+28. About three weeks before November investor meetings; priority: revenue build and use of funds, then deck, then investor list
+29. Deck figures linked to one output tab and checked before each send; base/downside/upside cases
+30. Investors focused on CAC; you added a CAC/payback sensitivity
+31. Proudest because it was the first time your analysis decided a real outcome
 
 **Choosing which investors to approach**
 
-43. how you built it, e.g. criteria like stage, sector focus and check size
-44. how you prioritized investors
-45. Did you tailor the pitch for different investors? One example.
-46. Did an investor push back? On what, and how did you respond?
+32. Investor screen: pre-seed, AI/enterprise software focus, check size fitting a $250K round
+33. Prioritized warm connections and investors who had recently backed similar companies
+34. Tailoring: angels heard traction, AI-focused funds the technical roadmap
+35. Main pushback: customer acquisition cost; answered with a CAC/payback sensitivity and a slide
 
 **Business development with Fortune 500 prospects and AI labs**
 
-47. your role in those discussions, e.g. preparing materials or running follow-ups
-48. how you prepared differently for a large company versus an AI lab, and what you tailored
-49. how you tracked follow-ups
-50. how you managed communication and deadlines across the time difference
-51. Where those discussions got to.
+36. BD role: preparing briefing materials and running follow-ups
+37. Tailoring: ROI, integration and security for Fortune 500 vs technical capability and roadmap fit for AI labs
+38. Shared pipeline tracker reviewed weekly with the founders
+39. Time difference: deliverables done in your morning, fixed overlap slot for calls
+40. BD discussions still early-stage when you left in December; tracker handed over
 
 ## Founder & CEO, Ayah Apparel
 
 **A three-statement model from my own sales data**
 
-52. How did you make those decisions before the model?
-53. What did the sales data contain, and how did you clean it?
-54. one specific pricing or sourcing decision the model changed, and what the numbers showed
-55. The result of that decision, ideally a number such as margin, cash or units sold.
-56. What first got you interested in finance? Did building this model play a part?
+41. Products: mostly hoodies and tees
+42. Before the model: pricing by gut feel and competitor prices
+43. Sales data: order exports (product, size, price, discounts, shipping, returns); cleaned test orders, matched refunds
+44. Model showed two low-margin lines; you cut them and reset prices
+45. Ayah 2024 revenue ~AED 60k at ~45% gross margin
+46. Finance interest: sparked by the Lumiere project (summer 2023), made practical by this model
 
 **Building the e-commerce site and TikTok channel myself**
 
-57. what you had to learn to do this, e.g. video editing or writing for social
-58. One thing the monthly reporting showed you and what you changed as a result.
-59. Which piece of content or campaign worked best, and why do you think it did?
-60. A number, e.g. orders, followers or the share of sales from TikTok.
+47. Taught yourself short-form video editing and hook writing
+48. Monthly reports showed TikTok drove most orders and Instagram few; you shifted content time to TikTok
+49. Best content: sketch-to-finished-hoodie videos
+50. ~60% of orders via TikTok; 2024 revenue ~AED 60k
 
-**A mistake running my own business**
+**Over-ordering a winter hoodie run**
 
-61. a real mistake, e.g. over-ordering stock, a pricing error or a launch that didn’t work
-62. what told you, e.g. the numbers or customer feedback
-63. the root cause, e.g. a decision made without checking the numbers
-64. what you did to fix it
-65. whether and how you told anyone affected, e.g. customers or suppliers
-66. what you changed afterwards, e.g. checking decisions against the three-statement model first
-67. The cost of the mistake and the result of the fix.
-68. what you learned
+51. Autumn 2024 winter hoodie over-order on early TikTok buzz; ~40% of the run unsold, cash tied up
+52. Spotted it in the monthly report’s sell-through a few weeks into the season
+53. Cleared with bundles (hoodies with tees); told your supplier the next order would be smaller and later
+54. Now sizes orders from sell-through data and uses pre-orders for new designs
 
 ## Research & Operations Intern, Improve ME Institute
 
-**A variant-view expansion recommendation**
+**Recommending Silicon Oasis over Dubai Marina**
 
-69. the exact question you were asked to answer
-70. which submarket you recommended
-71. the obvious choice and why
-72. How the founders responded and what they decided.
+55. Question: which Dubai submarket for the institute’s next center
+56. Obvious choice: Dubai Marina (prestige, footfall); you recommended Dubai Silicon Oasis
+57. Silicon Oasis gross yields ~7% vs ~5% in the Marina, faster price growth, family population near schools
+58. The founders added Silicon Oasis to their shortlist
 
 **Course materials and quarterly reports for leadership**
 
-73. what the reports covered and where the data came from
-74. how you checked the numbers and the wording
-75. who you co-authored them with
-76. what you contributed and how you marketed them
-77. how you prioritized the two workstreams
-78. one error or inconsistency you caught before a report went out, and how you caught it
-79. The outcome, e.g. how leadership used the reports.
+59. Reports: course sales and enrollment figures from the institute’s spreadsheets, as a two-page summary
+60. Checks: reconciled totals against finance records, reread the wording
+61. Co-authored with the teaching staff: worked examples, practice questions; wrote social posts and emails promoting courses
+62. Caught students who switched courses mid-quarter being counted twice
+63. Leadership used the summary to decide which courses to run again
 
 ## Founder, Independent Online Fitness Coaching
 
 **Five recurring coaching clients over two years**
 
-80. how you found them
-81. how you tailored their plan and tracked their progress
-82. how often and how you kept in touch with clients
-83. how you fitted coaching around everything else
-84. One client whose progress you’re proudest of, and what you changed in their plan to get there.
-85. How did you think about retention versus finding new clients?
-86. what kept clients with you
+64. First clients via Instagram posts and referrals from friends
+65. Tailored plans with a weekly check-in form and monthly progress photos; check-ins on Sunday evenings
+66. A client who plateaued at ~3 months stayed another year after the switch to weekly averages
+67. Retention first because happy clients brought referrals
 
-**A difficult coaching client**
+**A client who was ready to quit**
 
-87. what the problem was, e.g. was frustrated with their progress and close to quitting
-88. how you first responded to the client
-89. what they told you
-90. what you had misjudged
-91. the specific change
-92. anything else you changed, e.g. targets or how often you checked in
-93. How did you check that the new plan was working for them over the following weeks?
-94. The outcome, e.g. whether they stayed and for how long.
-95. what this client taught you about handling a difficult client
+68. Client plateaued after ~3 months and wanted to quit; daily scale swings were the real issue
+69. You had focused on the long-term target and missed how the daily numbers felt
+70. Changes: weekly averages, adjusted calories, an added strength goal
+71. She stayed another year
 
 ## AI Transformation Consulting Extern, Tata Consultancy Services — GenAI-Powered Data Analytics Externship
 
 **Choosing the right credit-risk model**
 
-96. the main issues, e.g. missing values or inconsistent fields, and how you treated them
-97. the main reason, e.g. better recall or easier to explain to the business
-98. How did you explain the choice to a non-technical audience?
+72. Data issues: missing income values and duplicate records; duplicates removed, median fill with a flag
+73. Decision tree chosen for explainability to borrowers/regulators and higher recall on defaulters
+74. AUC-ROC ~0.80 (tree) vs ~0.77 (logistic regression)
+75. Explained the tree as if-then rules, like a loan officer’s checklist
 
 **Building fairness into an AI recommendation**
 
-99. Was the dataset live or simulated?
-100. One specific risk you found, e.g. a variable that could act as a proxy for a protected characteristic, and what you did about it.
-101. Did you document any trade-off between accuracy and fairness? How?
-102. What did the governance framework require, e.g. human review of decisions or regular bias checks?
-103. How the governance framework was received.
+76. Dataset was simulated and anonymized
+77. Checked approval rates across age groups; flagged a feature that closely tracked age (proxy)
+78. Documented the small accuracy cost of removing it
+79. Framework: human review of borderline cases plus regular bias checks
 
 ## Individual Research Scholar, Lumiere Education
 
 **A 30-page diligence memo on AgTech**
 
-104. how you sized it, e.g. top-down or bottom-up, and your main data sources
-105. the hardest judgment call in the analysis
-106. how you resolved it
-107. how you made each section useful for that reader
-108. Your conclusion and any feedback or recognition.
+80. Mentor: a PhD researcher (unnamed)
+81. Topic: sensor-based soil-moisture monitoring for smallholder farms
+82. TAM bottom-up (farms × adoption × sensor-kit price), cross-checked against industry reports
+83. Hardest call: how much waste reduction to credit; conservative mid-range figure with the full range shown
+84. Mentor feedback: first draft read like a literature review; restructured as a memo
+85. Conclusion: viable where water is scarce and costly; price the main barrier for the smallest farms
 
 ## Member, Computer Science Society, Swarthmore College
 
 **Learning Python for analysis**
 
-109. why you joined the workshops
-110. how you applied what you learned, e.g. a script or analysis you built
-111. where you use Python now, e.g. for data cleaning or backtests
-112. what the workshops covered, e.g. pandas or data visualization
-113. the first thing you built
-114. what building it taught you
-115. A concrete result of applying it.
+86. Joined to stop doing repetitive data work by hand in Excel
+87. Workshops covered pandas, data cleaning and plotting
+88. First build: a pandas + yfinance script that pulls peer financials and calculates trading multiples
+89. Use Python for comps and backtests at Clarus
+90. Script cut pulling a peer set from ~1 hour to a few minutes
 
 ## Vice President, Modelcore, Dubai College Business Society
 
-**Leading Modelcore’s speaker network**
+**Restarting a stalled speaker program**
 
-116. how you split the work, who owned what, and how you tracked progress
-117. a moment the team fell behind or disagreed
-118. what you did
-119. which executives you contacted yourself, if any
-120. your role in running the events
-121. How did you keep the team motivated across almost two years?
-122. How many speakers or events in total.
+91. Team of six split into outreach, logistics and promotion
+92. Autumn 2023 stall: cold emails got almost no replies, partly because you tried to send all the outreach yourself
+93. Fix: owners per area, shared tracker, weekly check-ins, ~40-executive target list prioritized by alumni/parent links
+94. Your part: contacting executives with a personal link, hosting the Q&A; rotated hosts to keep the team motivated
+95. About eight events, typical audiences of 80–120 students
 
 **Getting senior executives to say yes**
 
-123. What was your personal role in getting them to say yes?
-124. how you reached them, e.g. cold email, LinkedIn or introductions
-125. how you framed what they would get from it
-126. what you offered or how you handled the logistics
-127. how you followed up
-128. Roughly how many executives did you contact, and how many said yes?
+96. Your role: rebuilding the approach after cold emails failed
+97. ~40-executive target list, prioritized by alumni/parent links; warm introductions first
+98. Tailored one-page pitch: time with students who could be future hires or customers
+99. Fixed 45-minute slot, questions in advance, all logistics handled; one follow-up after a week
+100. ~8 events from ~40 executives; Careem and Property Finder came through warm introductions
 
 ## Volunteer & Outreach Support, Door of Awareness
 
 **Weekly teaching in Lahore**
 
-129. who your students are and what made teaching them challenging
-130. how, e.g. in person or online
-131. how you adapt your lessons
-132. a concept you had to explain in a new way, and how
-133. How do you check whether students have actually understood a lesson?
-134. How has teaching every week changed the way you explain things?
-135. A result, e.g. how many students you teach or their progress.
+101. About 12 students aged 12–15 at very different levels
+102. In person when in Lahore, online weekly otherwise
+103. Grouping by level; market-stall budgeting exercise
+104. Students explain the idea back at the end of each lesson; “example before the rule”
+105. Most students can now build a simple budget on their own
 
 **Financial models for fundraising campaigns**
 
-136. what you were asked to do for the campaigns
-137. what the models covered, e.g. costs per student and fundraising targets
-138. one recommendation you made
-139. the analysis behind it
-140. How did you make the models usable for leadership, and how did you present them?
-141. Was there any disagreement with leadership about the plan, and how did you handle it?
-142. The outcome, e.g. funds raised or a change leadership made.
+106. Winter campaign, target ~$5,000
+107. Model covered cost per student of winter supplies and donors needed at different gift sizes
+108. Recommended recurring small donors because one-off gifts varied a lot year to year
+109. One-page summary with a weekly progress tracker
+110. Some leaders wanted one big appeal event; kept one event, focused outreach on recurring donors
+111. Campaign raised ~90% of target
 
 ## Delegate & Trainer, Model United Nations
 
 **Training junior delegates**
 
-143. what you trained them in
-144. how, e.g. mock debates, research templates or feedback sessions
-145. a delegate you helped improve, and what they struggled with
-146. what you did to help
-147. What did you teach them about research and preparation?
-148. How many delegates did you train, and over how many conferences?
-149. Did training others change how you prepared yourself?
-150. The result, e.g. awards or how they performed.
+112. Research workshops for ~10 junior delegates before each conference; one-page country brief with sources
+113. A delegate who froze when challenged; practice rebuttals using her brief
+114. Trained delegates over your last two years at school
+115. Most trainees spoke in their first committee session
 
 ## Academic record, Dubai College
 
 **Balancing A-Levels with a business and a society**
 
-151. how you managed your time, e.g. a weekly schedule, fixed hours for the business, or what you said no to
-152. a week when everything collided
-153. how you prioritized
-154. What did you give up or say no to during that period?
+116. Weekly schedule: school first, Ayah on weekday evenings, Modelcore on weekends
+117. Hardest week: final-year mocks + an Ayah restock + a Modelcore speaker event
+118. Handed event logistics to team owners and ordered the restock early
+119. Paused new Ayah designs and cut back on MUN competing during that period
 
 ## Best Researcher, UN Security Council, Model United Nations
 
 **Best Researcher in the UN Security Council**
 
-155. which conference, and when
-156. which country
-157. the crisis or topic
-158. your research method
-159. how you used your research under time pressure, e.g. drafting clauses or rebutting a claim
-160. how you made sure your points were backed by research
-161. How did you organize your research so you could find a fact in seconds during debate?
-162. One moment where your research changed the direction of the debate.
+120. Regional conference in Dubai, 2024
+121. Country: France
+122. Topic: maritime security in the Red Sea
+123. Prep: one-page sourced country brief plus an evidence file indexed by subtopic
+124. You challenged a draft clause on shipping disruption with a source, and it was amended
 
-## Other details to confirm
+## Also invented in model answers
 
-These aren’t tied to a single story, but the app’s generated answers and model answers depend on them.
-
-1. Did you grow up in Dubai? The app now says only that you went to school in Dubai, at Dubai College; tell us if you want it to say more.
-2. What first got you interested in finance? The app no longer says it started with Ayah Apparel (your Lumiere diligence memo, Jun to Sep 2023, came earlier). The same question appears in the Ayah Apparel model story above, and in the generated walkthrough and “Why IB?” answers.
-3. Did the Clarus Capital fund act on any of your work (a stock recommendation or a backtested strategy)? If so, what happened?
-4. Was the Lumiere paper your first piece of investment-style analysis? The Lumiere story calls it your “first taste” of the analysis banks do.
+Fit, HireVue and curveball model answers use the same backstory: you grew up in Dubai; Lumiere (summer 2023) first got you interested in how investors judge a business, Ayah made it hands-on and Stratus confirmed banking; you run half-marathons. Change any of these in your own answers if they aren’t true.
